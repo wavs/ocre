@@ -1,0 +1,18 @@
+OCRe - open source document analysis and OCR system (www.huge.ocre.free.fr)
+This is an EPITA's student project.
+
+--------------------------------------------------------------------------------
+Version 0.1.0 (2008-01-??)
+--------------------------------------------------------------------------------
+First stable GUI.
+
+New Features:
+    * Not Yet
+Fixes:  
+    * Not Yet
+--------------------------------------------------------------------------------
+Technology Preview Announcement  (2008-01-19)
+--------------------------------------------------------------------------------
+The OCRe svn was opened to the public in January 2008 in order to give a first
+preview of the project. There were only the COPYING, README, Makefile and
+CHANGES, with a GTK+ helloWorld.
