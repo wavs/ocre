@@ -1,4 +1,4 @@
-# OCRe Project - HugeTeam - EPITA SPE
+# OCRe Project - HUGE Software - EPITA SPE
 # Makefile made by guilbe_p@epita.fr
 # 2008/01/17 6:09 pm
 #!/usr/bin/sh
