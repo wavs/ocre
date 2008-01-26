@@ -3,15 +3,16 @@ OCRopus - open source document analysis and OCR system (www.ocropus.org)
 Version 0.1.1 (2007-10-31)
 
 
---------------------------------------------------------------------------------
+------------------------------------------------------------------------
 Building OCRopus
---------------------------------------------------------------------------------
-Please refer to the file INSTALL for help on building OCRopus from source.
+------------------------------------------------------------------------
+Please refer to the file INSTALL for help on building OCRopus from 
+source.
 
 
---------------------------------------------------------------------------------
+------------------------------------------------------------------------
 Executing OCRopus
---------------------------------------------------------------------------------
+------------------------------------------------------------------------
 After successfully building ocropus you can use "ocrocmd/ocrocmd" for
 performing OCR on a document image (preferably in .png format).
 Try e.g.
@@ -19,31 +20,34 @@ Try e.g.
 
 But, OCRopus can do more than ocrocmd shows:
 
-If you have built ocroscript you get an interpreter with the complete OCRopus
-functionality. You can run this either with an appropriate Lua script or in
-interactive mode. The OCRopus team is actually using ocroscript for quick
+If you have built ocroscript you get an interpreter with the complete
+OCRopus
+functionality. You can run this either with an appropriate Lua script or 
+in
+interactive mode. The OCRopus team is actually using ocroscript for 
+quick
 development and unit testing.
 
 
---------------------------------------------------------------------------------
+------------------------------------------------------------------------
 Documentation
---------------------------------------------------------------------------------
+------------------------------------------------------------------------
 Please refer to http://www.ocropus.org/wiki/DocumentationIndex
 for the most recent documentation of OCRopus.
 
 
---------------------------------------------------------------------------------
+------------------------------------------------------------------------
 Background
---------------------------------------------------------------------------------
+------------------------------------------------------------------------
 Language:
         C for gtk User Interface
         Ocaml for finite-state transducers(machine)/*FIXME*/
         Ocaml for image processing.
 /*FIXME*/
 
---------------------------------------------------------------------------------
+------------------------------------------------------------------------
 Online Resources
---------------------------------------------------------------------------------
+------------------------------------------------------------------------
 Homepage:
     http://www.huge.ocre.free.fr
 
@@ -54,7 +58,7 @@ OCRe is made by second year EPITA's students:
     http://www.epita.fr
 
 Contact:
-        guilbep@gmail.com <- programmer | hotel
-        atest@gmail.com <- project manager
-        dimitri.georgoulis@gmail.com <- dimitri | programmer
-        wavox.fr@gmail.com <- programmer | macuser
+	guilbep@gmail.com 			 <- programmer | hotel
+	atestu@gmail.com 			 <- project manager
+	dimitri.georgoulis@gmail.com <- dimitri | programmer
+	wavox.fr@gmail.com 			 <- programmer | macuser
