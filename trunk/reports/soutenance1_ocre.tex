@@ -1,0 +1,100 @@
+
+
+%
+%  untitled
+%
+%  Created by Alexandre Testu on 2008-02-01.
+%  Copyright (c) 2008 __MyCompanyName__. All rights reserved.
+%
+\documentclass[]{report}
+
+% Use utf-8 encoding for foreign characters
+\usepackage[utf8]{inputenc} 
+\usepackage[french]{babel}
+
+% Setup for fullpage use
+\usepackage{fullpage}
+
+% Uncomment some of the following if you use the features
+%
+% Running Headers and footers
+\usepackage{fancyhdr}
+% Multipart figures
+%\usepackage{subfigure}
+% More symbols
+%\usepackage{amsmath}
+%\usepackage{amssymb}
+%\usepackage{latexsym}
+% Surround parts of graphics with box
+\usepackage{boxedminipage}
+
+% Package for including code in the document
+\usepackage{listings}
+
+% If you want to generate a toc for each chapter (use with book)
+\usepackage{minitoc}
+
+% This is now the recommended way for checking for PDFLaTeX:
+\usepackage{ifpdf}
+
+%\newif\ifpdf
+%\ifx\pdfoutput\undefined
+%\pdffalse % we are not running PDFLaTeX
+%\else
+%\pdfoutput=1 % we are running PDFLaTeX
+%\pdftrue
+%\fi
+\ifpdf 
+\usepackage[pdftex]{graphicx} \else 
+\usepackage{graphicx} \fi 
+\title{OCRe} 
+\author{ \textsc{Huge} Software \\
+\\
+\\
+Premi\`ere Soutenance \\
+\\
+\\
+\textsc{Rapport}}
+
+\date{}
+
+\begin{document}
+
+\ifpdf \DeclareGraphicsExtensions{.pdf, .jpg, .tif} \else \DeclareGraphicsExtensions{.eps, .jpg} \fi
+
+\maketitle
+
+\pagebreak
+
+\tableofcontents 
+\pagebreak
+
+\part{Pr\'eparatifs} 
+
+% (fold)
+\label{prt:preparatifs}
+
+\chapter{Gen\`ese} 
+
+% (fold)
+\label{cha:genese}
+
+\section{Naissance du groupe} 
+
+% (fold)
+\label{sec:naissance_du_groupe} Au commencement, il y avait quatre geeks. Trois rescap\'es de l'aventure Objectif:Mars trois ``poutreurs de l'espace'', c'est \`a dire Dimitri Georgoulis, Pierre Guilbert et Alexandre Testu ainsi qu'une nouvelle recrue, le sieur Thomas A\"it-taleb. Nous sommes tous des amis proches, et nous pensons que c'est ce qui nous diff\'erencie de beaucoup d'autres groupes: nous sommes soud\'es. Les diff\'erends qu'il peut y avoir au sein du groupe se r\`egle d'un claquement de doigt, et les choix que l'\'equipe a eu \`a faire ont toujours \'etait fait \`a l'unanimit\'e.
+
+% section naissance_du_groupe (end)
+
+\section{Choix du sujet} 
+
+% (fold)
+\label{sec:choix_du_sujet} Le fait de choisir de r\'ealiser un OCR est apparu comme une \'evidence pour tous les membres du groupe. Nous avons d\'ej\`a fait de la 3D l'ann\'ee derni\`ere, et le fait de d\'evelopper un logiciel de \emph{reconaissance d'\'ecriture} nous fascine tous les quatre. 
+
+% section choix_du_sujet (end)
+
+
+% chapter genese (end)
+% part preparatifs (end)
+\bibliographystyle{plain} 
+\bibliography{} \end{document} 
