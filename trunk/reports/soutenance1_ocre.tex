@@ -1,10 +1,8 @@
-
-
 %
-%  untitled
+%  Rapport de soutenance 1 // OCRe - HUGE Software
 %
 %  Created by Alexandre Testu on 2008-02-01.
-%  Copyright (c) 2008 __MyCompanyName__. All rights reserved.
+%  Copyright (c) 2008 Epita. All rights reserved.
 %
 \documentclass[]{report}
 
@@ -74,27 +72,148 @@ Premi\`ere Soutenance \\
 % (fold)
 \label{prt:preparatifs}
 
-\chapter{Gen\`ese} 
-
-% (fold)
+\chapter{Gen\`ese} % (fold)
 \label{cha:genese}
+	\section{Naissance du groupe} % (fold)
+	\label{sec:naissance_du_groupe} 
+		Au commencement, il y avait quatre geeks. Trois rescap\'es de l'aventure Objectif:Mars trois ``poutreurs de l'espace'', c'est \`a dire Dimitri Georgoulis, Pierre Guilbert et Alexandre Testu ainsi qu'une nouvelle recrue, le sieur Thomas A\"it-taleb. Nous sommes tous des amis proches, et nous pensons que c'est ce qui nous diff\'erencie de beaucoup d'autres groupes: nous sommes soud\'es. Les diff\'erends qu'il peut y avoir au sein du groupe se r\`egle d'un claquement de doigt, et les choix que l'\'equipe a eu \`a faire ont toujours \'etait fait \`a l'unanimit\'e.
+	% section naissance_du_groupe (end)
 
-\section{Naissance du groupe} 
-
-% (fold)
-\label{sec:naissance_du_groupe} Au commencement, il y avait quatre geeks. Trois rescap\'es de l'aventure Objectif:Mars trois ``poutreurs de l'espace'', c'est \`a dire Dimitri Georgoulis, Pierre Guilbert et Alexandre Testu ainsi qu'une nouvelle recrue, le sieur Thomas A\"it-taleb. Nous sommes tous des amis proches, et nous pensons que c'est ce qui nous diff\'erencie de beaucoup d'autres groupes: nous sommes soud\'es. Les diff\'erends qu'il peut y avoir au sein du groupe se r\`egle d'un claquement de doigt, et les choix que l'\'equipe a eu \`a faire ont toujours \'etait fait \`a l'unanimit\'e.
-
-% section naissance_du_groupe (end)
-
-\section{Choix du sujet} 
-
-% (fold)
-\label{sec:choix_du_sujet} Le fait de choisir de r\'ealiser un OCR est apparu comme une \'evidence pour tous les membres du groupe. Nous avons d\'ej\`a fait de la 3D l'ann\'ee derni\`ere, et le fait de d\'evelopper un logiciel de \emph{reconaissance d'\'ecriture} nous fascine tous les quatre. 
-
-% section choix_du_sujet (end)
-
-
+	\section{Choix du sujet} % (fold)
+	\label{sec:choix_du_sujet} 
+		Le fait de choisir de r\'ealiser un OCR est apparu comme une \'evidence pour tous les membres du groupe. Nous avons d\'ej\`a fait de la 3D l'ann\'ee derni\`ere, et le fait de d\'evelopper un logiciel de \emph{reconaissance d'\'ecriture} nous fascine tous les quatre. 
+	% section choix_du_sujet (end)
 % chapter genese (end)
+
+\chapter{Organisation} % (fold)
+\label{cha:organisation}
+	On entend par organisation du projet la r\'epartition des t\^aches, la communication entre les membres du groupe
+	\section{Applications utilis\'ees} % (fold)
+	\label{sec:applications_utilis'ees}
+		\subsection{En ligne} % (fold)
+		\label{sub:en_ligne}
+			\paragraph{Basecamp\\} % (fold)
+			\label{par:basecamp}
+			Basecamp\footnote{\emph{http://www.basecamphq.com/}} est une application web de gestion de projet. Elle est développ\'e en Ruby on Rails par une start up bas\'ee \`a Chicago, 37Signals. Cette application est tr\`es intuitive, elle nous a beacoup aid\'e \`a collaborer de mani\`ere plus efficace que pendant le projet de Sup. Basecamp a \'et\'e recommand\'ee par le Wall Street Journal, Time, Business 2.0 ou encore BusinessWeek.
+			% paragraph basecamp (end)
+			\paragraph{Bubbl.us\\} % (fold)
+			\label{par:bubbl_us}
+			Il s'agit d'un logiciel de \emph{brainstorming} en Flash. Nous l'avons utilis\'e pour mieux visualiser la strusture qu'allait prendre notre OCR. La structure obtenue est visible en annexe. %ANNEXE
+			% paragraph bubbl_us (end)
+			\paragraph{Wordpress\\} % (fold)
+			\label{par:wordpress}
+			Nous utilisons la plateforme de publication Open Source Wordpress pour notre site web. En effet, nous aurions tr\`es bien pu passer du temps \`a d\'evelopper nos propre script PHP. Mais jamais ils ne serait jamais arriv\'e \`a la cheville de Wordpress. Exit le PHP donc, nous n'aurons qu'\`a toucher \`a du CSS et du HTML.
+			% paragraph wordpress (end)
+			% subsection en_ligne (end)
+		\subsection{Hors ligne} % (fold)
+		\label{sub:hors_ligne}
+			\paragraph{Emacs\\} % (fold)
+			\label{par:emacs}
+				C'\'etait soit \c ca soit Vi\ldots
+			% paragraph emacs (end)
+			\paragraph{TextMate\\} % (fold)
+			\label{par:textmate}
+				TextMate est le meilleur \'editeur de texte disponible sur Mac (oui, un troll se cache dans cette phrase). Plus s\'erieusement, le Mac \emph{user} du groupe, Alexandre Testu, celui qui r\'edige ce rapport \`a la troisi\`eme personne appr\'ecie l'auto-compl\'etion en \LaTeX qu'offre TextMate.
+			% paragraph textmate (end)
+			\paragraph{Subversion\\} % (fold)
+			\label{par:subversion}
+				Nous avons enregistr\'e OCRe sur Google Code\footnote{\emph{http://code.google.com/p/ocre}}. Pourquoi pas Sourceforge ou autre? Google Code offre tout d'abord une interface bien plus agr\'eable, il n'y a pas de publicit\'es qui prennent un tiers de la page comme sur Sourceforge. De plus, nous avons un Wiki \`a notre disposition. Google Code nous est donc apparu comme le meilleur choix pour nous comme pour nos futurs utilisateurs.
+			% paragraph subversion (end)
+			\paragraph{Glade} % (fold)
+				Glade est un logiciel qui facilite le d\'eveloppement d'interface en Gtk. Pour plus de d\'etail, se r\'ef\'erer \`a %REF
+			\label{par:glade}
+			% paragraph glade (end)
+		% subsection hors_ligne (end)
+	% section applications_utilis'ees (end)
+% chapter organisation (end)
+
 % part preparatifs (end)
+
+
+
+
+\part{Ce qu'on a fait} % (fold)
+\label{prt:ce_qu_on_a_fait}
+
+
+	\chapter{Extraction} % (fold)
+	\label{cha:extraction}
+	
+		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+		%%%%%%%%%%%%%%%%%%%%%% FIXME
+		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+		%%%%%%%%%%%%%%%%%%%%%% THOMAS
+		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	
+	% chapter extraction (end)
+
+
+	\chapter{Pr\'etraitement} % (fold)
+	\label{cha:pr'etraitement}
+	
+		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+		%%%%%%%%%%%%%%%%%%%%%% FIXME
+		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+		%%%%%%%%%%%%%%%%%%%%%% PIERRE
+		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+		
+	% chapter pr'etraitement (end)
+
+	
+	\chapter{R\'eseau de neurones} % (fold)
+	\label{cha:r'eseau_de_neurones}
+	
+		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+		%%%%%%%%%%%%%%%%%%%%%% FIXME
+		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+		%%%%%%%%%%%%%%%%%%%%%% DIMITRI
+		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+		
+	% chapter r'eseau_de_neurones (end)
+
+
+	\chapter{Interface utilisateur} % (fold)
+	\label{cha:interface_utilisateur}
+	
+		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+		%%%%%%%%%%%%%%%%%%%%%% FIXME
+		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+		%%%%%%%%%%%%%%%%%%%%%% ALEX
+		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+		
+	% chapter interface_utilisateur (end)
+	
+	\chapter{Site Web} % (fold)
+	\label{cha:site_web}
+	
+	% chapter site_web (end)
+% part ce_qu_on_a_fait (end)
+
+
+
+\paragraph{Ce qu'on compte faire} % (fold)
+\label{par:ce_qu_on_compte_faire}
+
+% paragraph ce_qu_on_compte_faire (end)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 \bibliographystyle{plain} 
 \bibliography{} \end{document} 
