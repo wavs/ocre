@@ -7,5 +7,16 @@
 	About this folder:	OCRed
 		OCRed is the preprocessing part of OCRe. 
 	About this file:	OCRed/main.ml
-		This is the main file.
- *)
+		This is the main.ml file.
+*)
+let main () =
+  Sdl.init [`VIDEO;`EVENTTHREAD;`TIMER];
+  Sdlkey.enable_unicode true;
+  Sdlkey.enable_key_repeat ();
+  try 
+    Event.run ()
+  with
+      Event.Quit_input ->  Sdl.quit ()
+    | Event.Quit_onmouse -> Sdl.quit ()
+    
+let _ = main ()
