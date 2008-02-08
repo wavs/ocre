@@ -1,3 +1,5 @@
-all:
-	gcc -Wall -g -o gtk gtk.c `pkg-config --cflags --libs gtk+-2.0 libglade-2.0`;
-	
+install:
+	gcc -Wall -g -o main main.c -export-dynamic `pkg-config gtk+-2.0 libglade-2.0 --cflags --libs`
+clean:
+	rm main
+	rm *~

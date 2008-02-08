@@ -13,16 +13,10 @@
 % Setup for fullpage use
 \usepackage{fullpage}
 
-% Uncomment some of the following if you use the features
-%
-% Running Headers and footers
+
 \usepackage{fancyhdr}
 % Multipart figures
 %\usepackage{subfigure}
-% More symbols
-%\usepackage{amsmath}
-%\usepackage{amssymb}
-%\usepackage{latexsym}
 % Surround parts of graphics with box
 \usepackage{boxedminipage}
 
@@ -34,14 +28,6 @@
 
 % This is now the recommended way for checking for PDFLaTeX:
 \usepackage{ifpdf}
-
-%\newif\ifpdf
-%\ifx\pdfoutput\undefined
-%\pdffalse % we are not running PDFLaTeX
-%\else
-%\pdfoutput=1 % we are running PDFLaTeX
-%\pdftrue
-%\fi
 \ifpdf 
 \usepackage[pdftex]{graphicx} \else 
 \usepackage{graphicx} \fi 
@@ -177,16 +163,29 @@ Premi\`ere Soutenance \\
 	% chapter r'eseau_de_neurones (end)
 
 
-	\chapter{Interface utilisateur} % (fold)
-	\label{cha:interface_utilisateur}
-	
-		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-		%%%%%%%%%%%%%%%%%%%%%% FIXME
-		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-		%%%%%%%%%%%%%%%%%%%%%% ALEX
-		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	\chapter{Interface graphique} % (fold)
+	\label{cha:interface_graphique}
+	Je vais commencer par expliqu\'e les outils et la m\'ethode qu'on a utilis\'e pour la r\'ealisation de l'interface, puis je d\'etaillerais \`a quoi ils nous ont servi.
+		\section{Gtkoi?} % (fold)
+		\label{sec:gtkoi_}
+			Le cahier des charges nous impose une interface utilisant la biblioth\`eque Gtk. On a donc commenc\'e par se documenter sur Gtk.
+			Gtk signifie ``The GIMP Toolkit'', puisque Gtk a \'et\'e cr\'e\'e pour le logiciel de traitement d'images ``The GIMP''. C'est en fait un ensemble de biblioth\`eques utilis\'e pour r\'ealiser des interfaces graphiques. Et \c ca n'avait pas l'air simple \`a utiliser.
+			Heureusement, nous avons rapidement d\'ecouvert qu'il existe un outil qui va nous simplifier la vie. Il se nomme Glade. C'est un outil qui simplifie grandement la cr\'eation de l'interface pour nous permettre de nous concentrer sur le code ``pur''. Glade 3 fonctionne tr\`es bien sur les machines du PIE. Il a le m\'erite de nous offrir une interface assez intuitive, je l'ai donc pris en main tr\`es rapidement.
+			Nous cr\'eons donc une interface en utilisant Glade puis nous relions chaque ``signal'' dans un \texttt{.c}. Les ``signals'' sont des sortes d'``\'ev\`enement'' auquel on peut relier une action en utilisant Gtk.
+			Pour relier un signal \`a une action, on utilise la fonction suivante:
+			
+			\begin{verbatim}
+				glade_xml_signal_connect (gxml, "on_window_destroy",
+							    G_CALLBACK (gtk_main_quit));
+			\end{verbatim}
+			
+			Ici, \verb!gxml! est notre fichier xml, \verb!"on_window_destroy"! est le signal auquel on rattache la fonction Gtk \verb!gtk_main_qui! qui quitte l'application en cours. Cette simple ligne de code nous permet de signifier au programme que lorsqu'on clique sur la ``croix'' en haut \`a droite de notre fen\^etre, 
+			
+			
+			
+		% section gtkoi_ (end)
 		
-	% chapter interface_utilisateur (end)
+	% chapter interface_graphique (end)
 	
 	\chapter{Site Web} % (fold)
 	\label{cha:site_web}
@@ -222,20 +221,6 @@ Premi\`ere Soutenance \\
 \label{prt:ce_qu_on_compte_faire}
 
 % part ce_qu_on_compte_faire (end)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
