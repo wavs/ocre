@@ -13,6 +13,7 @@ let main () =
   Sdl.init [`VIDEO;`EVENTTHREAD;`TIMER];
   Sdlkey.enable_unicode true;
   Sdlkey.enable_key_repeat ();
+(*   Arg.parse (Arg.align Argument.speclist) (fun _ -> ()) Argument.usage ; *)
   try
     Event.run ()
   with

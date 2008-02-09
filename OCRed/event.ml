@@ -13,24 +13,28 @@ exception Error_windows
 exception Quit_onmouse
 exception Nothing_to_be_done
 exception Quit_input
-let pi = 3.141592654
-let pisur3 = pi /. 3.
+
+let screen = Surface.screen
 
  let rec run () =
   try
-    Sdlvideo.flip Surface.screen;
+    Sdlvideo.flip !Surface.screen;
     Sdlvideo.blit_surface
-      ~src:Surface.image
-      ~dst:Surface.screen ();
+      ~src:!Surface.image
+      ~dst:!Surface.screen ();
   match
     Sdlevent.wait_event ()
   with
     | Sdlevent.KEYDOWN {Sdlevent.keysym=Sdlkey.KEY_F1} ->
         raise Quit_input
+    | Sdlevent.KEYDOWN {Sdlevent.keysym=Sdlkey.KEY_F3} ->
+        print_endline "charge_image";
+        Surface.image := Sdlloader.load_image "images/train.png";
+        run();
     | Sdlevent.KEYDOWN {Sdlevent.keysym=Sdlkey.KEY_F2} ->
         print_endline "test_of_surf";
         (*FIXME for passing variable angle*)
-        let img_rot = Rotation.hard_of_surf Surface.image  pisur3 in
+        let img_rot = Rotation.hard_of_surf !Surface.image !Rotation.angle  in
           Sdlvideo.save_BMP img_rot "test.bmp";
         run();
     | Sdlevent.QUIT -> raise Quit_onmouse
