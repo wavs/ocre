@@ -82,13 +82,15 @@ let hard_of_surf surf angle =
   let (height,width,pitch) = Surface.dim surf in
   let hypot = hypotenuse surf  in
   let center = hypot / 2 in
+  let cx = (center - width/2) in
+  let cy = (center - height/2) in
     (*middle of the big matrix*)
   let my_output = Transforme.bigarray2 hypot hypot in
   let my_input = Transforme.surf_to_matrix surf in
     for i=0 to (hypot - 1) do
       for j=0 to (hypot - 1) do
         let (x,y) = inverse_int (i - center) (j - center) angle in
-        let (x,y) = (x + center,y + center) in
+        let (x,y) = (x + center - cx,y + center - cy) in
           if (is_in_rect x y width height) then
             begin
               Bigarray.Array2.set
@@ -97,8 +99,8 @@ let hard_of_surf surf angle =
                 (j)
                 (Bigarray.Array2.get
                    my_input
-                   ( y)
-                   ( x));
+                   ( y )
+                   ( x ));
             end
           else
             begin
@@ -106,7 +108,7 @@ let hard_of_surf surf angle =
                 my_output
                 (i)
                 (j)
-                (Int32.zero);
+                (Int32.of_int 255);
             end
       done;
     done;
