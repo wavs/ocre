@@ -46,7 +46,7 @@ let hypotenuse surface =
 let center surface =
   let (width,height,pitch) = Surface.dim surface in
     match (width,height) with
-      |(_,_) -> (x / 2,y / 2)
+      |(x,y) -> (x / 2,y / 2)
 
 
 let is_in_rect x y width height =
@@ -56,7 +56,7 @@ let is_in_rect x y width height =
     false
 
 let simple_surf surf angle=
-  let (width,height,pitch) = Surface.dim surf in
+  let (height,width,pitch) = Surface.dim surf in
   let (cy,cx) = center surf in
   let cote_hypot = hypotenuse surf  in
   let demi_hypot = cote_hypot / 2 in
@@ -68,12 +68,12 @@ let simple_surf surf angle=
         let (x,y) = direct_int (i - cx) (j - cy) angle in
             Bigarray.Array2.set
                 my_output
-                (x + demi_hypot)
-                (y + demi_hypot)
+                ( x + demi_hypot )
+                ( y + demi_hypot )
                 (Bigarray.Array2.get
                    my_input
-                   (i)
-                   (j));
+                   (j)
+                   (i));
       done;
     done;
   Transforme.matrix_to_surf my_output
