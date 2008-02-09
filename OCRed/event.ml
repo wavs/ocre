@@ -1,11 +1,11 @@
-(* 
+(*
 	OCRe - The ultimate OCR - HUGE Software
 	OCRe is a project developed by 2nd year EPITA students
 	- website: http://huge.ocre.free.fr/
 	- svn repository: http://code.google.com/p/ocre
-	
+
 	About this folder:	OCRed
-		OCRed is the preprocessing part of OCRe. 
+		OCRed is the preprocessing part of OCRe.
 	About this file:	OCRed/eventhandler.ml
 		This is the eventhandler.ml file.
 *)
@@ -13,7 +13,9 @@ exception Error_windows
 exception Quit_onmouse
 exception Nothing_to_be_done
 exception Quit_input
-    
+let pi = 3.141592654
+let pisur3 = pi /. 3.
+
  let rec run () =
   try
     Sdlvideo.flip Surface.screen;
@@ -26,7 +28,11 @@ exception Quit_input
     | Sdlevent.KEYDOWN {Sdlevent.keysym=Sdlkey.KEY_F1} ->
         raise Quit_input
     | Sdlevent.KEYDOWN {Sdlevent.keysym=Sdlkey.KEY_F2} ->
-        
+        print_endline "test_of_surf";
+        (*FIXME for passing variable angle*)
+        let img_rot = Rotation.simple_surf Surface.image  pisur3 in
+          Sdlvideo.save_BMP img_rot "test.bmp";
+        run();
     | Sdlevent.QUIT -> raise Quit_onmouse
         (* User-requested quit *)
     | Sdlevent.SYSWM ->
@@ -41,9 +47,9 @@ with
 (* System specific event need to be enable with event_state*)
 (* needed for copy/past application*)
 (* | VIDEORESIZE of (int * int) *)
-(*FIXME FOR RECT IN MIDDLE SIZE*) 
+(*FIXME FOR RECT IN MIDDLE SIZE*)
 (* User resized video mode *)
-      
+
 (* | VIDEOEXPOSE *)
 (* Screen needs to be redrawn *)
 (* | USER of int *)
@@ -53,7 +59,7 @@ with
           (*         (\* Application loses/gains visibility *\) *)
           (*     | Sdlevent.ACTIVE {Sdlevent.gain=false} -> *)
           (*         print_endline "n'est plus active" *)
-      
+
 (* Keys pressed *)
 (*     | KEYUP of Sdlevent.keyboard_event *)
 (*     | MOUSEMOTION of Sdlevent.mousemotion_event *)
@@ -72,4 +78,4 @@ with
 (*      (\* Joystick button pressed *\) *)
 (*     | JOYBUTTONUP of Sdlevent.joybutton_event *)
 (* Joystick button released *)
-(* Keys released *)    
+(* Keys released *)

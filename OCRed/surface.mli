@@ -14,8 +14,4 @@ val width : int
 val height : int
 val pitch : int
 val screen : Sdlvideo.surface
-val image : Sdlvideo.surface
-val width : int
-val height : int
-val pitch : int
-val screen : Sdlvideo.surface
+val dim : Sdlvideo.surface -> int * int * int

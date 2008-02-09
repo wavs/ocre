@@ -13,4 +13,4 @@ exception Error_windows
 exception Quit_onmouse
 exception Nothing_to_be_done
 exception Quit_input
-val run : unit -> 'a
+val run : unit -> unit
