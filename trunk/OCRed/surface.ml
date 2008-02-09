@@ -14,3 +14,5 @@ let (width,height,pitch) = Sdlvideo.surface_dims image
 let screen = Sdlvideo.set_video_mode width height [`ANYFORMAT;
                                                    `RESIZABLE;
                                                    `DOUBLEBUF]
+let dim surface =
+  Sdlvideo.surface_dims surface

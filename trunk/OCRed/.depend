@@ -1,0 +1,16 @@
+digitization.cmo: digitization.cmi 
+digitization.cmx: digitization.cmi 
+eventhandler.cmo: eventhandler.cmi 
+eventhandler.cmx: eventhandler.cmi 
+loader.cmo: loader.cmi 
+loader.cmx: loader.cmi 
+main.cmo: main.cmi 
+main.cmx: main.cmi 
+output.cmo: output.cmi 
+output.cmx: output.cmi 
+printscreen.cmo: printscreen.cmi 
+printscreen.cmx: printscreen.cmi 
+rotation.cmo: rotation.cmi 
+rotation.cmx: rotation.cmi 
+sdlinit.cmo: sdlinit.cmi 
+sdlinit.cmx: sdlinit.cmi 
