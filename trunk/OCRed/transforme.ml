@@ -41,12 +41,15 @@ my_matrix
 let matrix_to_surf matrix =
   let width = Bigarray.Array2.dim1 matrix in
   let height = Bigarray.Array2.dim2 matrix in
+  let rm = Int32.of_int(255) in
+  let gm = Int32.of_int(255) in
+  let bm = Int32.of_int(255) in
   let my_surf = Sdlvideo.create_RGB_surface []  ~w:width
                                                 ~h:height
                                                 ~bpp:24
-                                                ~bmask:Int32.zero
-                                                ~rmask:Int32.zero
-                                                ~gmask:Int32.zero
+                                                ~rmask:rm
+                                                ~gmask:gm
+                                                ~bmask:bm
                                                 ~amask:Int32.zero in
 for j=0 to (height - 1) do
 for i=0 to (width - 1) do
