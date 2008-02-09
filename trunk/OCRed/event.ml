@@ -30,7 +30,7 @@ let pisur3 = pi /. 3.
     | Sdlevent.KEYDOWN {Sdlevent.keysym=Sdlkey.KEY_F2} ->
         print_endline "test_of_surf";
         (*FIXME for passing variable angle*)
-        let img_rot = Rotation.simple_surf Surface.image  pisur3 in
+        let img_rot = Rotation.hard_of_surf Surface.image  pisur3 in
           Sdlvideo.save_BMP img_rot "test.bmp";
         run();
     | Sdlevent.QUIT -> raise Quit_onmouse

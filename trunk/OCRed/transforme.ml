@@ -3,7 +3,7 @@
 	OCRe is a project developed by 2nd year EPITA students
 	- website: http://huge.ocre.free.fr/
 	- svn repository: http://code.google.com/p/ocre
-	
+
 	About this folder:	OCRed
 		OCRed is the preprocessing part of OCRe.
 	About this file:	OCRed/main.ml
@@ -44,16 +44,20 @@ let matrix_to_surf matrix =
   let rm = Int32.of_int(255) in
   let gm = Int32.of_int(255) in
   let bm = Int32.of_int(255) in
-  let my_surf = Sdlvideo.create_RGB_surface []  ~w:width
+  let am = Int32.of_int(255) in
+  let my_surf = Sdlvideo.create_RGB_surface [`SWSURFACE;`SRCCOLORKEY;`SRCALPHA]  ~w:width
                                                 ~h:height
-                                                ~bpp:24
+                                                ~bpp:32
                                                 ~rmask:rm
                                                 ~gmask:gm
                                                 ~bmask:bm
-                                                ~amask:Int32.zero in
+                                                ~amask:am in
 for j=0 to (height - 1) do
 for i=0 to (width - 1) do
   Sdlvideo.put_pixel my_surf i j (Bigarray.Array2.get matrix i j)
 done;
 done;
 my_surf
+
+(*FIXME for color probleme*)
+(* let matrix2tomatrix1 matrix = *)
