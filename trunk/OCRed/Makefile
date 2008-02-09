@@ -1,5 +1,5 @@
 PKG=sdl,sdl.sdlimage,sdl.sdlmixer,sdl.sdlttf
-FILES1=path.ml surface.ml transforme.ml rotation.ml event.ml
+FILES1=path.ml surface.ml transforme.ml rotation.ml argument.ml event.ml
 FILES2= main.ml
 LIBRARY= bigarray.cma sdlloader.cma
 PROG=OCRed
@@ -25,7 +25,7 @@ infodir=${prefix}/info
 
 all: main
 
-main: $(FILES1:.ml=.mli) $(FILES2:.ml=.mli) 
+main: $(FILES1:.ml=.mli) $(FILES2:.ml=.mli)
 	$(CAMLFIND) $(CAMLC) -g -o $(PROG) $(SDLFLAGS) $(FILES1:.ml=.mli) $(FILES2:.ml=.mli)
 	$(CAMLFIND) $(CAMLC) -g -o $(PROG) $(SDLFLAGS) $(FILES1) $(FILES2)
 
