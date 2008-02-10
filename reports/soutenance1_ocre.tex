@@ -91,10 +91,6 @@ Premi\`ere Soutenance \\
 			\label{par:bubbl_us}
 			Il s'agit d'un logiciel de \emph{brainstorming} en Flash. Nous l'avons utilis\'e pour mieux visualiser la strusture qu'allait prendre notre OCR. La structure obtenue est visible en annexe. %ANNEXE
 			% paragraph bubbl_us (end)
-			\paragraph{Wordpress\\} % (fold)
-			\label{par:wordpress}
-			Nous utilisons la plateforme de publication Open Source Wordpress pour notre site web. En effet, nous aurions tr\`es bien pu passer du temps \`a d\'evelopper nos propre script PHP. Mais jamais ils ne serait jamais arriv\'e \`a la cheville de Wordpress. Exit le PHP donc, nous n'aurons qu'\`a toucher \`a du CSS et du HTML.
-			% paragraph wordpress (end)
 			% subsection en_ligne (end)
 		\subsection{Hors ligne} % (fold)
 		\label{sub:hors_ligne}
@@ -106,6 +102,10 @@ Premi\`ere Soutenance \\
 			\label{par:textmate}
 				TextMate est le meilleur \'editeur de texte disponible sur Mac (oui, un troll se cache dans cette phrase). Plus s\'erieusement, le Mac \emph{user} du groupe, Alexandre Testu, celui qui r\'edige ce rapport \`a la troisi\`eme personne appr\'ecie l'auto-compl\'etion en \LaTeX qu'offre TextMate.
 			% paragraph textmate (end)
+			\paragraph{CSSEdit} % (fold)
+			\label{par:cssedit}
+			CSSEdit est une petite merveille qui nous est offerte (enfin plut\^ot vendue) par Macrabbits. Pour faire court, c'est un \'editeur de texte optimis\'e pour le CSS.
+			% paragraph cssedit (end)
 			\paragraph{Subversion\\} % (fold)
 			\label{par:subversion}
 				Nous avons enregistr\'e OCRe sur Google Code\footnote{\emph{http://code.google.com/p/ocre}}. Pourquoi pas Sourceforge ou autre? Google Code offre tout d'abord une interface bien plus agr\'eable, il n'y a pas de publicit\'es qui prennent un tiers de la page comme sur Sourceforge. De plus, nous avons un Wiki \`a notre disposition. Google Code nous est donc apparu comme le meilleur choix pour nous comme pour nos futurs utilisateurs.
@@ -136,7 +136,7 @@ Premi\`ere Soutenance \\
     \label{sec:niveaux_de_repr'esentation_des_images}
   		Il existe de nombreuses manières de représenter les images en traitement numérique. On ordonne ces représentations selon une échelle d'abstraction. On distingue alors quatre principaux niveaux de représentation qui s'échelonnent du signal pour le moins abstrait jusqu'aux modèles relationnels constituant un haut niveau d'abstraction.
 
-      En ce qui concerne le plus bas niveau d'abstraction, il y a la représentation "images iconiques", à savoir la représentation qui contient les données graphiques originales. Cette représentation est notamment utilisée durant le prétraitement de l'image (concernant le redressement, le débruitage ou encore le seuillage).
+      En ce qui concerne le plus bas niveau d'abstraction, il y a la représentation ``images iconiques'', à savoir la représentation qui contient les données graphiques originales. Cette représentation est notamment utilisée durant le prétraitement de l'image (concernant le redressement, le débruitage ou encore le seuillage).
 
       Le second niveau d'abstraction est celui qui consiste à segmenter les images. Formées de différentes parties représentant des groupes de pixels agglutinés, l'image est ainsi segmentée afin de dégager des formes (ou objets) en particulier pour les traiter par la suite.
 
@@ -153,7 +153,7 @@ Premi\`ere Soutenance \\
       Certainement les plus connues et les plus communes, les matrices sont un moyen simple et efficace de représenter des images. Elles constituent une représentation bas-niveau des données graphiques. Chaque élément de la matrice représente un entier correspondant à la luminosité ou encore les trois composantes de couleurs RGB (ou une autre propriété élémentaire de l'image) d'un pixel (pour PICTure ELement). Le pixel dont les coordonnées seront (x,y) correspondra à l'élément (x,y) de la matrice,plus précisement à l'intersection de la ligne x et de la colonne y. Cette représentation sous forme de matrices implique certaines relations spatiales, notamment celles du voisinage, qui s'avère utile pour certains traitements de l'image. Les images binaires, les images constituées de plusieurs bandes spectrales (i.e. (Alpha) Rouge Vert Bleu) ainsi que les structures hiérarchiques constituent des exemples spécifiques d'images représentées à l'aide de matrices.
   
 
-      Au stade actuel d'avancement du projet, nous représentons les images grâce au matrices, notamment pour le prétraitement de l'image. En ce qui concerne la partie extraction des lignes/caractères, nous avons décidé de les représenter par le biais d'une matrice binaire (0 pour un pixel blanc, 1 pour un pixel noir), décrite dans la structure s_binary_image.
+      Au stade actuel d'avancement du projet, nous représentons les images grâce au matrices, notamment pour le prétraitement de l'image. En ce qui concerne la partie extraction des lignes et des caractères, nous avons décidé de les représenter par le biais d'une matrice binaire (0 pour un pixel blanc, 1 pour un pixel noir), décrite dans la structure \verb!s_binary_image!.
 
       \begin{verbatim}
 				struct s_binary_image
@@ -166,12 +166,12 @@ Premi\`ere Soutenance \\
         };
 			\end{verbatim}
 
-      D'autres structures traditionnelles d'images existent. Les chaines sont un autre moyen de représenter les données graphiques. Le principe consiste à décrire les bords de l'objet que l'on veut représenter. Le contour est défini par la coordonnée de son pixel de référence et la séquence de symboles correspondant à l'orientation du pixel suivant. Chaque élément de la chaine correspond à un symbole basique de l'image, en somme un pixel. Les chaines codes ou Freeman codes [Freeman,1961] sont utilisées pour les données représentant des séquences de symboles. Côté implémentation, les chaines peuvent être représentées par un vecteur de préférence une liste chainée. Voici un exemple de chaines codes permettant de représenter le chiffre "2".
+      D'autres structures traditionnelles d'images existent. Les chaines sont un autre moyen de représenter les données graphiques. Le principe consiste à décrire les bords de l'objet que l'on veut représenter. Le contour est défini par la coordonnée de son pixel de référence et la séquence de symboles correspondant à l'orientation du pixel suivant. Chaque élément de la chaine correspond à un symbole basique de l'image, en somme un pixel. Les chaines codes ou Freeman codes [Freeman,1961] sont utilisées pour les données représentant des séquences de symboles. Côté implémentation, les chaines peuvent être représentées par un vecteur de préférence une liste chainée. Voici un exemple de chaines codes permettant de représenter le chiffre ``2''.
 
       % Insertion image: chaincodes.gif
 
-      Il est également possible de représenter plus abstraitement les images par des structures topologiques, telles que des graphes. Ces structures sont constituées d'un ensemble d'éléments et leurs relations, à savoir respectivement les sommets et les arcs du graphe. Ces graphes peuvent bien entendu être valués par un poids. Pour représenter des images, on se sert d'un graphe de régions d'adjacence où les sommets sont des régions de l'image et les arcs sont les bords, à savoir les relations de voisinage. Le graphe de régions d'adjacence est créé à partir d'une matrice contenant la description des régions de l'image, appellée "region map". Cette structure peut être utilisée pour filtrer un motif dans le cadre de la reconnaissance de symboles par exemple.
-    
+
+      Il est également possible de représenter plus abstraitement les images par des structures topologiques, telles que des graphes. Ces structures sont constituées d'un ensemble d'éléments et leurs relations, à savoir respectivement les sommets et les arcs du graphe. Ces graphes peuvent bien entendu être valués par un poids. Pour représenter des images, on se sert d'un graphe de régions d'adjacence où les sommets sont des régions de l'image et les arcs sont les bords, à savoir les relations de voisinage. Le graphe de régions d'adjacence est créé à partir d'une matrice contenant les labels des régions de l'image, appellée ``region map''. Cette structure peut être utilisée pour filtrer un motif dans le cadre de la reconnaissance de symboles par exemple.
 
       Pour un haut niveau d'abstraction, il existe les structures relationnelles, qui consistent à lier plusieurs données entre elles afin de représenter une image. Ce type de structure s'inspire grandement des bases de données relationnelles. La structure permet de lier entre elles les parties sémantiques de l'image. Ce type de structure est envisagé dans la plupart des cas après avoir au préalable segmenter notre image de départ en plusieurs objets distincts.
 
@@ -193,14 +193,16 @@ Premi\`ere Soutenance \\
 
     \section{D\'etection des lignes} % (fold)
     \label{sec:d'etection_des_lignes}
-      Après le prétraitement de l'image, on obtient une image "parfaite", à savoir redressée, débruitée et seuillée. C'est ensuite à la partie extraction de mettre en place la détection des lignes de l'image et l'extraction des caractères afin de pouvoir donner à la partie reconnaissance les caractères isolés. La partie extraction est également responsable de la détection des blocs dans l'image, tels que des blocs de texte, des schémas, des images ou encore des tableaux.
-      Cette partie "analyse de l'image et extraction" se déroulera dans l'ordre suivant: tout d'abord, nous devrons détecter les blocs de l'image afin de pouvoir effectuer le traitement adéquate selon le type de bloc. En ce qui concerne le traitement des blocs de texte, on effectue une détection des lignes puis une extraction des caractères et enfin on passe les caractères à la partie "Reconnaissance desdes caractères".
 
-      Pour cette soutenance, nous avons réalisé la détection des lignes conformément au planning. Cette détection des lignes se concrètise en un exécutable nommé "extract" dans le répertoire /extraction du projet. Il dispose de plusieurs options comme l'aide -h, l'attribution du nom de fichier d'entrée -i file et celui de sortie -o file. Cette exécutable prend en entrée une image bitmap noir&blanc "parfaite" et génère un fichier bitmap fidèle au fichier original tout en ayant préalablement encadrè les lignes détectées.
+      Après le prétraitement de l'image, on obtient une image ``parfaite'', à savoir redressée, débruitée et seuillée. C'est ensuite à la partie extraction de mettre en place la détection des lignes de l'image et l'extraction des caractères afin de pouvoir donner à la partie reconnaissance les caractères isolés. La partie extraction est également responsable de la détection des blocs dans l'image, tels que des blocs de texte, des schémas, des images ou encore des tableaux.
+      Cette partie ``analyse de l'image et extraction'' se déroulera dans l'ordre suivant: tout d'abord, nous devrons détecter les blocs de l'image afin de pouvoir effectuer le traitement adéquate selon le type de bloc. En ce qui concerne le traitement des blocs de texte, on effectue une détection des lignes puis une extraction des caractères et enfin on passe les caractères à la partie ``Reconnaissance des caractères''.
+
+      Pour cette soutenance, nous avons réalisé la détection des lignes conformément au planning. Cette détection des lignes se concrètise en un exécutable nommé \verb!extract! dans le répertoire \verb!/extraction! du projet. Il dispose de plusieurs options comme l'aide \verb!-h!, l'attribution du nom de fichier d'entrée \verb!-i [file]! et celui de sortie \verb!-o [file]!. Cette exécutable prend en entrée une image bitmap noir et blanc ``parfaite'' et génère un fichier bitmap fidèle au fichier original tout en ayant préalablement encadr\'e les lignes détectées.
       Le traitement appliqué à l'image se décompose en cinq parties. En premier lieu, l'image source est chargée dans une surface à l'aide de la librairie SDL. Afin de faciliter les traitements, on binarise notre image, ainsi d'après la surface obtenue, on créé une matrice binaire représentant l'image. Nous effectuons ensuite la projection horizontale de cette matrice. La projection horizontale consiste à calculer le nombre de pixels noirs sur chaque ligne. On obtient ainsi un vecteur de projection, à savoir l'histogramme de projection horizontale de longueur la hauteur de l'image.
 
       Ensuite, la détection des lignes consiste à parcourir le vecteur de projection horizontale à la recherche des plages blanches (où il y a peu de pixels noirs) représentant les interlignes ainsi que les plages noires, à savoir les lignes de texte.
-      Cependant appliqué tel quel, cet algorithme est peu robuste face aux pixels parasites (i.e. des tâches). En effet, ces pixels parasites auraient la fâcheuse tendance à être pris pour des lignes à part entière. C'est pourquoi lors de la détection des lignes, nous devons vérifier que les lignes détectées sont d'une hauteur suffisante. C'est pourquoi nous avons utilisé un certain seuil pour considérer une plage de pixels en tant que ligne. Afin que ce seuil soit le plus adapté, nous l'avons fixé à 8 pixels pour une résolution de 300 Points par Pouce. Les lignes détectées sont stockées dans une liste chainée de structure s_line_set définie comme ceci:
+
+      Cependant appliqué tel quel, cet algorithme est peu robuste face aux pixels parasites (i.e. des tâches). En effet, ces pixels parasites auraient la fâcheuse tendance à être pris pour des lignes à part entière. C'est pourquoi lors de la détection des lignes, nous devons vérifier que les lignes détectées sont d'une hauteur suffisante. C'est pourquoi nous avons utilisé un certain seuil pour considérer une plage de pixels en tant que ligne. Afin que ce seuil soit le plus adapté, nous l'avons fixé à $8$ pixels pour une résolution de $300$ Points par Pouce. Les lignes détectées sont stockées dans une liste chainée de structure \verb!s_line_set! définie comme ceci:
 
       \begin{verbatim}
         struct s_line_set
@@ -218,7 +220,7 @@ Premi\`ere Soutenance \\
 
     % section d'etection_des_lignes (end)
 
-    \section{M\'ethodes de s\'egmentation} % (fold)
+    \section{M\'ethodes de segmentation} % (fold)
     \label{sec:m'ethodes_de_s\'egmentation}
 
 
@@ -246,12 +248,12 @@ Premi\`ere Soutenance \\
         l'utilisation de cette bibliotheque, l'utilisation d'objet de type Sdlvideo.Surface en est un exemple. Pour faire ce que
         nous avons à faire nous procédons de la manière suivante:
         \begin{enumerate}
-          \item On créer un objet de type Sdlvideo.surface par l'intermédiaire du module Sdlloader qui permet de charger des
+          \item On créer un objet de type \verb!Sdlvideo.surface! par l'intermédiaire du module Sdlloader qui permet de charger des
             images d'extension variées.
-          \item On transforme cette objet en un tableau d'entiers grâce à des fonctions de notre cru. Mais surtout grâce a
-            get_pixel du module Sdlvideo.
+          \item On transforme cette objet en un tableau d'entiers grâce à des fonctions de notre cru. Mais surtout grâce a \verb!get_pixel! du module \verb!Sdlvideo!.
           \item On applique alors une fonction de seuillage, de rotation, ou de reduction du bruit (filtre médiant)
         \end{enumerate}
+
         Nous devons cependant signaler, que la transformation en tableau d'entier provoque un étrange phénomène au niveau des
         couleurs -- les valeurs de rouges et de bleus sont échangées --. Ce problème devra être résolue afin de sauvegarder
         les images en couleurs lors de la partie segmentation, detection des blocs. Rappelons que les fichier png ont de
@@ -287,13 +289,22 @@ Premi\`ere Soutenance \\
 
 	\chapter{Interface graphique} % (fold)
 	\label{cha:interface_graphique}
-	Je vais commencer par expliqu\'e les outils et la m\'ethode qu'on a utilis\'e pour la r\'ealisation de l'interface, puis je d\'etaillerais \`a quoi ils nous ont servi.
+		\section{Pourquoi une interface?} % (fold)
+		\label{sec:pourquoi_une_interface_}
+		C'est vrai \c ca, est-ce que c'est vraiment utile? Sachant que notre programme n'effectuera qu'une action principale (trouver du texte dans une image), pourquoi s'emb\^eter \`a d\'evelopper une interface graphique? Parce que. Parce que les gens normaux utilisent une souris depuis 1984, et qu'ils veulent cliquer sur un bouton et non pas tapper une commande, aussi simple soit elle.
+		
+		L'interface est un aspect primordial dans un logiciel. Chaque bouton doit \^etre \`a sa place. \'Enorm\'ement de logiciels n'ont pas re\c cu les \'eloges qu'ils m\'eritent \`a cause d'une interface bacl\'ee. L'utilisateur doit trouver ce qu'il cherche tr\`es rapidement. Il doit y avoir le moins de boutons possible tout en offrant une large palette d'options. Pas si simple\ldots
+		
+		L'une des r\'ef\'erences en mati\`ere d'ergonomie est bien entendu le syst\`eme Mac OS X. Nous avons donc parcouru les \emph{Apple Human Interface Guidelines}\footnote{$http://developer.apple.com/documentation/UserExperience/Conceptual/OSXHIGuidelines/$}, un document de 400 pages qui s'est r\'ev\'el\'e \^etre tr\`es int\'eressant. Parmi les conseils les plus utiles, certains peuvent para\^itre \'evident mais il est affligeant de voir que tant d'applications ne respectent pas ces principes de bases. Nous nous efforcerons donc dans la limite du possible de respecter quelques r\`egles de bases, comme offrir des options par d\'efaut qui conviendront \`a l'utilisateur lambda (pas aux \emph{geeks} que nous sommes), ou encore n'ajouter des fonctions que si elles satisfont au moins $80\%$ des utilisateurs, et non pas les $20\%$ de \emph{power users}.
+		
+		
+		% section pourquoi_une_interface_ (end)
 		\section{Gtkoi?} % (fold)
 		\label{sec:gtkoi_}
-			Le cahier des charges nous impose une interface utilisant la biblioth\`eque Gtk. On a donc commenc\'e par se documenter sur Gtk.
-			Gtk signifie ``The GIMP Toolkit'', puisque Gtk a \'et\'e cr\'e\'e pour le logiciel de traitement d'images ``The GIMP''. C'est en fait un ensemble de biblioth\`eques utilis\'e pour r\'ealiser des interfaces graphiques. Et \c ca n'avait pas l'air simple \`a utiliser.
-			Heureusement, nous avons rapidement d\'ecouvert qu'il existe un outil qui va nous simplifier la vie. Il se nomme Glade. C'est un outil qui simplifie grandement la cr\'eation de l'interface pour nous permettre de nous concentrer sur le code ``pur''. Glade 3 fonctionne tr\`es bien sur les machines du PIE. Il a le m\'erite de nous offrir une interface assez intuitive, je l'ai donc pris en main tr\`es rapidement.
-			Nous cr\'eons donc une interface en utilisant Glade puis nous relions chaque ``signal'' dans un \texttt{.c}. Les ``signals'' sont des sortes d'``\'ev\`enement'' auquel on peut relier une action en utilisant Gtk.
+			Le cahier des charges nous impose une interface utilisant la biblioth\`eque Gtk. On a donc commenc\'e par se documenter l\`a-dessus.\\
+			Gtk signifie ``The GIMP Toolkit'', puisque Gtk a \'et\'e cr\'e\'e pour le logiciel de traitement d'images ``The GIMP''. C'est en fait un ensemble de biblioth\`eques utilis\'e pour r\'ealiser des interfaces graphiques. Et \c ca n'avait pas l'air simple \`a utiliser.\\
+			Heureusement, nous avons rapidement d\'ecouvert qu'il existe un outil qui va nous faciliter la vie. Il se nomme Glade. C'est un outil qui simplifie grandement la cr\'eation de l'interface pour nous permettre de nous concentrer sur le code ``pur''. Glade 3 fonctionne tr\`es bien sur les machines du PIE. Il a le m\'erite de nous offrir une interface assez intuitive, je l'ai donc pris en main tr\`es rapidement.\\
+			Nous cr\'eons donc une interface en utilisant Glade puis nous relions chaque ``signal'' dans un \texttt{.c}. Les ``signals'' sont des sortes d'``\'ev\`enement'' auquel on peut relier une action en utilisant Gtk.\\
 			Pour relier un signal \`a une action, on utilise la fonction suivante:
 
 			\begin{verbatim}
@@ -301,12 +312,25 @@ Premi\`ere Soutenance \\
 							    G_CALLBACK (gtk_main_quit));
 			\end{verbatim}
 
-			Ici, \verb!gxml! est notre fichier xml, \verb!"on_window_destroy"! est le signal auquel on rattache la fonction Gtk \verb!gtk_main_qui! qui quitte l'application en cours. Cette simple ligne de code nous permet de signifier au programme que lorsqu'on clique sur la ``croix'' en haut \`a droite de notre fen\^etre,
-
-
+			Ici, \verb!gxml! est notre fichier xml, \verb!"on_window_destroy"! est le signal auquel on rattache la fonction Gtk \verb!gtk_main_quit! qui quitte l'application en cours. Cette simple ligne de code nous permet de signifier au programme que lorsqu'on clique sur la ``croix'' en haut \`a droite de notre fen\^etre, il faut non seulement fermer la fen\^etre mais aussi l'application.
+			On peut bien entendu lui sp\'ecifier d'autres fonctions que celles de Gtk.
 
 		% section gtkoi_ (end)
 
+		\section{Ce qu'on a fait} % (fold)
+		\label{sec:ce_qu_on_a_fait}
+			Pour cette soutenance, nous somme pri\'e de bien vouloir rendre une \'ebauche d'interface. C'est donc une interface assez incompl\`ete que l'on rend. Pour l'instant, notre interface ne sait faire qu'une chose: ouvrir une image! Une fonction e\'l\'ementaire qui ne s'est pas r\'ev\'el\'ee \^etre si simple que \c ca \`a d\'evelopper. Notre fen\^etre est divis\'ee en trois:
+			\begin{enumerate}
+				\item Une barre d'outil qui contiendra les raccourcis vers les fonctionalit\'es de base,
+				\item La partie gauche de la fen\^etre affichera l'image scann\'ee,
+				\item La partie droit contiendra le texte obtenu \`a partir de l'image que l'utilisateur pourra modifier puis enregistrer.
+			\end{enumerate}
+			
+			
+		% section ce_qu_on_a_fait (end)
+		
+		
+		
 	% chapter interface_graphique (end)
 
 	\chapter{Site Web} % (fold)
@@ -316,22 +340,25 @@ Premi\`ere Soutenance \\
 		Le site web\footnote{\emph{http://huge.ocre.free.fr}} est la premi\`ere chose que verra l'utilisateur potentiel. Il devra donc \^etre \`a la fois attirant et bien ordonn\'e. Le site devra comporter:
 		\begin{itemize}
 			\item Une page d'accueil qui expliquera bri\`evement ce qu'est notre projet, qui nous sommes, etc\ldots
-			\item Une page de d\'eveloppement qui contiendra un lien vers notre page Google Code.
+			\item Une page de d\'eveloppement qui informera le visiteur des avanc\'ees du projet. Il contiendra aussi un lien vers notre page Google Code.
 			\item Une page de t\'el\'echargement qui listera chronologiquement tout ce qu'on a cr\'e\'e, c'est \`a dire nos sources, les \'ex\'ecutables et les rapports de soutenances.
-			\item Une partie ``blog'' qui informera le visiteurs du stade de d\'eveloppement du projet.
-			\item Une page d'``A propos'' qui expliquera plus en d\'etail qui nous somme, ce qu'est l'Epita, etc\ldots
+			\item Une page de liens,
+			\item Une page d'``A propos'' qui expliquera plus en d\'etail qui nous sommes, ce qu'est l'Epita, etc\ldots
 		\end{itemize}
+		De plus, nous aimerions bien avoir un site enti\`erement bilingue (anglais/fran\c cais)
 		% section ce_qu_on_veut (end)
 		\section{Comment on s'est d\'ebrouill\'e} % (fold)
 		\label{sec:comment_on_s_est_d'ebrouill'e}
 		Comment on s'est débrouillé
 
-			On est parti avec l'idée que le site web ne devrait pas nous éloigner de notre tâche principale: développer un logiciel de reconnaissance de caractères. Il fallait donc trouver un moyen rapide pour construire ce site. Nous nous sommes donc tournés vers la plateforme de publication open source Wordpress.
-			Nous avons pleinement conscience que ce choix nous empêchera d'apprendre en détail des langages tels que le PHP. Cependant, entre passer plus de temps à peaufiner notre OCR et coder un script de news, il n'y a pas photo!
-
-			Wordpress s'installe très facilement sur notre site. Un glisser-déposer et 3 clics plus tard, notre site fonctionne. Par contre, il ressemble à n'importe quel blog, pas du tout au site d'une boite de logiciel. Qu'à cela ne tienne, Alexandre sort CSSEdit\footnote{http://macrabbit.com/cssedit/} de son dossier Applications, et quelques heures plus tard\ldots tadam\footnote{http://huge.ocre.free.fr/}!
-
-		Finalement, même si nos connaissances du PHP se limite toujours à\ldots pas grand chose, on a construit un site ergonomique, tout en apprenant un autre langage, le CSS.
+			On est parti avec l'idée que le site web ne devrait pas nous éloigner de notre tâche principale: développer un logiciel de reconnaissance de caractères. Le site web est donc tr\`es basique. Nous avons 10 pages HTML, 5 en anglais et 5 en fran\c cais. Chaque page est reli\'ee \`a sa traduction dans l'autre langue. 
+			Le code HTML de chaque page ne fait que quelques lignes, nous avons plus mis l'accent sur le fichier CSS. Les balises \verb!<div id="">! correspondent \`a un style du fichier CSS. Ce fichier nous autorise \`a d\'efinir la position des \'el\'ement ain si que divers effets qui se r\'ev\`elent assez utiles pour par exemple personaliser les liens.
+			
+			\begin{figure}[htp]
+			\centering
+			\includegraphics[width=10][height=8]{screen_site.png}
+			\caption{Notre site web}\label{fig:site}
+			\end{figure}
 
 		% section comment_on_s_est_d'ebrouill'e (end)
 	% chapter site_web (end)
@@ -347,11 +374,11 @@ Premi\`ere Soutenance \\
 
     \section{D\'etection des caractères} % (fold)
     \label{sec:d'etection_des_caractères}
-      Pour les prochaînes soutenances, nous devrons réaliser une détection des caractères fonctionnelle qui sera robuste vis-à-vis des pixels parasites, du chevauchement des caractères et du défaut d'encrage excessif ou insuffisant. Pour cela, on utilisera vraisemblablement la projection verticale des pixels pour chaque ligne détectée. Pour le problème des pixels parasites, on incluera un seuil. En ce qui concerne le  chevauchement de caractères, on devra vérifier que les transitions entre l'arrière plan et les caractères ainsi que la connexité possible entre deux caractères, nous serons vraisemblablement ammené à utiliser une représentation topologique tel qu'un graphe. Pour les éventuelles problèmes d'encrage insuffisant, nous ferons appel à un autre seuil minimum de largeur de caractère. Enfin dans le cas d'un encrage excessif, on utilisera l'algorithme dit du "Break Cost".
+      Pour les prochaînes soutenances, nous devrons réaliser une détection des caractères fonctionnelle qui sera robuste vis-à-vis des pixels parasites, du chevauchement des caractères et du défaut d'encrage excessif ou insuffisant. Pour cela, on utilisera vraisemblablement la projection verticale des pixels pour chaque ligne détectée. Pour le problème des pixels parasites, on incluera un seuil. En ce qui concerne le  chevauchement de caractères, on devra vérifier que les transitions entre l'arrière plan et les caractères ainsi que la connexité possible entre deux caractères, nous serons vraisemblablement ammené à utiliser une représentation topologique tel qu'un graphe. Pour les éventuelles problèmes d'encrage insuffisant, nous ferons appel à un autre seuil minimum de largeur de caractère. Enfin dans le cas d'un encrage excessif, on utilisera l'algorithme dit du ``Break Cost''.
 
     % section d'etection_des_caractères (end)
 
-    \section{S\'egmentation} % (fold)
+    \section{Segmentation} % (fold)
     \label{sec:s\'egmentation}
   		Après les recherches effectuées pour cette soutenance, nous devrons implémenter une de ces méthode de détection de bloc afin de pouvoir différencier les blocs de texte à ceux d'images ou de graphiques. Comme énoncé précédemment, plusieurs méthodes s'offrent à nous pour effectuer ce traitement. Nous devrons également trouvé une structure de données permettant de stocker ces différents blocs et leurs caractéristiques propres mais également une technique permettant de conserver en mémoire les propriétés du texte, à savoir les paragraphes ou encore les tabulations.
 
@@ -364,4 +391,5 @@ Premi\`ere Soutenance \\
 
 
 \bibliographystyle{plain}
-\bibliography{} \end{document}
+\bibliography{} 
+\end{document}
