@@ -1,5 +1,5 @@
 /* pour compiler :
-gcc -Wall -g -o main main.c `pkg-config --cflags --libs gtk+-2.0 
+gcc -Wall -g -o main main.c `pkg-config --cflags --libs gtk+-2.0
 libglade-2.0`
 */
 #include "/usr/local/include/gtk-2.0/gtk/gtk.h"

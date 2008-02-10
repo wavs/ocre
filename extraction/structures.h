@@ -69,7 +69,7 @@ typedef struct s_result_extraction t_result_extraction;
 
 /*
 ** This structure contains some informations about how
-** the program begin and with which files. 
+** the program begin and with which files.
 */
 struct s_launch_infos
 {

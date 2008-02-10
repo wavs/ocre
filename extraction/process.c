@@ -29,7 +29,7 @@ void processAll(t_launch_infos *infos)
   t_binary_image *pic;
   t_result_extraction *result;
   SDL_Surface *image;
-  
+
   pic = NULL;
   result = NULL;
   image = NULL;

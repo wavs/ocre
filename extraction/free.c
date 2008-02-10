@@ -26,7 +26,7 @@ void free_pic(t_binary_image *pic)
       free(pic->hproj);
       pic->hproj = NULL;
       for (i=0; i < pic->height; i++)
-	{ 
+	{
 	  free(pic->data[i]);
 	  pic->data[i] = NULL;
 	}
@@ -61,7 +61,7 @@ void free_result(t_result_extraction *result)
 		    {
 		      free(result->linelist->charlist);
 		      result->linelist->charlist = son_char;
-		      son_char = son_char->next; 
+		      son_char = son_char->next;
 		    }
 		  free(result->linelist->charlist);
 		  result->linelist->charlist = NULL;

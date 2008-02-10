@@ -29,7 +29,7 @@
 int main(int argc, char *argv[])
 {
   t_launch_infos *infos;
-  
+
   infos = apply_args(argc,argv);
   if (infos->display)
     {

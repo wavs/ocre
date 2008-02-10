@@ -1,10 +1,10 @@
-OCRe - open source document analysis and OCR system 
+OCRe - open source document analysis and OCR system
 (www.huge.ocre.free.fr)
 This is an EPITA's student project.
 
 Version 0.0.1 (2008-01-??)
 
-This file contains information for building OCRe on a Linux System, 
+This file contains information for building OCRe on a Linux System,
 but also on a FreeBSD Sytem.
 For differences on other platforms, please have a look at:
 http://huge.ocre.free.fr
@@ -19,15 +19,17 @@ or by running "su" and typing your root password.
 ------------------------------------------------------------------------
 Building OCRe
 ------------------------------------------------------------------------
-After installing the needed software (see below) go to the Ocropus 
+After installing the needed software (see below) go to the Ocre
 release directory and run:
-    * ./configure (complains about unmet requirements)
+    * Make (complains about unmet requirements)
+    - It should create a ./bin directory in which you will found all
+    our executable. Please read the README file for more info.
 
 ------------------------------------------------------------------------
 Requirements - basic OCRe
 ------------------------------------------------------------------------
 The following software really needs to be installed for running OCRe:
-
+    Ocamlsdl, Ocaml-findlibs (the ocamlfind executable)
 ------------------------------------------------------------------------
 Optional Software - basic OCRe
 ------------------------------------------------------------------------
@@ -35,18 +37,14 @@ Optional Software - basic OCRe
     * aspell-en     (or equivalent)
     * aspell-fr     (indeed)
       Without aspell, OCRes needs a different UTF-8 encoded word list.
-      By default, it will look into /usr/share/dict/words; 
+      By default, it will look into /usr/share/dict/words;
 you can supply
       a different location through the "wordlist" environment variable.
       The file `data/words/en-us' does the job.
 
-Please use the external repository of OCRopus for the following 
+Please use the repository of OCRe for the following
 software:
-    * svn checkout http://ocropus.googlecode.com/svn/external 
-ocropus-external
-    * openfst (library for weighted finite-state transducers)
-      * cd ocropus-external/fst-ocropus/fst;
-      * ./configure; make; make install
+        svn checkout http://ocre.googlecode.com/svn/trunk/ ocre-read-only
 
 We use OCRopus as base for our files and others things.
 
@@ -55,3 +53,5 @@ libsdl caml and leptonica
 
 
 The Huge Team.
+
+The things we said were not true for all.

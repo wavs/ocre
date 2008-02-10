@@ -17,7 +17,7 @@
 int is_bmp(char *filename)
 {
   int i;
-  
+
   i = 0;
   while (filename[i] != '\0')
     {

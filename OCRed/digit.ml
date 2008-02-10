@@ -90,7 +90,10 @@ let filtremed matrix =
 
           done;
         done;
-        Bigarray.Array2.set matrix2 i j (mediane (tri_fusion (tabtolist(tab))))
+        Bigarray.Array2.set matrix2
+          i
+          j
+          (mediane (tri_fusion (tabtolist(tab))))
       done;
     done;
     matrix2
