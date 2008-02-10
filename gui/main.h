@@ -13,6 +13,8 @@ typedef struct {
   GtkWidget* aboutdialog;
 }GUI_;
 
+void on_about_show (gpointer user_data);
+
 void on_open_show (GtkImageMenuItem* test, gpointer user_data);
 
 int main (int argc, char *argv[]);
