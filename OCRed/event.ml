@@ -54,9 +54,9 @@ with
       | Sdlevent.KEYDOWN {Sdlevent.keysym=Sdlkey.KEY_F1} ->
         raise Quit_input
       | Sdlevent.KEYDOWN {Sdlevent.keysym=Sdlkey.KEY_F3} ->
-          print_endline "charge_image";
-          Surface.image := Sdlloader.load_image "images/train.png";
-          run();
+          print_endline "test seuil";
+          Digit.main ();
+          run()
       | Sdlevent.KEYDOWN {Sdlevent.keysym=Sdlkey.KEY_F2} ->
           f2();
           run();

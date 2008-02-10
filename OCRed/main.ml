@@ -27,11 +27,20 @@ let main () =
     end
   else
     begin
-      Sdl.init [`VIDEO;`EVENTTHREAD;`TIMER];
-      Sdlkey.enable_unicode true;
-      Sdlkey.enable_key_repeat ();
-      Event.action ();
-      Sdl.quit ()
+      if !Argument.seuil then
+        begin
+          Sdl.init [`VIDEO;`EVENTTHREAD;`TIMER];
+          Digit.main();
+          Sdl.quit()
+        end
+      else
+        begin
+          Sdl.init [`VIDEO;`EVENTTHREAD;`TIMER];
+          Sdlkey.enable_unicode true;
+          Sdlkey.enable_key_repeat ();
+          Event.action ();
+          Sdl.quit ()
+        end
     end
-
+      
 let _ = main ()
