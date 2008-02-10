@@ -15,6 +15,7 @@
 
 (** {3 Main functions} *)
 val pi : float
+val deg : float
 val rad : float
 val degree_to_rad : int -> float
 val angle : float ref
