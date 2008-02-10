@@ -1,7 +1,7 @@
 #include "main.h"
 
 /* 
-   opens an "About" dialog 
+** opens an "About" dialog 
 */
 void on_about_show (gpointer user_data)
 {
@@ -39,7 +39,7 @@ void on_about_show (gpointer user_data)
 }
 
 /* 
-   opens an "Open File" dialog 
+** opens an "Open File" dialog 
 */
 void on_open_show (GtkImageMenuItem* test, gpointer user_data)
 {
@@ -73,7 +73,7 @@ void on_open_show (GtkImageMenuItem* test, gpointer user_data)
 }
 
 /*
-  the main function
+** the main function
 */
 int main (int argc, char *argv[])
 {
