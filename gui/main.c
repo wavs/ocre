@@ -83,7 +83,7 @@ int main (int argc, char *argv[])
 
   gui = g_slice_new(GUI_);
 
-  gui->gxml   = glade_xml_new ("gui.glade", NULL, NULL);
+  gui->gxml   = glade_xml_new ("../gui/gui.glade", NULL, NULL);
   gui->window = glade_xml_get_widget (gui->gxml, "window");
   gui->image  = glade_xml_get_widget (gui->gxml, "image");
 

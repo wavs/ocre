@@ -1,4 +1,4 @@
-init/*
+/*
 ** OCRe - The ultimate OCR - HUGE Software
 ** OCRe is a project developed by 2nd year EPITA students
 ** - website: http://huge.ocre.free.fr/
