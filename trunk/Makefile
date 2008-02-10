@@ -21,4 +21,7 @@ graph:
 
 
 clean:
-	cd OCRed/ && make clean && cd ../extraction/ && make clean && cd ../gui/ && make clean && cd ../ && rm -rf bin/
+	cd OCRed/ && make clean && cd ../extraction/ && make clean && cd ../gui/ && make clean && cd ../
+
+cleanc:
+	rm -rf bin
