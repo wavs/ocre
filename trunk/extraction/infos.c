@@ -28,11 +28,11 @@ void unknown_command_line(char *exe)
 */
 void help(char *exe)
 {
-  printf("Usage: %s -i inputfile -o output file\n\n", exe);
-  printf("This program extracts the printed lines of a bitmap image.\n");
-  printf("It saves the extraction result in an ouput bitmap file.\n\n");
-  printf("Arguements:\n");
-  printf("   -i file: path of your input file\n");
-  printf("   -o file: path of your output file\n");
-  printf("   -h :     display the help\n\n");
+ printf("Usage: %s -i inputfile -o output file\n\n", exe);
+ printf("This program extracts the printed lines of a bitmap image\n");
+ printf("It saves the extraction result in an ouput bitmap file\n\n");
+ printf("Arguements:\n");
+ printf("   -i file: path of your input file\n");
+ printf("   -o file: path of your output file\n");
+ printf("   -h :     display the help\n\n");
 }

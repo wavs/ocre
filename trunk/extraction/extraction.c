@@ -30,47 +30,35 @@ t_result_extraction *extract_line(t_binary_image *pic)
   t_line_set *tmp;
   t_line_set *father;
   t_result_extraction *result;
-  
   result = NULL;
   result = malloc(sizeof(t_result_extraction));
-  /* Gestion d'erreurs mémoire */
   result->linelist = NULL;
   result->name = pic->name;
   index = 0;
   i = 0;
-  while (i < pic->height)
-    {
-      if (pic->hproj[i] > 0)
-	{
-	  i_tmp = i;
-	  height_tmp = 0;
-	  while ((pic->hproj[i] != 0) && (i < pic->height))
-	    {
-	      height_tmp++;
-	      i++;
-	    }
-	  if (height_tmp > 8)
-	    {
-	      index++;
-	      tmp = malloc(sizeof(t_line_set));
-	      /* Gestion d'erreurs de mémoire */
-	      tmp->id = index;
-	      tmp->pos = i_tmp;
-	      tmp->charlist = NULL;
-	      tmp->next = NULL;
-	      tmp->height = height_tmp;
-	      if (index == 1)
-		{
-		  result->linelist = tmp;
-		}
-	      else
-		{
-		  father->next = tmp;
-		}
-	      father = tmp;
-	    }
-	}
-      i++;
+  while (i < pic->height) {
+    if (pic->hproj[i] > 0) {
+      i_tmp = i;
+      height_tmp = 0;
+      while ((pic->hproj[i] != 0) && (i < pic->height)) {
+	height_tmp++;
+	i++; }
+      if (height_tmp > 8) {
+	index++;
+	tmp = malloc(sizeof(t_line_set));
+	tmp->id = index;
+	tmp->pos = i_tmp;
+	tmp->charlist = NULL;
+	tmp->next = NULL;
+	tmp->height = height_tmp;
+	if (index == 1) {
+	  result->linelist = tmp;
+	} else {
+	  father->next = tmp; }
+	father = tmp;
+      }
     }
+    i++;
+  }
   return (result);
 }

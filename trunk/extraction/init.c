@@ -43,6 +43,6 @@ void InitSDL(SDL_Surface *screen, int display)
 	}
       fprintf(stderr, "SDL screen opened.");
       /* Title of the window */
-      SDL_WM_SetCaption("OCRe - HUGE Software - Extraction Part", NULL);
+     SDL_WM_SetCaption("OCRe - HUGE Software - Extraction Part", NULL);
     }
 }
