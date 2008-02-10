@@ -44,6 +44,9 @@ main: $(FILES1:.ml=.mli) $(FILES2:.ml=.mli)
 
 depend:
 	$(CAMLDEP) *.mli *.ml > .depend
+cleanc:
+	rm -f *~
+	rm -f *.cm? *.o
 clean:
 	rm -f *~
 	rm -f *.cm? *.o
