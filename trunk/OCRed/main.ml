@@ -30,7 +30,7 @@ let main () =
       if !Argument.seuil then
         begin
           Sdl.init [`VIDEO;`EVENTTHREAD;`TIMER];
-          Digit.main();
+          Seuil.main();
           Sdl.quit()
         end
       else
@@ -42,5 +42,5 @@ let main () =
           Sdl.quit ()
         end
     end
-      
+
 let _ = main ()

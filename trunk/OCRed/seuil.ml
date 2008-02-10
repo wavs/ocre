@@ -1,11 +1,11 @@
-(* 
+(*
 	OCRe - The ultimate OCR - HUGE Software
 	OCRe is a project developed by 2nd year EPITA students
 	- website: http://huge.ocre.free.fr/
 	- svn repository: http://code.google.com/p/ocre
-	
+
 	About this folder:	OCRed
-		OCRed is the preprocessing part of OCRe. 
+		OCRed is the preprocessing part of OCRe.
 	About this file:	OCRed/seuil.ml
 		This is the seuil.ml file.
 *)
@@ -42,6 +42,3 @@ let main()=
       seuillage !Surface.image;
       Sdlvideo.save_BMP !Surface.image "tresholded.bmp";
     end
-    
-    
-    
