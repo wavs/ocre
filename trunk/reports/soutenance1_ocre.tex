@@ -246,22 +246,48 @@ Premi\`ere Soutenance \\
     % section d'etection_des_lignes (end)
 
     \section{M\'ethodes de segmentation} % (fold)
-    \label{sec:m'ethodes_de_s\'egmentation}
-      La ségmentation permet de décomposer une image en plusieurs sous-images, que l'on appellera blocs. Chacun de ces blocs possédera ces propres caractèristiques, notamment ses coordonnées, sa taille ainsi que son type: texte, image ou graphique. Plusieurs méthodes de ségmentation existent. Comme la ségmentation est sensible au bruit, son traitement se fera à partir d'une image parfaite.
-      \subsection{Ségmentation par seuillage}
-      La plus simple et la plus rapide est la ségmentation par seuillage (threshold segmentation), qui permet de distinguer les objets de l'arrière plan.
+    \label{sec:m'ethodes_de_segmentation}
+      La segmentation permet de décomposer une image en plusieurs sous-images, que l'on appellera blocs. Chacun de ces blocs possédera ces propres caractèristiques, notamment ses coordonnées, sa taille ainsi que son type: texte, image ou graphique. Plusieurs méthodes de segmentation existent. Comme la segmentation est sensible au bruit, son traitement se fera à partir d'une image parfaite.
+      \subsection{Segmentation par seuillage}
+      La plus simple et la plus rapide est la segmentation par seuillage (threshold segmentation), qui permet de distinguer les objets de l'arrière plan. Plusieurs variantes existent, notamment la segmentation par seuillage global, semi-global et local ainsi que par multi-seuillages.
       
       % subsection segmentation_par_seuillage (end)
       
-      Il y a également la segmentation par contours (edge-based segmentation) qui est utilisé pour détécter les bords des objets contenus dans des images représentant des cartes ou des photos.
-      On distingue aussi la ségmentation par régions (region-based segmentation). Ce type de ségmentation consiste à créer des régions dans l'image composées de pixels similaires. Ce critère de similarité est important car c'est celui-ci qui détermine le résultat obtenu après la segmentation. La ségmentation par régions génére donc un ensemble de régions.
-      \begin{enumerate}
+      \subsection{Segmentation par contours}
+      Il y a également la segmentation par contours (edge-based segmentation) qui est utilisée pour détecter les bords des objets contenus dans des images représentant des cartes ou des photos par exemple.
+      
+      % subsection segmentation_par_contours (end)
+      
+      \subsection{Segmentation par régions}
+      On distingue aussi la segmentation par régions (region-based segmentation). Ce type de segmentation consiste à créer des régions composées de pixels similaires. Ce critère de similarité est important car c'est celui-ci qui détermine le résultat obtenu après la segmentation. La segmentation par régions génére donc un ensemble de régions dontles propriétés sont:
+      \begin{itemize}
         \item la réunion de toutes les régions compose l'image d'origine.
         \item toutes les régions sont connexes.
         \item les pixels d'une même région sont homogènes.
         \item les pixels de deux régions adjacentes ne sont pas homogènes.
-      \end{enumerate}
+      \end{itemize}
       
+      Le critère de similarité est essentiel. Dans la plupart des cas, il consiste à définir des pixels comme similaires de part leur degré de voisinnage. On distingue deux méthodes pour créer les régions: la décomposition/fusion (Split/Merge) et la croissance de régions (growing-region).
+      
+      \subsubsection{Décomposition/fusion}
+        Comme son nom l'indique, cette technique est composée de deux phases:
+        \begin{enumerate}
+          \item Décomposition: découpage itératif de l'image jusqu'à ce que l'on obtienne des blocs contenant seulement des pixels similaires.
+          \item Fusion: regroupement des blocs voisins dans le cas où ils sont similaires.
+        \end{enumerate}
+        
+        La décomposition (split) consiste à découper notre image dichotomiquement par blocs. On part d'un bloc correspondant à l'image d'origine. On étudie ensuite son contenu. Dans le cas où les données sont homogènes alors on stoppe la décomposition sinon on découpe ce bloc en 4 sous-blocs et étudie chacun de ces sous-blocs et ainsi de suite. Cette technique est implémentable selon plusieurs méthodes. On peut naturellement utilisé un arbre quaternaire pour représenter l'image, où chaque bloc serait une feuille de l'arbre. Cependant, les arbres quaternaires ne sont pas pratiques pour naviguer entre des blocs voisins. C'est pourquoi on pourrait dans ce cas utiliser une structure topologique, comme un graphe d'adjacence.
+        La fusion (merge), quant à elle, se charge de regrouper les blocs entre eux selon un critère de similarité, par exemple la valeur moyenne de l'ensemble des pixels d'un bloc. Elle permet donc d'identifier les différentes régions de l'image selon un critère particulier.
+      
+      % Insertion image: decomposition.jpg
+      
+      % subsubsection decomposition_fusion
+      
+      \subsubsection{Croissance de régions}
+      
+      % subsubsection croissance_de_régions
+      
+      % segmentation_par_regions (end)
       
     % section m'ethodes_de_s\'egmentation (end)
 
