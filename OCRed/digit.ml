@@ -114,56 +114,23 @@ let rec lecturebigarray b =
       print_string " "
     done;
     print_newline()
-  done
+  done     
 
-let main2() =
-  let listemp = tabtolist (Array.make 5 42) in
-    lectureliste listemp
-
-let main3() = 
-  let listemp2 = tri_fusion (tabtolist [|32;42;25;3;2;2;45;69;12;10;2;10|]) in
-    lectureliste listemp2
-
-let main4() = 
-  let listemp3 = tri_fusion [5;3;4;1;6;4;7;3;10] in
-    print_int (mediane listemp3);
-    print_newline();
-    lectureliste listemp3
-      
-let main() = 
-    Seuil.seuillage !Surface.image;
-  (*let original_matrix= Transforme.surf_to_matrix image in
-  let filtered_matrix = filtremed original_matrix in
-  let surf_of_filtered = Transforme.matrix_to_surf filtered_matrix in
-  *)
- (* let grotablo = Transforme.bigarray2 3 3 in
-    Bigarray.Array2.set grotablo 0 0 (Int32.of_int 1);
-    Bigarray.Array2.set grotablo 0 1 (Int32.of_int 2);
-    Bigarray.Array2.set grotablo 0 2 (Int32.of_int 3);
-    Bigarray.Array2.set grotablo 1 0 (Int32.of_int 4);
-    Bigarray.Array2.set grotablo 1 1 (Int32.of_int 5);
-    Bigarray.Array2.set grotablo 1 2 (Int32.of_int 6);
-    Bigarray.Array2.set grotablo 2 0 (Int32.of_int 7);
-    Bigarray.Array2.set grotablo 2 1 (Int32.of_int 8);
-    Bigarray.Array2.set grotablo 2 2 (Int32.of_int 9);*)
-    (* for i = 0 to 2 do
-       for j = 0 to 2 do
-       Bigarray.Array2.set grotablo i j (Int32.of_int (1 + i))
-       done;
-       done;*)
-    (*affichage du tableau initial*)
-    (*lecturebigarray grotablo;
-    (*application du filtre median*)
-    print_newline();
-    print_newline();
-    (*affichage du tableau modifié*)
-    lecturebigarray (filtremed grotablo)*)
-       Sdlvideo.save_BMP !Surface.image (*surf_of_filtered*) "dtc.BMP"
-       
-      
-   
-(*/Fonctions de test*) 
-(*****************************************************)
+let main()=
+  if (!Path.output <> "") then
+    begin
+      let original_matrix= Transforme.surf_to_matrix !Surface.image in
+      let filtered_matrix = filtremed original_matrix in
+        Surface.image := Transforme.matrix_to_surf filtered_matrix;
+        Sdlvideo.save_BMP !Surface.image !Path.output
+    end
+  else
+    begin
+      let original_matrix= Transforme.surf_to_matrix !Surface.image in
+      let filtered_matrix = filtremed original_matrix in
+        Surface.image := Transforme.matrix_to_surf filtered_matrix;
+        Sdlvideo.save_BMP !Surface.image "filtered.BMP"
+    end
 
 (*****************************************************)
 (*/FILTRE MEDIAN*)

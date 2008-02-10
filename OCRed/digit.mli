@@ -20,8 +20,5 @@ val filtremed :
   (int32, Bigarray.int32_elt, Bigarray.c_layout) Bigarray.Array2.t                                             
 val lectureliste : int list -> unit
 val lecturebigarray : (int32, 'a, 'b) Bigarray.Array2.t 
--> unit                                                
-val main2 : unit -> unit
-val main3 : unit -> unit
-val main4 : unit -> unit
+-> unit
 val main : unit -> unit
