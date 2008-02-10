@@ -453,8 +453,15 @@ Premi\`ere Soutenance \\
 \part{Ce qu'on compte faire} % (fold)
 \label{prt:ce_qu_on_compte_faire}
 
-	\chapter{Analyse de l'image et extraction} % (fold)
-	\label{cha:analyse_de_l'image_et_extraction}
+\chapter{Pr\'etraitement de l'image} % (fold)
+        \section{angle de rotation et optimisation}
+        Nous avons r\'eussi a appliquer une rotation sur une image, il faut cependant remarquer que cette rotation peut \^etre optimiser, notament en \'evitant les cas triviaux tels que la rotation d'angle 90 degr\'e, en r\'eduisant la taille de l'image de sortie, mais aussi en applicant une interpolation bi-lin\'eaire qui permettra d'\'eviter de fa\c con intelligente une perte trop violente d'information.
+        La detection de l'angle de rotation devra \^etre viable pour la deuxi\'eme soutenance, cela implique que nous implementions les divers algos et principes d\'ecouverts au cour de nos intenses recherches.
+        \section{reduction du bruit}
+        Nous utilisons un filtre m\'edian, utile pour la suppresion du bruit de type point. Il existe cependant de nombreux autres types de filtres efficaces sur ce type de bruit mais aussi sur d'autres. Nos fonctions de filtrages sont assez ``moche'' au niveau de l'optimisation. Nous avons deja les algos pour l'optimisation du filtre m\'edian. Il faudra aussi penser a fournir d'autre filtres, qui permettront un niveau d'utilisation du programme plus large. Et bien sur il faudra les impl\'ementer.
+
+\chapter{Analyse de l'image et extraction} % (fold)
+\label{cha:analyse_de_l'image_et_extraction}
 
     \section{D\'etection des caractères} % (fold)
     \label{sec:d'etection_des_caractères}
