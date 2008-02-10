@@ -32,7 +32,7 @@ let speclist = [
   ("--output", Arg.String (fun s -> set_path_output s), "output path of your ouput image");
   ("--image", Arg.String (fun s -> set_path_image s), "input path of your input image");
   ("--angle", Arg.Int (fun i -> set_angle i), "Angle in degree");
-  ("--display", Arg.Set display, " Useless option")
+  ("--display", Arg.Set display, "allows to see your image being transformed")
 ]
 
-let usage = "Usage: -image [path] -angle [float]"
+let usage = "Usage: -image [path] -angle [integer]"
