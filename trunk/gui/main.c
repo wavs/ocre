@@ -1,12 +1,34 @@
 #include "main.h"
 
-void on_about_show (GtkImageMenuItem* lol, gpointer user_data)
+void on_about_show (gpointer user_data)
 {
-  GUI_* guisex;
+  GtkWidget* about;
+  GtkWidget* label;
 
-  guisex = (GUI_ *)user_data;
+  about = gtk_dialog_new_with_buttons("About",
+				      NULL,
+				      GTK_DIALOG_MODAL | 
+				      GTK_DIALOG_DESTROY_WITH_PARENT,
+				      GTK_STOCK_OK,
+				      GTK_RESPONSE_ACCEPT,
+				      NULL);
+  label = gtk_label_new("OCRe - HUGE Software - 2008");
 
-  gtk_widget_show(guisex->aboutdialog);
+  g_signal_connect_swapped (about,
+			    "response",
+			    G_CALLBACK (gtk_widget_destroy),
+			    about);
+
+  gtk_container_add (GTK_CONTAINER (GTK_DIALOG(about)->vbox),
+		     label);
+
+  gtk_widget_show_all(about);
+
+  if (gtk_dialog_run(GTK_DIALOG (about)) == 
+      GTK_RESPONSE_ACCEPT)
+    {
+      gtk_widget_destroy (about);
+    }
 }
 
 /* opens an "Open File" dialog */
@@ -60,9 +82,8 @@ int main (int argc, char *argv[])
 				 G_CALLBACK (on_open_show),
 				 gui);
   // signal to open the "about" dialog
-  glade_xml_signal_connect_data (gui->gxml, "on_about_show",
-				 G_CALLBACK (on_about_show),
-				 gui);
+  glade_xml_signal_connect (gui->gxml, "on_about_show",
+			    G_CALLBACK (on_about_show));
 
   gtk_widget_show (gui->window);                
   gtk_main ();
