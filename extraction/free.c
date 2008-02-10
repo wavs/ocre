@@ -11,6 +11,7 @@
 */
 
 #include <stdlib.h>
+#include <stdio.h>
 #include "structures.h"
 
 /*
@@ -19,29 +20,21 @@
 void free_pic(t_binary_image *pic)
 {
   int i;
-  int j;
 
-  for (i=0; i < pic->height; i++)
+  if (pic != NULL)
     {
-      free(&(pic->hproj[i]));
-    }
-  free(pic->hproj);
-  pic->hproj = NULL;
-  for (i=0; i < pic->height; i++)
-    {
-      /*
-	for (j=0; j < pic->width; j++)
-	{
-	  free(&(pic->data[i][j]));
+      free(pic->hproj);
+      pic->hproj = NULL;
+      for (i=0; i < pic->height; i++)
+	{ 
+	  free(pic->data[i]);
+	  pic->data[i] = NULL;
 	}
-      */
-      free(pic->data[i]);
-      pic->data[i] = NULL;
+      free(pic->data);
+      pic->data= NULL;
+      free(pic);
+      pic = NULL;
     }
-  free(pic->data);
-  pic->data= NULL;
-  free(pic);
-  pic = NULL;
 }
 
 /*
@@ -53,33 +46,36 @@ void free_result(t_result_extraction *result)
   t_line_set *son_line;
 
   /* Free of linked list of lines */
-  if (result->linelist != NULL)
+  if (result != NULL)
     {
-      son_line = result->linelist->next;
-      while (son_line != NULL)
+      if (result->linelist != NULL)
 	{
-	  /* Free of linked list of characters*/
-	  if (result->linelist->charlist != NULL)
+	  son_line = result->linelist->next;
+	  while (son_line != NULL)
 	    {
-	      son_char = result->linelist->charlist->next;
-	      while (son_char != NULL)
+	      /* Free of linked list of characters*/
+	      if (result->linelist->charlist != NULL)
 		{
+		  son_char = result->linelist->charlist->next;
+		  while (son_char != NULL)
+		    {
+		      free(result->linelist->charlist);
+		      result->linelist->charlist = son_char;
+		      son_char = son_char->next; 
+		    }
 		  free(result->linelist->charlist);
-		  result->linelist->charlist = son_char;
-		  son_char = son_char->next; 
+		  result->linelist->charlist = NULL;
 		}
-	      free(result->linelist->charlist);
-	      result->linelist->charlist = NULL;
+	      free(result->linelist);
+	      result->linelist = son_line;
+	      son_line = son_line->next;
 	    }
 	  free(result->linelist);
-	  result->linelist = son_line;
-	  son_line = son_line->next;
+	  result->linelist = NULL;
 	}
-      free(result->linelist);
-      result->linelist = NULL;
+      free(result);
+      result = NULL;
     }
-  free(result);
-  result = NULL;
 }
 
 /*

@@ -28,13 +28,11 @@ void unknown_command_line(char *exe)
 */
 void help(char *exe)
 {
-  printf("\nOCRe - HUGE Software - Extraction Part\n\n");
-  printf("Command line: %s [-i input file] [-o output file]\n\n", exe);
+  printf("Usage: %s -i inputfile -o output file\n\n", exe);
   printf("This program extracts the printed lines of a bitmap image.\n");
   printf("It saves the extraction result in an ouput bitmap file.\n\n");
   printf("Arguements:\n");
-  printf("   -i file: this is the bitmap image in which you want to extract line.\n");
-  printf("   -o file: this is the output bitmap image in which you'll see the preview of extraction.\n");
-  printf("   -h : this is the help of the program.\n");
-  printf("   -d : this option activates the display window.\n\n");
+  printf("   -i file: path of your input file\n");
+  printf("   -o file: path of your output file\n");
+  printf("   -h :     display the help\n\n");
 }

@@ -13,29 +13,13 @@
 CC=gcc
 
 # Flags
-CFLAGS= -W -Wall -pedantic -Werror -g
+CFLAGS= -W -Wall -pedantic -ansi -Werror -pipe -g
 
 # Target
 TARGET= extract
 
-# Source files
-CSOURCES= args launch process init infos tools pixel binarization projections extraction graphics event free
-
-# Set of source files and object files
-SOURCEFILES = $(CSOURCES:=.c)
-OBJECTFILES = $(CSOURCES:=.o)
-
-# Compiling files
-$(TARGET): $(OBJECTFILES)
-	@echo "\n=== Linking files ==="
-	$(CC) $(CFLAGS) -o $(TARGET) $(OBJECTFILES)
-
-.c.o:
-	@echo "\n---" $@ "---"
-	$(CC) $(CFLAGS) `sdl-config --cflags --libs` -c -o $@ $<
-
-depend:
-	makedepend -I $(SOURCEFILES)
+$(TARGET): main.c args.c tools.c launch.c process.c init.c infos.c pixel.c binarization.c projections.c extraction.c graphics.c event.c free.c
+	gcc $(CFLAGS) `sdl-config --cflags --libs` main.c args.c tools.c launch.c process.c init.c infos.c pixel.c binarization.c projections.c extraction.c graphics.c event.c free.c -o $(TARGET)
 
 clean:
 	rm -f *~ *.o core
@@ -43,4 +27,3 @@ clean:
 bak:
 	cp *.[ch] Makefile Backup/
 
-# DO NOT DELETE

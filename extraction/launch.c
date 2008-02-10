@@ -18,6 +18,7 @@
 #include "event.h"
 #include "SDL/SDL.h"
 #include "infos.h"
+#include "tools.h"
 
 /*
 ** This function starts the extraction process with
@@ -57,11 +58,12 @@ void launchProgramWithoutDisplay(t_launch_infos *infos)
   screen = NULL;
   if (infos->inFile != NULL && infos->outFile != NULL)
     {
-      if (is_bmp(infos->inFile))
+      if (1) /*is_bmp(infos->inFile))*/
 	{
 	  InitSDL(screen,0);
 	  processAll(infos);
 	  SDL_Quit();
+	  printf("SDL closed.\n");
 	}
       else
 	{
