@@ -1,11 +1,11 @@
-(* 
+(*
 	OCRe - The ultimate OCR - HUGE Software
 	OCRe is a project developed by 2nd year EPITA students
 	- website: http://huge.ocre.free.fr/
 	- svn repository: http://code.google.com/p/ocre
-	
+
 	About this folder:	OCRed
-		OCRed is the preprocessing part of OCRe. 
+		OCRed is the preprocessing part of OCRe.
 	About this file:	OCRed/digitization.ml
 		This is the digitization.ml file.
 *)
@@ -49,10 +49,10 @@ let rec tri_fusion liste =
 
 (*****************************************************)
 (*Tabtolist*)
-let tabtolist tab = 
+let tabtolist tab =
   let i = ref 0 in
   let liste = ref [] in
-    while (!i < Array.length tab) do 
+    while (!i < Array.length tab) do
       liste := tab.(!i)::!liste;
       i := !i + 1
     done;
@@ -73,48 +73,48 @@ let filtremed matrix =
   let height = Bigarray.Array2.dim2 matrix in
   let matrix2 = Transforme.bigarray2 width height in
   let k = ref 0 in
- 
+
     for i = 0 to ((width) - 1) do
       for j = 0 to ((height) - 1) do
         let tab = Array.make 9 (Int32.of_int 0) in
         k:=0;
         for l = i - 1 to i + 1 do
           for m = j - 1 to j + 1 do
-            if ((l >= 0) 
+            if ((l >= 0)
                  && (l <= (width - 1)))
                  && ((m >= 0)
-                 && (m <= (height - 1))) 
+                 && (m <= (height - 1)))
             then
-              (tab.(!k) <- Bigarray.Array2.get matrix l m);    
+              (tab.(!k) <- Bigarray.Array2.get matrix l m);
             k:= !k + 1;
-            
+
           done;
         done;
         Bigarray.Array2.set matrix2 i j (mediane (tri_fusion (tabtolist(tab))))
       done;
     done;
     matrix2
-      
-      
+
+
 (*/filtre_median*)
 (*****************************************************)
- 
+
 (*****************************************************)
-(*Fonctions de test*)     
+(*Fonctions de test*)
 let rec lectureliste l = match l with
     []   -> print_int 666
   |e::l0 -> (print_int e ;
             print_string " ; ";
            lectureliste l0)
 
-let rec lecturebigarray b = 
+let rec lecturebigarray b =
   for i = 0 to (Bigarray.Array2.dim1 b) - 1 do
     for j = 0 to (Bigarray.Array2.dim2 b) - 1 do
       print_int (Int32.to_int (Bigarray.Array2.get b i j));
       print_string " "
     done;
     print_newline()
-  done     
+  done
 
 let main()=
   if (!Path.output <> "") then
