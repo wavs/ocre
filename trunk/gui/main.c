@@ -1,5 +1,13 @@
 #include "main.h"
 
+void on_about_show (GtkImageMenuItem* lol, gpointer user_data)
+{
+  GUI_* guisex;
+
+  guisex = (GUI_ *)user_data;
+
+  gtk_widget_show(guisex->aboutdialog);
+}
 
 /* opens an "Open File" dialog */
 void on_open_show (GtkImageMenuItem* test, gpointer user_data)
@@ -25,7 +33,6 @@ void on_open_show (GtkImageMenuItem* test, gpointer user_data)
       // get the filename
       filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER 
 						(open));
-      
       // open the file
       gtk_image_set_from_file(GTK_IMAGE(guisex->image),filename);
     }
@@ -53,8 +60,9 @@ int main (int argc, char *argv[])
 				 G_CALLBACK (on_open_show),
 				 gui);
   // signal to open the "about" dialog
-  glade_xml_signal_connect (gui->gxml, "on_about_show",
-			    G_CALLBACK (on_about_show));
+  glade_xml_signal_connect_data (gui->gxml, "on_about_show",
+				 G_CALLBACK (on_about_show),
+				 gui);
 
   gtk_widget_show (gui->window);                
   gtk_main ();
