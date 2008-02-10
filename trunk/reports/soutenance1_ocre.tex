@@ -160,9 +160,9 @@ Premi\`ere Soutenance \\
 
       Le second niveau d'abstraction est celui qui consiste à segmenter les images. Formées de différentes parties représentant des groupes de pixels agglutinés, l'image est ainsi segmentée afin de dégager des formes (ou objets) en particulier pour les traiter par la suite.
 
-      La représentation géométrique constitue le troisième niveau de représentation. Les images sont ainsi caractérisées selon des données de formes 2D ou 3D. Cette représentation est utilisée notamment pour les simulations d'éclairage par exemple en CAO (Conception Assistée par Ordinateur).
+      La représentation géométrique constitue le troisième niveau de représentation. Les images sont ainsi caractérisées selon des données de forme 2D ou 3D. Cette représentation est utilisé notamment pour les simulations d'éclairage par exemple en CAO (Conception Assistée par Ordinateur).
 
-      Enfin au plus haut niveau de l'échelle d'abstraction, on trouve les modèles relationnels qui permettent de traiter plus efficacement les données en les organisant par exemple sous la forme de réseaux sémantiques [Nilsson, 1982]. Les modèles relationnels consistent comme leurs noms l'indiquent, à mettre en relation plusieurs éléments de l'image afin de mieux comprendre et de mieux percer la signification de cette image.
+      Enfin au plus haut niveau de l'échelle d'abstraction, on trouve les modèles relationnels qui permettent de traiter plus efficacement les données en les organisant par exemple sous la forme de réseaux sémantiques [Nilsson, 1982]. Les modèles relationnels consistent comme leurs noms l'indiquent, à mettre en relation plusieurs éléments de l'image afin de mieux comprendre et de mieux percer la signification de l'image.
 
     % section niveaux_de_repr'esentation_des_images (end)
 
@@ -171,7 +171,8 @@ Premi\`ere Soutenance \\
       Afin de représenter les images selon les précédents niveaux d'abstraction, nous avons besoin de structures contenant les données de l'image et implémentables en mémoire. On distingue parmi celles-ci deux grands types de structures. D'un côté, il y a les structures traditionnelles, consituées des matrices, des chaines ainsi que des structures topologiques et relationnelles. De l'autre côté, se trouvent les structures hiérarchiques telles que les pyramides et les arbres quaternaires.
 
       Certainement les plus connues et les plus communes, les matrices sont un moyen simple et efficace de représenter des images. Elles constituent une représentation bas-niveau des données graphiques. Chaque élément de la matrice représente un entier correspondant à la luminosité ou encore les trois composantes de couleurs RGB (ou une autre propriété élémentaire de l'image) d'un pixel (pour PICTure ELement). Le pixel dont les coordonnées seront (x,y) correspondra à l'élément (x,y) de la matrice,plus précisement à l'intersection de la ligne x et de la colonne y. Cette représentation sous forme de matrices implique certaines relations spatiales, notamment celles du voisinage, qui s'avère utile pour certains traitements de l'image. Les images binaires, les images constituées de plusieurs bandes spectrales (i.e. (Alpha) Rouge Vert Bleu) ainsi que les structures hiérarchiques constituent des exemples spécifiques d'images représentées à l'aide de matrices.
-  
+
+       % Insertion image: matrix.jpg
 
       Au stade actuel d'avancement du projet, nous représentons les images grâce au matrices, notamment pour le prétraitement de l'image. En ce qui concerne la partie extraction des lignes et des caractères, nous avons décidé de les représenter par le biais d'une matrice binaire (0 pour un pixel blanc, 1 pour un pixel noir), décrite dans la structure \verb!s_binary_image!.
 
@@ -188,19 +189,20 @@ Premi\`ere Soutenance \\
 
       D'autres structures traditionnelles d'images existent. Les chaines sont un autre moyen de représenter les données graphiques. Le principe consiste à décrire les bords de l'objet que l'on veut représenter. Le contour est défini par la coordonnée de son pixel de référence et la séquence de symboles correspondant à l'orientation du pixel suivant. Chaque élément de la chaine correspond à un symbole basique de l'image, en somme un pixel. Les chaines codes ou Freeman codes [Freeman,1961] sont utilisées pour les données représentant des séquences de symboles. Côté implémentation, les chaines peuvent être représentées par un vecteur de préférence une liste chainée. Voici un exemple de chaines codes permettant de représenter le chiffre ``2''.
 
-      % Insertion image: chaincodes.gif
+      % Insertion image: chaincodes.jpg
 
+
+      % Insertion image: topo.jpg
 
       Il est également possible de représenter plus abstraitement les images par des structures topologiques, telles que des graphes. Ces structures sont constituées d'un ensemble d'éléments et leurs relations, à savoir respectivement les sommets et les arcs du graphe. Ces graphes peuvent bien entendu être valués par un poids. Pour représenter des images, on se sert d'un graphe de régions d'adjacence où les sommets sont des régions de l'image et les arcs sont les bords, à savoir les relations de voisinage. Le graphe de régions d'adjacence est créé à partir d'une matrice contenant les labels des régions de l'image, appellée ``region map''. Cette structure peut être utilisée pour filtrer un motif dans le cadre de la reconnaissance de symboles par exemple.
 
-      Pour un haut niveau d'abstraction, il existe les structures relationnelles, qui consistent à lier plusieurs données entre elles afin de représenter une image. Ce type de structure s'inspire grandement des bases de données relationnelles. La structure permet de lier entre elles les parties sémantiques de l'image. Ce type de structure est envisagé dans la plupart des cas après avoir au préalable segmenter notre image de départ en plusieurs objets distincts.
+      Pour un haut niveau d'abstraction, il existe les structures relationnelles, qui consiste à lier plusieurs données entre elles afin de représenter une image. Ce type de structure s'inspire grandement des bases de données relationnelles. La structure permet de lier entre elles les parties sémantiques de l'image. Ce type de structure est envisage dans la plupart des cas après avoir segmenter notre image de départ en plusieurs objets distincts.
 
-      
+      % Insertion image: relationnel.jpg
+
       En ce qui concerne les structures hiérarchiques de données, on distingue tout d'abord les pyrammides, qui se décomposent elles mêmes en deux types: les M-pyramides (à base de matrices) et les T-pyramides (à base d'arbres). Les pyramides sont composées d'une séquence d'images de différentes résolutions. Cette propriété rend donc les pyramides très pratique pour une utilisation en parallèle.
 
-      L'autre structure arborescente est l'arbre quaternaire (ou quadTree). C'est une structure dérivée des pyramides. D'ailleurs l'année dernière dans le cadre du partitionnement de l'espace 3D, nous avions fait appel à un octree, qui n'est autre que la généralisation des quadtree à l'espace. Pour revenir aux arbres quaternaires, leur principe est que l'image à représenter est soit une image de couleur uniforme, soit la réunion de quatre sous-images carrées de mêmes tailles. Cette structure est comme son nom l'indique une structure arborescente où les feuilles contiennent les couleurs des sous-images. Les arbres quaternaires sont utilisés entre autres pour la compression d'images, en effet ils permettent de miniser l'information nécessaire pour coder des zones homogènes. Cependant, l'ensemble des images pour lesquelles la compression par quadtree est efficace, est restreint. Voici un exemple d'arbre quaternaire:
-      
-      % Insertion image: quadtree.gif
+      L'autre structure arborescente est l'arbre quaternaire (ou quadTree). C'est une structure dérivée des pyramides. D'ailleurs l'année dernière dans le cadre du partitionnement de l'espace 3D, nous avions fait appel à un octree, qui n'est autre que la généralisation des quadtree à l'espace. Pour revenir aux arbres quaternaires, leur principe est que l'image à représenter est soit une image de couleur uniforme, soit la réunion de quatre sous-images carrées de mêmes tailles. Cette structure est comme son nom l'indique une structure arborescente où les feuilles contiennent les couleurs des sous-images. Les arbres quaternaires sont utilisés entre autres pour la compression d'images, en effet ils permettent de miniser l'information nécessaire pour coder des zones homogènes. Cependant, l'ensemble des images pour lesquelles la compression par quadtree est efficace, est restreint.
 
 
     % section structures_de_donn'ees_images (end)
@@ -218,7 +220,10 @@ Premi\`ere Soutenance \\
       Cette partie ``analyse de l'image et extraction'' se déroulera dans l'ordre suivant: tout d'abord, nous devrons détecter les blocs de l'image afin de pouvoir effectuer le traitement adéquate selon le type de bloc. En ce qui concerne le traitement des blocs de texte, on effectue une détection des lignes puis une extraction des caractères et enfin on passe les caractères à la partie ``Reconnaissance des caractères''.
 
       Pour cette soutenance, nous avons réalisé la détection des lignes conformément au planning. Cette détection des lignes se concrètise en un exécutable nommé \verb!extract! dans le répertoire \verb!/extraction! du projet. Il dispose de plusieurs options comme l'aide \verb!-h!, l'attribution du nom de fichier d'entrée \verb!-i [file]! et celui de sortie \verb!-o [file]!. Cette exécutable prend en entrée une image bitmap noir et blanc ``parfaite'' et génère un fichier bitmap fidèle au fichier original tout en ayant préalablement encadr\'e les lignes détectées.
-      Le traitement appliqué à l'image se décompose en cinq parties. En premier lieu, l'image source est chargée dans une surface à l'aide de la librairie SDL. Afin de faciliter les traitements, on binarise notre image, ainsi d'après la surface obtenue, on créé une matrice binaire représentant l'image. Nous effectuons ensuite la projection horizontale de cette matrice. La projection horizontale consiste à calculer le nombre de pixels noirs sur chaque ligne. On obtient ainsi un vecteur de projection, à savoir l'histogramme de projection horizontale de longueur la hauteur de l'image.
+      Le traitement appliqué à l'image se décompose en cinq parties. En premier lieu, l'image source est chargée dans une surface à l'aide de la librairie SDL. D'après cette surface, nous créons une matrice binaire représentant l'image. Nous effectuons ensuite la projection horizontale de cette matrice.
+      La projection horizontale consiste à calculer le nombre de pixels noirs sur chaque ligne. On obtient ainsi un vecteur de projection, à savoir l'histogramme de projection horizontale de longueur la hauteur de l'image.
+
+      % Formule mathématique de la projection horizontale
 
       Ensuite, la détection des lignes consiste à parcourir le vecteur de projection horizontale à la recherche des plages blanches (où il y a peu de pixels noirs) représentant les interlignes ainsi que les plages noires, à savoir les lignes de texte.
 
@@ -235,8 +240,8 @@ Premi\`ere Soutenance \\
         };
       \end{verbatim}
 
-      Cette structure est composée de plusieurs caractéristiques de la ligne, notamment sa position et sa hauteur qui nous permettent de la localiser dans l'image de départ.
-      Une fois le résultat obtenu, nous générons une image présentant les lignes détéctées dans des cadres et enfin nous sauvegardons le fichier bitmap. Ces deux opérations ne nous seront utiles seulement dans le cadre de la présentation de la détection des lignes lors de la première soutenance. En effet, la génération d'un fichier preview ne nous sera pas utiles dans la suite du projet.
+      Cette structure est composé de plusieurs caractéristiques de la ligne, notamment sa position et sa hauteur qui nous permettent de la localiser dans l'image de départ.
+      Une fois le résultat obtenu, nous générons une image présentant les lignes détéctées dans des cadres et enfin nous sauvegardons le fichier bitmap. Ces deux opérations ne nous seront utiles seulement dans le cadre de la présentation de la détection des lignes lors de la soutenance. En effet, la génération d'un fichier preview ne nous sera pas utiles dans la suite du projet.
 
     % section d'etection_des_lignes (end)
 
@@ -293,6 +298,15 @@ Premi\`ere Soutenance \\
         les images en couleurs lors de la partie segmentation, detection des blocs. Rappelons que les fichier png ont de
         nombreux modes de gestion de la couleur ce qui pourrait expliquer deux trois phénomènes.
 
+        \section{OCRed}
+        \subsection{caml}
+         Nous utilisons plusieurs outils qui nous facilitent la vie, tout d'abord Ocamlfind qui permet de trouver les bibliothéques à notre place, ce qui est fort utile. Ocamldebug malgré son étrangeté nous a permis de résoudre quelques petits problèmes.
+         Nous avons organisé notre arborescence de façon clair, afin en autre de créer une documentation lisible dans le futur grâce à Ocamldoc qui permet la création d'une documentation lisible au format .info html et autre.
+         Nous avons des modules dédiés à chaque tache, formules de rotation, valeurs par référence qui permettent des options d'exécution viables,transformation de l'image en type de donnée manipulable, gestion des événements utilisateur pour la partie graphique en sdl, gestion des options d'exécution grâce au module Arg de caml.
+         Bref, quelquechose de comprehensible.
+        \subsection{executable}
+        Nous avons fait en sorte, grâce au module Arg entre autres que notre exécutable puisse fonctionner en ligne de commande pure, mais aussi avec une interface graphique en sdl. Cela permet de larges possibilitées d'utilisation, et une flexibilité importante.
+        De plus les options d'exécution permettent une grande interaction avec le programme. On utilise l'option \!verb-d! qui permet de passer en mode graphique et donc de visualiser immédiatement les modifications efféctuées sur l'image.
         \section{Rotation de l'image}
         \label{principe}
         La rotation d'une image ce fait par rapport à son centre, nous devons donc prendre en compte le décalage.
@@ -302,10 +316,24 @@ Premi\`ere Soutenance \\
         des bornes du fichier source.
         La rotation d'une image pose d'autres problèmes que ceux citées plus haut:
         \begin{enumerate}
-          \item
-          \item
-          \item
+          \item la formule trigonométrique habituelle pour la rotation retourne des valeurs flottantes. On se retrouve donc avec des pixels qui en chevauchent plusieurs autre.
+          \item nous avons donc des pertes de données importantes, la solution envisagée serait une interpolation bilinéaire
         \end{enumerate}
+        Ansi la rotation peut être mise en équation de la façon suivante :
+%%%%%%%%%%%%%%%%%%%%%%%%%FIXME
+%%%%%%%%%%%%%%%%%%%%%%%% mettre les equations
+        %%                                ∀( x', y') ∈ dst ∃( x , y ) ∈ R2
+        %       tel que :
+        %                              x'    = x · cos (−α) − y · sin (−α)
+        %
+        %                              y'    = x · sin (−α) + y · cos (−α)
+        %
+        %       On a donc :
+        %                         si ( x , y ) ∈ tableausource
+        %                                 valeur de (x',y') = valeur de (x,y)
+        %                         sinon
+        %                                 valeur de (x',y') = 255 ou 0 (blanc ou noir) celon ce que l'on veut
+
 	% chapter pr'etraitement (end)
 
 
@@ -385,7 +413,7 @@ Premi\`ere Soutenance \\
 		\label{sec:comment_on_s_est_d'ebrouill'e}
 		Comment on s'est débrouillé
 
-			On est parti avec l'idée que le site web ne devrait pas nous éloigner de notre tâche principale: développer un logiciel de reconnaissance de caractères. Le site web est donc tr\`es basique. Nous avons 10 pages HTML, 5 en anglais et 5 en fran\c cais. Chaque page est reli\'ee \`a sa traduction dans l'autre langue. 
+			On est parti avec l'idée que le site web ne devrait pas nous éloigner de notre tâche principale: développer un logiciel de reconnaissance de caractères. Le site web est donc tr\`es basique. Nous avons 10 pages HTML, 5 en anglais et 5 en fran\c cais. Chaque page est reli\'ee \`a sa traduction dans l'autre langue.
 			Le code HTML de chaque page ne fait que quelques lignes, nous avons plus mis l'accent sur le fichier CSS. Les balises \verb!<div id="">! correspondent \`a un style du fichier CSS. Ce fichier nous autorise \`a d\'efinir la position des \'el\'ement ain si que divers effets qui se r\'ev\`elent assez utiles pour par exemple personaliser les liens.
 			La page d'accueil est visible en annexe.
 			 
@@ -410,7 +438,7 @@ Premi\`ere Soutenance \\
 
     \section{Segmentation} % (fold)
     \label{sec:s\'egmentation}
-  		Après les recherches effectuées pour cette soutenance, nous devrons implémenter une de ces méthode de détection de bloc afin de pouvoir différencier les blocs de texte à ceux d'images ou de graphiques. Comme énoncé précédemment, plusieurs méthodes s'offrent à nous pour effectuer ce traitement. Nous devrons également trouvé une structure de données permettant de stocker ces différents blocs et leurs caractéristiques propres mais également une technique permettant de conserver en mémoire les propriétés du texte, à savoir les paragraphes ou encore les tabulations.
+  		Nous devrons implémenter une méthode de détection de bloc afin de pouvoir différencier les blocs de texte à ceux d'images ou de graphiques. Comme énoncé dans précédemment, plusieurs méthodes s'offrent à nous pour effectuer ce traitement. Nous devrons également trouvé une structure de données permettant de stocker ces différents blocs et leurs caractéristiques propres mais également une structure permettant de garder en mémoire les propriétés du texte, à savoir les paragraphes ou encore les tabulations.
 
     % section s\'egmentation (end)
 
@@ -427,5 +455,5 @@ Premi\`ere Soutenance \\
 % section site (end)
 
 \bibliographystyle{plain}
-\bibliography{} 
+\bibliography{}
 \end{document}
