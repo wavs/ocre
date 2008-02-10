@@ -13,9 +13,8 @@ let pi = 3.141592653
 let rad = 180. /. pi
 let degree_to_rad degree = float_of_int (degree) *. rad
 
-let degree = ref 0
 let angle = ref 0.
-let create_angle a = angle := (degree_to_rad !degree)
+let create_angle a= angle := (degree_to_rad a)
 
 let mean_of_float x = match (modf x) with
   | (x,y) when (x >= 0.5)-> int_of_float(floor(y +. 1.))

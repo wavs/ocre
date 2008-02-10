@@ -10,4 +10,5 @@
 		This is the path.mli file.
 *)
 val image : string ref
+val output : string ref
 val create_image : string -> unit
