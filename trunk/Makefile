@@ -7,28 +7,18 @@
 # About this file: General Makefile of the OCRe project.
 #
 
-all:
-	make ocred &&
-	make extraction &&
-	make gui 
+all: red ext graph
 
-ocred:
+red:
 	rm -rf bin && mkdir bin && cd OCRed && make && mv OCRed ../bin && cd ../ &&
 
-extraction:
+ext:
 	cd extraction && make && mv extract ../bin && cd ../ &&
 
-gui:
-	cd gui && make && mv gui ../bin && cd ../ &&
+graph:
+	cd gui && make && mv gui ../bin && cp gui.glade ../bin && cd ../ &&
 
 
 
 clean:
-# 	cd OCRed/
-# 	make clean
-# 	cd ../extraction/
-# 	make clean
-# 	cd ../gui/
-# 	make clean
-# 	cd ../
-	rm -rf bin/
+	cd OCRed/ && make clean && cd ../extraction/ && make clean && cd ../gui/ && make clean && cd ../ && rm -rf bin/

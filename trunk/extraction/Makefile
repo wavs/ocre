@@ -23,6 +23,7 @@ $(TARGET): main.c args.c tools.c launch.c process.c init.c infos.c pixel.c binar
 
 clean:
 	rm -f *~ *.o core
+	rm -f extract
 
 bak:
 	cp *.[ch] Makefile Backup/
