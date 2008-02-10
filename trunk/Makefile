@@ -1,3 +1,5 @@
-SOURCES = OCRed/main.ml
+LIBS= sdl bigarray
+SOURCES = main.ml
 RESULT  = main
--include OCamlMakefile
+INCDIRS = +sdl
+include OCamlMakefile

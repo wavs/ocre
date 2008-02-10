@@ -12,5 +12,6 @@
 val image : Sdlvideo.surface ref
 val screen : Sdlvideo.surface ref
 val set_image : string -> unit
-val set_screen : int -> int -> Sdlvideo.surface
+val set_screen : int -> int -> unit
 val dim : Sdlvideo.surface -> int * int * int
+val taille : Sdlvideo.surface -> int * int

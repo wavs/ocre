@@ -18,6 +18,8 @@ let main () =
         Sdl.init [`VIDEO;`EVENTTHREAD;`TIMER];
         Sdlkey.enable_unicode true;
         Sdlkey.enable_key_repeat ();
+        let (w,h) = Surface.taille !Surface.image in
+        Surface.set_screen w h;
         Event.run ()
       with
           Event.Quit_input ->  Sdl.quit ()

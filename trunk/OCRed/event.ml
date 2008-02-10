@@ -14,9 +14,25 @@ exception Quit_onmouse
 exception Nothing_to_be_done
 exception Quit_input
 
-let screen = Surface.screen
+let f2 () =
+  print_endline "test_of_surf";
+  (*FIXME for passing variable angle*)
+  let img_rot = Rotation.hard_of_surf
+    !Surface.image
+    !Rotation.angle  in
+    if (!Path.output <> "") then
+      begin
+        Sdlvideo.save_BMP img_rot !Path.output;
+        Surface.image := img_rot;
+      end
+    else
+      begin
+        Sdlvideo.save_BMP img_rot "output.bmp";
+        Surface.image := img_rot;
+      end
 
 let action () =
+print_endline "please wait while processing";
 try
   let img_rot = Rotation.hard_of_surf
     !Surface.image
@@ -31,7 +47,7 @@ with
     Sdlvideo.flip !Surface.screen;
     Sdlvideo.blit_surface
       ~src:!Surface.image
-      ~dst:!screen ();
+      ~dst:!Surface.screen ();
     match
       Sdlevent.wait_event ()
     with
@@ -42,14 +58,8 @@ with
           Surface.image := Sdlloader.load_image "images/train.png";
           run();
       | Sdlevent.KEYDOWN {Sdlevent.keysym=Sdlkey.KEY_F2} ->
-          print_endline "test_of_surf";
-          (*FIXME for passing variable angle*)
-          let img_rot = Rotation.hard_of_surf
-            !Surface.image
-            !Rotation.angle  in
-            Sdlvideo.save_BMP img_rot "test.bmp";
-            Surface.image := img_rot;
-            run();
+          f2();
+          run();
       | Sdlevent.QUIT -> raise Quit_onmouse
           (* User-requested quit *)
       | Sdlevent.SYSWM ->
