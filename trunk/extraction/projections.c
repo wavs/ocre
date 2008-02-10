@@ -22,7 +22,7 @@ void horizontal_projection(t_binary_image *pic)
 {
   int i;
   int j;
-  
+
   pic->hproj = malloc(pic->height * sizeof(int));
   /* Gestion d'erreurs de mémoire */
   for (i=0; i < pic->height; i++)

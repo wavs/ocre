@@ -9,4 +9,5 @@
 	About this file:	OCRed/main.mli
 		This is the main.mli file.
 *)
+val init : unit -> unit
 val main : unit -> unit

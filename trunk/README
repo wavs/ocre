@@ -1,40 +1,58 @@
-OCRopus - open source document analysis and OCR system (www.ocropus.org)
+OCRe - open source document analysis and OCR system
+(www.huge.ocre.free.fr)
+This is an EPITA's student project.
 
-Version 0.1.1 (2007-10-31)
-
+Version 0.0.1 (2008-01-??)
 
 ------------------------------------------------------------------------
-Building OCRopus
+Building OCRe
 ------------------------------------------------------------------------
-Please refer to the file INSTALL for help on building OCRopus from 
+Please refer to the file INSTALL for help on building OCRopus from
 source.
 
 
 ------------------------------------------------------------------------
-Executing OCRopus
+Executing OCRe
 ------------------------------------------------------------------------
-After successfully building ocropus you can use "ocrocmd/ocrocmd" for
-performing OCR on a document image (preferably in .png format).
-Try e.g.
-    ocrocmd/ocrocmd data/pages/alice_1.png
-
-But, OCRopus can do more than ocrocmd shows:
-
-If you have built ocroscript you get an interpreter with the complete
-OCRopus
-functionality. You can run this either with an appropriate Lua script or 
-in
-interactive mode. The OCRopus team is actually using ocroscript for 
-quick
-development and unit testing.
-
-
+Hence you have run Make, you should have a bin directory.
+Where you will found three binaries:
+      * OCRed which processes rotation and tresholding
+      * gui which is at that time a beta-gui
+      * extract which processes line detection
 ------------------------------------------------------------------------
 Documentation
 ------------------------------------------------------------------------
-Please refer to http://www.ocropus.org/wiki/DocumentationIndex
-for the most recent documentation of OCRopus.
+        * the OCRed program is quite complexe:
+          - you have to set the input image whith the -i option
+          - you may specify an output, but it's not a must have,
+             whithout this option the executable save an image
+             whith different name in different path:
+             example : rotation.bmp treshold.bmp
+              (*sorry for the error*) in the current directory.
+              The executable could write a file in the upper
+              directory. We don't really know how it works.
+          - you may set the angle for rotation if you want one,
+            the angle is in degree. You have to use -a option for
+            this.
+          - you may set the treshold with -s option
+            (s like seuil in french). example: -s 300 is quite well.
+          - whith option -d it displays an ouput in a windows
+                 * press F1 to quit
+                 * press F2 to rotate or something
+                   whitout an angle it processes whith a 0 degree
+                   it enlarges your image ;)
+                 * press F3 to treshold
+                 * press F4 to filter with median filter
+                 !WARNING don't press F4 then F3, tresholding do
+                 its job only with colour.
+          - whithout this option
+             It makes what you want. More or Less.
 
+        * the gui is able to load and print an image
+
+        * extract takes a black&white bitmap image in input
+          with the option -i and it saves the preview with -o
+          The output image shows the text lines between two lines
 
 ------------------------------------------------------------------------
 Background

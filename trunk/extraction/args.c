@@ -1,4 +1,4 @@
-/*
+init/*
 ** OCRe - The ultimate OCR - HUGE Software
 ** OCRe is a project developed by 2nd year EPITA students
 ** - website: http://huge.ocre.free.fr/
@@ -52,7 +52,7 @@ t_launch_infos *apply_args(int argc, char *argv[])
 	      free(res);
 	      exit(EXIT_SUCCESS); }
 	}
-    } else { 
+    } else {
     help(argv[0]);
     free(res);
     exit(EXIT_SUCCESS);

@@ -1,7 +1,7 @@
 #include "main.h"
 
-/* 
-** opens an "About" dialog 
+/*
+** opens an "About" dialog
 */
 void on_about_show (gpointer user_data)
 {
@@ -12,7 +12,7 @@ void on_about_show (gpointer user_data)
   /* create adn About dialog */
   about = gtk_dialog_new_with_buttons("About",
 				      NULL,
-				      GTK_DIALOG_MODAL | 
+				      GTK_DIALOG_MODAL |
 				      GTK_DIALOG_DESTROY_WITH_PARENT,
 				      GTK_STOCK_OK,
 				      GTK_RESPONSE_ACCEPT,
@@ -31,15 +31,15 @@ void on_about_show (gpointer user_data)
   gtk_widget_show_all(about);
 
   /* destroy the widget if clicks on OK */
-  if (gtk_dialog_run(GTK_DIALOG (about)) == 
+  if (gtk_dialog_run(GTK_DIALOG (about)) ==
       GTK_RESPONSE_ACCEPT)
     {
       gtk_widget_destroy (about);
     }
 }
 
-/* 
-** opens an "Open File" dialog 
+/*
+** opens an "Open File" dialog
 */
 void on_open_show (GtkImageMenuItem* test, gpointer user_data)
 {
@@ -63,12 +63,12 @@ void on_open_show (GtkImageMenuItem* test, gpointer user_data)
     {
       char* filename;
       /* get the filename */
-      filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER 
+      filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER
 						(open));
       /* open the file */
       gtk_image_set_from_file(GTK_IMAGE(guisex->image),filename);
     }
-  
+
   gtk_widget_destroy (open);
 }
 
@@ -98,7 +98,7 @@ int main (int argc, char *argv[])
   glade_xml_signal_connect (gui->gxml, "on_about_show",
 			    G_CALLBACK (on_about_show));
 
-  gtk_widget_show (gui->window);                
+  gtk_widget_show (gui->window);
   gtk_main ();
 
   return 0;

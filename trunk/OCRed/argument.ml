@@ -32,15 +32,33 @@ let set_angle a =
     rotate := true
 
 let speclist = [
-  ("-o", Arg.String (fun s -> set_path_output s), "output path of your ouput image");
-  ("-i", Arg.String (fun s -> set_path_image s), "input path of your input image");
-  ("-a", Arg.Int (fun i -> set_angle i), "integer Angle in degree");
-  ("-d", Arg.Set display, " allows to see your image being transformed");
-  ("-s", Arg.Int (fun i -> set_seuil i), "integer  Treshold : Color to Black&White");
-  ("--output", Arg.String (fun s -> set_path_output s), "output path of your ouput image");
-  ("--image", Arg.String (fun s -> set_path_image s), "input path of your input image");
-  ("--angle", Arg.Int (fun i -> set_angle i), "Angle in degree");
-  ("--display", Arg.Set display, " Useless option")
+  ("-o",
+   Arg.String (fun s -> set_path_output s),
+   "output path of your ouput image");
+  ("-i",
+   Arg.String (fun s -> set_path_image s),
+   "input path of your input image");
+  ("-a",
+   Arg.Int (fun i -> set_angle i),
+   "integer Angle in degree");
+  ("-d",
+   Arg.Set display,
+   " allows to see your image being transformed");
+  ("-s",
+   Arg.Int (fun i -> set_seuil i),
+   "integer  Treshold : Color to Black&White");
+  ("--output",
+   Arg.String (fun s -> set_path_output s),
+   "output path of your ouput image");
+  ("--image",
+   Arg.String (fun s -> set_path_image s),
+   "input path of your input image");
+  ("--angle",
+   Arg.Int (fun i -> set_angle i),
+   "Angle in degree");
+  ("--display",
+   Arg.Set display,
+   " Useless option")
 ]
 
 let usage = "Usage: -image [path] -angle [float]"

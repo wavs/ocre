@@ -28,7 +28,7 @@ t_binary_image *bitmap_to_binaryimage(SDL_Surface *image,
   int j;
   Uint32 black;
   t_binary_image *pic;
-  
+
   black = SDL_MapRGB(image->format, 0x00, 0x00, 0x00);
   pic = NULL;
   pic = malloc(sizeof(t_binary_image));

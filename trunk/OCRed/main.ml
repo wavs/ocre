@@ -16,7 +16,10 @@ Sdl.init [`VIDEO;`EVENTTHREAD;`TIMER];
           Sdlkey.enable_key_repeat ()
 
 let main () =
-  Arg.parse (Arg.align Argument.speclist) (fun _ -> ()) Argument.usage;
+  Arg.parse
+    (Arg.align Argument.speclist)
+    (fun _ -> ())
+    Argument.usage;
   if !Argument.display then
     begin
       try

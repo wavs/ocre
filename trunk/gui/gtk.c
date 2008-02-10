@@ -14,8 +14,8 @@ int main (int argc, char *argv[])
                               G_CALLBACK (gtk_main_quit));
 
     g_object_unref (G_OBJECT (gxml));
-        
-    gtk_widget_show (window);                
+
+    gtk_widget_show (window);
     gtk_main ();
 
     return 0;

@@ -27,7 +27,7 @@
 void launchProgramWithDisplay(t_launch_infos *infos)
 {
   SDL_Surface *screen;
-  
+
   screen = NULL;
   if (infos->inFile != NULL && infos->outFile != NULL)
     {
@@ -54,7 +54,7 @@ void launchProgramWithDisplay(t_launch_infos *infos)
 void launchProgramWithoutDisplay(t_launch_infos *infos)
 {
   SDL_Surface *screen;
-  
+
   screen = NULL;
   if (infos->inFile != NULL && infos->outFile != NULL)
     {
