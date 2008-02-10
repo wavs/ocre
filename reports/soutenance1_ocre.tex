@@ -126,18 +126,111 @@ Premi\`ere Soutenance \\
 \part{Ce qu'on a fait} % (fold)
 \label{prt:ce_qu_on_a_fait}
 
-
-	\chapter{Extraction} % (fold)
-	\label{cha:extraction}
+% A VERFIER (wavs)
 	
-		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-		%%%%%%%%%%%%%%%%%%%%%% FIXME
-		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-		%%%%%%%%%%%%%%%%%%%%%% THOMAS
-		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \chapter{Repr\'esentation des images} % (fold)
+	\label{cha:repr'esentation_des_images}
 	
-	% chapter extraction (end)
+  
+    \section{Niveaux de repr\'esentation des images} % (fold)
+    \label{sec:niveaux_de_repr'esentation_des_images}
+  		Il existe de nombreuses manières de représenter les images en traitement numérique. On ordonne ces représentations selon une échelle d'abstraction. On distingue alors quatre principaux niveaux de représentation qui s'échelonnent du signal pour le moins abstrait jusqu'aux modèles relationnels constituant un haut niveau d'abstraction.
+      
+      En ce qui concerne le plus bas niveau d'abstraction, il y a la représentation "images iconiques", à savoir la représentation qui contient les données graphiques originales. Cette représentation est notamment utilisée durant le prétraitement de l'image (concernant le redressement, le débruitage ou encore le seuillage).
+      
+      Le second niveau d'abstraction est celui qui consiste à segmenter les images. Formées de différentes parties représentant des groupes de pixels agglutinés, l'image est ainsi segmentée afin de dégager des formes (ou objets) en particulier pour les traiter par la suite.
+      
+      La représentation géométrique constitue le troisième niveau de représentation. Les images sont ainsi caractérisées selon des données de forme 2D ou 3D. Cette représentation est utilisé notamment pour les simulations d'éclairage par exemple en CAO (Conception Assistée par Ordinateur).
+      
+      Enfin au plus haut niveau de l'échelle d'abstraction, on trouve les modèles relationnels qui permettent de traiter plus efficacement les données en les organisant par exemple sous la forme de réseaux sémantiques [Nilsson, 1982]. Les modèles relationnels consistent comme leurs noms l'indiquent, à mettre en relation plusieurs éléments de l'image afin de mieux comprendre et de mieux percer la signification de l'image.
+      
+    % section niveaux_de_repr'esentation_des_images (end)
+    
+    \section{Structures de donn\'ees images} % (fold)
+    \label{sec:structures_de_donn'ees_images}
+      Afin de représenter les images selon les précédents niveaux d'abstraction, nous avons besoin de structures contenant les données de l'image et implémentables en mémoire. On distingue parmi celles-ci deux grands types de structures. D'un côté, il y a les structures traditionnelles, consituées des matrices, des chaines ainsi que des structures topologiques et relationnelles. De l'autre côté, se trouvent les structures hiérarchiques telles que les pyramides et les arbres quaternaires.
+      
+      Certainement les plus connues et les plus communes, les matrices sont un moyen simple et efficace de représenter des images. Elles constituent une représentation bas-niveau des données graphiques. Chaque élément de la matrice représente un entier correspondant à la luminosité ou encore les trois composantes de couleurs RGB (ou une autre propriété élémentaire de l'image) d'un pixel (pour PICTure ELement). Le pixel dont les coordonnées seront (x,y) correspondra à l'élément (x,y) de la matrice,plus précisement à l'intersection de la ligne x et de la colonne y. Cette représentation sous forme de matrices implique certaines relations spatiales, notamment celles du voisinage, qui s'avère utile pour certains traitements de l'image. Les images binaires, les images constituées de plusieurs bandes spectrales (i.e. (Alpha) Rouge Vert Bleu) ainsi que les structures hiérarchiques constituent des exemples spécifiques d'images représentées à l'aide de matrices.
+      
+       % Insertion image: matrix.jpg
+       
+      Au stade actuel d'avancement du projet, nous représentons les images grâce au matrices, notamment pour le prétraitement de l'image. En ce qui concerne la partie extraction des lignes/caractères, nous avons décidé de les représenter par le biais d'une matrice binaire (0 pour un pixel blanc, 1 pour un pixel noir), décrite dans la structure s_binary_image.
+      
+      \begin{verbatim}
+				struct s_binary_image
+        {
+          char *name;
+          int width;
+          int height;
+          int **data;  /* Matrix of binary integer */
+          int *hproj;  /* Horizontal projection vector */
+        };
+			\end{verbatim}
+      
+      D'autres structures traditionnelles d'images existent. Les chaines sont un autre moyen de représenter les données graphiques. Le principe consiste à décrire les bords de l'objet que l'on veut représenter. Le contour est défini par la coordonnée de son pixel de référence et la séquence de symboles correspondant à l'orientation du pixel suivant. Chaque élément de la chaine correspond à un symbole basique de l'image, en somme un pixel. Les chaines codes ou Freeman codes [Freeman,1961] sont utilisées pour les données représentant des séquences de symboles. Côté implémentation, les chaines peuvent être représentéespar un vecteur de préférence une liste chainée.
+      
+      % Insertion image: chaincodes.jpg
+      
+      Il est également possible de représenter plus abstraitement les images par des structures topologiques, telles que des graphes. Ces structures sont constituées d'un ensemble d'éléments et leurs relations, à savoir respectivement les sommets et les arcs du graphe. Ces graphes peuvent bien entendu être valués par un poids. Pour représenter des images, on se sert d'un graphe de régions d'adjacence où les sommets sont des régions de l'image et les arcs sont les bords, à savoir les relations de voisinage. Le graphe de régions d'adjacence est créé à partir d'une matrice contenant les labels des régions de l'image, appellée "region map". Cette structure peut être utilisée pour filtrer un motif dans le cadre de la reconnaissance de symboles par exemple.
+      
+      % Insertion image: topo.jpg
+      
+      Pour un haut niveau d'abstraction, il existe les structures relationnelles, qui consiste à lier plusieurs données entre elles afin de représenter une image. Ce type de structure s'inspire grandement des bases de données relationnelles. La structure permet de lier entre elles les parties sémantiques de l'image. Ce type de structure est envisage dans la plupart des cas après avoir segmenter notre image de départ en plusieurs objets distincts.
+      
+      % Insertion image: relationnel.jpg
+      
+      En ce qui concerne les structures hiérarchiques de données, on distingue tout d'abord les pyrammides, qui se décomposent elles mêmes en deux types: les M-pyramides (à base de matrices) et les T-pyramides (à base d'arbres). Les pyramides sont composées d'une séquence d'images de différentes résolutions. Cette propriété rend donc les pyramides très pratique pour une utilisation en parallèle.
+      
+      L'autre structure arborescente est l'arbre quaternaire (ou quadTree). C'est une structure dérivée des pyramides. D'ailleurs l'année dernière dans le cadre du partitionnement de l'espace 3D, nous avions fait appel à un octree, qui n'est autre que la généralisation des quadtree à l'espace. Pour revenir aux arbres quaternaires, leur principe est que l'image à représenter est soit une image de couleur uniforme, soit la réunion de quatre sous-images carrées de mêmes tailles. Cette structure est comme son nom l'indique une structure arborescente où les feuilles contiennent les couleurs des sous-images. Les arbres quaternaires sont utilisés entre autres pour la compression d'images, en effet ils permettent de miniser l'information nécessaire pour coder des zones homogènes. Cependant, l'ensemble des images pour lesquelles la compression par quadtree est efficace, est restreint.
+      
+      
+    % section structures_de_donn'ees_images (end)
+	
+	% chapter repr'esentation_des_images (end)
 
+  
+	\chapter{Analyse de l'image et extraction} % (fold)
+	\label{cha:analyse_de_l'image_et_extraction}
+	
+    \section{D\'etection des lignes} % (fold)
+    \label{sec:d'etection_des_lignes}
+      Après prétraitement de l'image, on obtient une image "parfaite", à savoir redressée, débruitée et seuillée. C'est ensuite à la partie extraction de mettre en place la détection des lignes de l'image et l'extraction des caractères afin de pouvoir donner à la partie reconnaissance les caractères isolés. La partie extraction est également responsable de la détection des blocs dans l'image, tels que des blocs de texte, des schémas, des images ou encore des tableaux.
+      Cette partie analyse de l'image et extraction se déroulera dans l'ordre suivant: tout d'abord, nous devons détecter les blocs de l'image afin de pouvoir effectuer le traitement adéquate selon le type de bloc. En ce qui concerne le traitement des blocs de texte, on effectue une détection des lignes puis une extraction des caractères et enfin on passe les caractères aux réseaux de neurones.
+      
+      Pour cette soutenance, nous avons réalisé la détection des lignes conformément au planning. Cette détection des lignes se concrètise en un exécutable nommé "extract" dans le répertoire /extraction du projet. Il dispose de plusieurs options comme l'aide -h, l'attribution du nom de fichier d'entrée -i file et celui de sortie -o file. Cette exécutable prend en entrée une image bitmap noir&blanc "parfaite" et génère un fichier bitmap fidèle au fichier original tout en ayant préalablement encadrè les lignes détectées.
+      Le traitement appliqué à l'image se décompose en cinq parties. En premier lieu, l'image source est chargée dans une surface à l'aide de la librairie SDL. D'après cette surface, nous créons une matrice binaire représentant l'image. Nous effectuons ensuite la projection horizontale de cette matrice.
+      La projection horizontale consiste à calculer le nombre de pixels noirs sur chaque ligne. On obtient ainsi un vecteur de projection, à savoir l'histogramme de projection horizontale de longueur la hauteur de l'image.
+      
+      % Formule mathématique de la projection horizontale
+      
+      Ensuite, la détection des lignes consiste à parcourir le vecteur de projection horizontale à la recherche des plages blanches (où il y a peu de pixels noirs) représentant les interlignes ainsi que les plages noires, à savoir les lignes de texte. 
+      Cependant, appliqué tel quel, cet algorithme est peu robuste face aux pixels parasites (i.e. des tâches). En effet, ces pixels parasites auraient la facheuse tendance à être pris pour des lignes à part entière. C'est pourquoi lors de la détection des lignes, nous devons vérifier que les lignes détectées sont d'une hauteur suffisante. C'est pourquoi nous avons utilisé un certain seuil pour considérer une plage de pixels en tant que ligne. Afin que ce seuil soit le plus adapté, nous l'avons fixé à 8 pixels pour une résolution de 300 Points par Pouce. Les lignes détectées sont stockées dans une liste chainée de structure s_line_set définie comme ceci:
+      
+      \begin{verbatim}
+        struct s_line_set
+        {
+          int id;
+          int pos;
+          int height;
+          struct s_character_set *charlist;
+          struct s_line_set *next;
+        };
+      \end{verbatim}
+      
+      Cette structure est composé de plusieurs caractéristiques de la ligne, notamment sa position et sa hauteur qui nous permettent de la localiser dans l'image de départ.
+      Une fois le résultat obtenu, nous générons une image présentant les lignes détéctées dans des cadres et enfin nous sauvegardons le fichier bitmap. Ces deux opérations ne nous seront utiles seulement dans le cadre de la présentation de la détection des lignes lors de la soutenance. En effet, la génération d'un fichier preview ne nous sera pas utiles dans la suite du projet.
+      
+    % section d'etection_des_lignes (end)
+    
+    \section{M\'ethodes de s\'egmentation} % (fold)
+    \label{sec:m'ethodes_de_s\'egmentation}
+  		
+      
+    % section m'ethodes_de_s\'egmentation (end)
+	
+	% chapter analyse_de_l'image_et_extraction (end)
+
+  % A VERIFIER (wavs)
 
 	\chapter{Pr\'etraitement} % (fold)
 	\label{cha:pr'etraitement}
@@ -219,6 +312,23 @@ Premi\`ere Soutenance \\
 
 \part{Ce qu'on compte faire} % (fold)
 \label{prt:ce_qu_on_compte_faire}
+
+	\chapter{Analyse de l'image et extraction} % (fold)
+	\label{cha:analyse_de_l'image_et_extraction}
+	
+    \section{D\'etection des caractères} % (fold)
+    \label{sec:d'etection_des_caractères}
+      Pour les prochaînes soutenances, nous devrons réaliser une détection des caractères fonctionnelle qui sera robuste vis-à-vis des pixels parasites, du chevauchement des caractères et du défaut d'encrage excessif ou insuffisant. Pour cela, on utilisera vraisemblablement la projection verticale des pixels pour chaque ligne détectée. Pour le problème des pixels parasites, on incluera un seuil. En ce qui concerne le  chevauchement de caractères, on devra vérifier que les transitions entre l'arrière plan et les caractères ainsi que la connexité possible entre deux caractères, nous serons vraisemblablement ammené à utiliser une représentation topologique tel qu'un graphe. Pour les éventuelles problèmes d'encrage insuffisant, nous ferons appel à un autre seuil minimum de largeur de caractère. Enfin dans le cas d'un encrage excessif, on utilisera l'algorithme dit du "Break Cost".
+      
+    % section d'etection_des_caractères (end)
+    
+    \section{S\'egmentation} % (fold)
+    \label{sec:s\'egmentation}
+  		Nous devrons implémenter une méthode de détection de bloc afin de pouvoir différencier les blocs de texte à ceux d'images ou de graphiques. Comme énoncé dans précédemment, plusieurs méthodes s'offrent à nous pour effectuer ce traitement. Nous devrons également trouvé une structure de données permettant de stocker ces différents blocs et leurs caractéristiques propres mais également une structure permettant de garder en mémoire les propriétés du texte, à savoir les paragraphes ou encore les tabulations.
+      
+    % section s\'egmentation (end)
+	
+	% chapter analyse_de_l'image_et_extraction (end)
 
 % part ce_qu_on_compte_faire (end)
 
