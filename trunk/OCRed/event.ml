@@ -40,7 +40,7 @@ try
     Sdlvideo.save_BMP img_rot !Path.output
 with
   | Sdlvideo.Video_exn s -> print_endline
-      (s^" --> you may have forgotten an option try --help option")
+      (s^" --> you may have forgotten an option: try --help option")
 
  let rec run () =
   try
