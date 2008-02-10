@@ -49,7 +49,7 @@ t_result_extraction *extract_line(t_binary_image *pic)
 	      height_tmp++;
 	      i++;
 	    }
-	  if (height_tmp > (0.5*(pic->height / 100)))
+	  if (height_tmp > 8)
 	    {
 	      index++;
 	      tmp = malloc(sizeof(t_line_set));
