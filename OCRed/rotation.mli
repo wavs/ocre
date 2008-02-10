@@ -18,7 +18,6 @@ val pi : float
 val rad : float
 val degree_to_rad : int -> float
 val angle : float ref
-val degree : int ref
 val create_angle : int -> unit
 
 val direct_float : float -> float -> float -> int * int

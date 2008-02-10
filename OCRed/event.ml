@@ -16,37 +16,49 @@ exception Quit_input
 
 let screen = Surface.screen
 
+let action () =
+try
+  let img_rot = Rotation.hard_of_surf
+    !Surface.image
+    !Rotation.angle  in
+    Sdlvideo.save_BMP img_rot !Path.output
+with
+  | Sdlvideo.Video_exn s -> print_endline
+      (s^" --> you may have forgotten an option try --help option")
+
  let rec run () =
   try
     Sdlvideo.flip !Surface.screen;
     Sdlvideo.blit_surface
       ~src:!Surface.image
-      ~dst:!Surface.screen ();
-  match
-    Sdlevent.wait_event ()
-  with
-    | Sdlevent.KEYDOWN {Sdlevent.keysym=Sdlkey.KEY_F1} ->
+      ~dst:!screen ();
+    match
+      Sdlevent.wait_event ()
+    with
+      | Sdlevent.KEYDOWN {Sdlevent.keysym=Sdlkey.KEY_F1} ->
         raise Quit_input
-    | Sdlevent.KEYDOWN {Sdlevent.keysym=Sdlkey.KEY_F3} ->
-        print_endline "charge_image";
-        Surface.image := Sdlloader.load_image "images/train.png";
-        run();
-    | Sdlevent.KEYDOWN {Sdlevent.keysym=Sdlkey.KEY_F2} ->
-        print_endline "test_of_surf";
-        (*FIXME for passing variable angle*)
-        let img_rot = Rotation.hard_of_surf !Surface.image !Rotation.angle  in
-          Sdlvideo.save_BMP img_rot "test.bmp";
-        run();
-    | Sdlevent.QUIT -> raise Quit_onmouse
-        (* User-requested quit *)
-    | Sdlevent.SYSWM ->
-        print_endline (Sdlevent.string_of_event Sdlevent.SYSWM);
-        run()
-    | _ -> run ()
-with
-    Quit_input -> raise Quit_input
-  | Quit_onmouse -> raise Quit_onmouse
-
+      | Sdlevent.KEYDOWN {Sdlevent.keysym=Sdlkey.KEY_F3} ->
+          print_endline "charge_image";
+          Surface.image := Sdlloader.load_image "images/train.png";
+          run();
+      | Sdlevent.KEYDOWN {Sdlevent.keysym=Sdlkey.KEY_F2} ->
+          print_endline "test_of_surf";
+          (*FIXME for passing variable angle*)
+          let img_rot = Rotation.hard_of_surf
+            !Surface.image
+            !Rotation.angle  in
+            Sdlvideo.save_BMP img_rot "test.bmp";
+            Surface.image := img_rot;
+            run();
+      | Sdlevent.QUIT -> raise Quit_onmouse
+          (* User-requested quit *)
+      | Sdlevent.SYSWM ->
+          print_endline (Sdlevent.string_of_event Sdlevent.SYSWM);
+          run()
+      | _ -> run ()
+  with
+      Quit_input -> raise Quit_input
+    | Quit_onmouse -> raise Quit_onmouse
 
 (* System specific event need to be enable with event_state*)
 (* needed for copy/past application*)

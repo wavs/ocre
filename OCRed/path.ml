@@ -10,4 +10,5 @@
 		This is the path.ml file.
 *)
 let image = ref ""
+let output = ref ""
 let create_image (string: string) = image := string

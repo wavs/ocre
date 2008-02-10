@@ -10,14 +10,26 @@
 		This is the main.ml file.
 *)
 let main () =
-  Sdl.init [`VIDEO;`EVENTTHREAD;`TIMER];
-  Sdlkey.enable_unicode true;
-  Sdlkey.enable_key_repeat ();
-(*   Arg.parse (Arg.align Argument.speclist) (fun _ -> ()) Argument.usage ; *)
-  try
-    Event.run ()
-  with
-      Event.Quit_input ->  Sdl.quit ()
-    | Event.Quit_onmouse -> Sdl.quit ()
+  Arg.parse (Arg.align Argument.speclist) (fun _ -> ()) Argument.usage ;
+
+  if !Argument.display then
+    begin
+      try
+        Sdl.init [`VIDEO;`EVENTTHREAD;`TIMER];
+        Sdlkey.enable_unicode true;
+        Sdlkey.enable_key_repeat ();
+        Event.run ()
+      with
+          Event.Quit_input ->  Sdl.quit ()
+        | Event.Quit_onmouse -> Sdl.quit ()
+    end
+  else
+    begin
+      Sdl.init [`VIDEO;`EVENTTHREAD;`TIMER];
+      Sdlkey.enable_unicode true;
+      Sdlkey.enable_key_repeat ();
+      Event.action ();
+      Sdl.quit ()
+    end
 
 let _ = main ()

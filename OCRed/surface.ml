@@ -29,6 +29,7 @@ let screen = ref (Sdlvideo.set_video_mode
 
 let set_image path = image := Sdlloader.load_image path
 
+
 let set_screen  w h = Sdlvideo.set_video_mode
   w
   h
