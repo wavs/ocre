@@ -32,7 +32,7 @@ t_launch_infos *apply_args(int argc, char *argv[])
   res->outFile = NULL;
   if (argc > 1)
     {
-      while ((optchar = getopt(argc, argv, "i:o:h:d")) != -1)
+      while ((optchar = getopt(argc, argv, "i:o:h::d")) != -1)
 	{
 	  switch (optchar)
 	    {

@@ -27,7 +27,7 @@ void InitSDL(SDL_Surface *screen, int display)
       /* End of the program */
       exit(EXIT_FAILURE);
     }
-  fprintf(stderr, "SDL initialized.\n");
+  printf("SDL initialized.\n");
   atexit(SDL_Quit);
   /* Option -d: display the SDL window. */
   if (display)

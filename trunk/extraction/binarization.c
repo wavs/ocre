@@ -47,7 +47,7 @@ t_binary_image *bitmap_to_binaryimage(SDL_Surface *image, char *filename)
     {
       for (j=0; j < image->w; j++)
 	{
-	  if (getpixel(image,j,i) == black)
+	  if (getpixel(image,j,i) < black)
 	    {
 	      pic->data[j][i] = 1;
 	    }
