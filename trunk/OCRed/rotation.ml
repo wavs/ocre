@@ -11,7 +11,8 @@
 *)
 let pi = 3.141592653
 let rad = 180. /. pi
-let degree_to_rad degree = float_of_int (degree) *. rad
+let deg = pi /. 180.
+let degree_to_rad degree = float_of_int (degree) *. deg
 
 let angle = ref 0.
 let create_angle a= angle := (degree_to_rad a)
@@ -33,15 +34,15 @@ let direct_int i j theta=
     (mean_of_float x', mean_of_float y')
 
 let inverse_float x y theta=
-  let x' =    x*.cos(~-.theta) +. y*.sin(~-.theta) in
-  let y' =    x*.sin(~-.theta) -. y*.cos(~-.theta) in
+  let x' =    x*.cos(~-.theta) -. y*.sin(~-.theta) in
+  let y' =    x*.sin(~-.theta) +. y*.cos(~-.theta) in
     (mean_of_float x',mean_of_float y')
 
 let inverse_int i j theta=
   let x = float_of_int i in
   let y = float_of_int j in
-  let x' =    x*.cos(~-.theta) +. y*.sin(~-.theta) in
-  let y' =    x*.sin(~-.theta) -. y*.cos(~-.theta) in
+  let x' =    x*.cos(~-.theta) -. y*.sin(~-.theta) in
+  let y' =    x*.sin(~-.theta) +. y*.cos(~-.theta) in
     (mean_of_float x',mean_of_float y')
 
 let hypotenuse surface =
@@ -101,8 +102,8 @@ let hard_of_surf surf angle =
             begin
               Bigarray.Array2.set
                 my_output
-                (i)
                 (j)
+                (i)
                 (Bigarray.Array2.get
                    my_input
                    ( y )
@@ -112,8 +113,8 @@ let hard_of_surf surf angle =
             begin
               Bigarray.Array2.set
                 my_output
-                (i)
                 (j)
+                (i)
                 (Int32.of_int 255);
             end
       done;
