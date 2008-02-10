@@ -21,7 +21,8 @@
 ** into a binary image (t_binary_image in structures.h).
 ** Prerequisites: Allocation of the SDL_Surface image.
 */
-t_binary_image *bitmap_to_binaryimage(SDL_Surface *image, char *filename)
+t_binary_image *bitmap_to_binaryimage(SDL_Surface *image,
+				      char *filename)
 {
   int i;
   int j;
@@ -37,26 +38,21 @@ t_binary_image *bitmap_to_binaryimage(SDL_Surface *image, char *filename)
   pic->height = image->h;
   pic->data = malloc(pic->height * sizeof(int));
   /* Gestion d'erreurs mémoire */
-  for (i=0; i < pic->width; i++)
-    {
-      pic->data[i] = malloc(pic->height * sizeof(int));
-      /* Gestion d'erreurs mémoire */
-    }
+  for (i=0; i < pic->width; i++) {
+    pic->data[i] = malloc(pic->height * sizeof(int));
+    /* Gestion d'erreurs mémoire */
+  }
   SDL_LockSurface(image);
-  for (i=0; i < image->h; i++)
-    {
-      for (j=0; j < image->w; j++)
+  for (i=0; i < image->h; i++) {
+    for (j=0; j < image->w; j++) {
+      if (getpixel(image,j,i) == black)
 	{
-	  if (getpixel(image,j,i) < black)
-	    {
-	      pic->data[j][i] = 1;
-	    }
-	  else
-	    {
-	      pic->data[j][i] = 0;
-	    }
-	}
+	  pic->data[j][i] = 1;
+	} else {
+	pic->data[j][i] = 0;
+      }
     }
+  }
   SDL_UnlockSurface(image);
   pic->hproj = NULL;
   return(pic);

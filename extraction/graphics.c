@@ -68,7 +68,9 @@ void trace_boxline(SDL_Surface *image, t_line_set *linelist)
   t_line_set *tmp;
   Uint32 cl;
 
+
   cl = SDL_MapRGB(image->format, 0x00, 0x00, 0x00);
+  draw_line(0, 230, 3, 23, cl, image);
   tmp = linelist;
   while (tmp != NULL)
     {

@@ -33,31 +33,26 @@ void processAll(t_launch_infos *infos)
   pic = NULL;
   result = NULL;
   image = NULL;
-  /*image = IMG_Load(infos->inFile);*/
   image = SDL_LoadBMP(infos->inFile);
   if (image != NULL)
-    {
-      printf("Image %s loaded.\n", infos->inFile);
+    { printf("Image %s loaded.\n", infos->inFile);
       pic = bitmap_to_binaryimage(image,infos->inFile);
       if (pic != NULL)
-	{
-	  printf("Binarization done.\n");
+	{ printf("Binarization done.\n");
 	  horizontal_projection(pic);
 	  printf("Horizontal projection done.\n");
 	  result = extract_line(pic);
-	  printf("Lines extraction done.\n");
-	  trace_boxline(image,result->linelist);
-	  if (SDL_SaveBMP(image, infos->outFile) < 0)
-	    {
-	      fprintf(stderr,"SDL BMP saving error");
+	  if (result != NULL)
+	    { printf("Lines extraction done.\n");
+	      trace_boxline(image,result->linelist);
+	      if (SDL_SaveBMP(image, infos->outFile) < 0)
+		{ fprintf(stderr,"SDL BMP saving error"); }
+	      else
+		{ printf("Image %s saved.\n", infos->outFile); }
+	      /* free_all(pic,result); */
 	    }
-	  else
-	    {
-	      printf("Image %s saved.\n", infos->outFile);
-	    }
-	  SDL_FreeSurface(image);
-	  free_all(pic,result);
 	}
+      SDL_FreeSurface(image);
     }
   else
     {

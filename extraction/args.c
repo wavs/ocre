@@ -31,14 +31,11 @@ t_launch_infos *apply_args(int argc, char *argv[])
   res->inFile = NULL;
   res->outFile = NULL;
   if (argc > 1)
-    {
-      while ((optchar = getopt(argc, argv, "i:o:h::d")) != -1)
-	{
-	  switch (optchar)
-	    {
-	    case 'i':
-	      res->inFile = strdup(optarg);
-	      break;
+    { while ((optchar = getopt(argc, argv, "i:o:h::d")) != -1)
+	{ switch (optchar)
+	    {  case 'i':
+		res->inFile = strdup(optarg);
+		break;
 	    case 'o':
 	      res->outFile = strdup(optarg);
 	      break;
@@ -53,15 +50,12 @@ t_launch_infos *apply_args(int argc, char *argv[])
 	    case '?':
 	      unknown_command_line(argv[0]);
 	      free(res);
-	      exit(EXIT_SUCCESS);
-	    }
+	      exit(EXIT_SUCCESS); }
 	}
-    }
-  else
-    {
-      help(argv[0]);
-      free(res);
-      exit(EXIT_SUCCESS);
+    } else { 
+    help(argv[0]);
+    free(res);
+    exit(EXIT_SUCCESS);
     }
   return (res);
 }
