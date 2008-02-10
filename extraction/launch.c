@@ -58,7 +58,7 @@ void launchProgramWithoutDisplay(t_launch_infos *infos)
   screen = NULL;
   if (infos->inFile != NULL && infos->outFile != NULL)
     {
-      if (1) /*is_bmp(infos->inFile))*/
+      if is_bmp(infos->inFile))
 	{
 	  InitSDL(screen,0);
 	  processAll(infos);

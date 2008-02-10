@@ -17,4 +17,5 @@
 ** into a binary image (t_binary_image in structures.h).
 ** Prerequisites: Allocation of the SDL_Surface image.
 */
-t_binary_image *bitmap_to_binaryimage(SDL_Surface *image, char *filename);
+t_binary_image *bitmap_to_binaryimage(SDL_Surface *image,
+				      char *filename);
