@@ -1,10 +1,15 @@
 #include "main.h"
 
+/* 
+   opens an "About" dialog 
+*/
 void on_about_show (gpointer user_data)
 {
   GtkWidget* about;
   GtkWidget* label;
-
+  /* so there is no unused parameter... */
+  (void)user_data;
+  /* create adn About dialog */
   about = gtk_dialog_new_with_buttons("About",
 				      NULL,
 				      GTK_DIALOG_MODAL | 
@@ -12,8 +17,9 @@ void on_about_show (gpointer user_data)
 				      GTK_STOCK_OK,
 				      GTK_RESPONSE_ACCEPT,
 				      NULL);
+  /* text shown in the about box */
   label = gtk_label_new("OCRe - HUGE Software - 2008");
-
+  /* destroy the widget when clicking on the cross */
   g_signal_connect_swapped (about,
 			    "response",
 			    G_CALLBACK (gtk_widget_destroy),
@@ -24,6 +30,7 @@ void on_about_show (gpointer user_data)
 
   gtk_widget_show_all(about);
 
+  /* destroy the widget if clicks on OK */
   if (gtk_dialog_run(GTK_DIALOG (about)) == 
       GTK_RESPONSE_ACCEPT)
     {
@@ -31,14 +38,17 @@ void on_about_show (gpointer user_data)
     }
 }
 
-/* opens an "Open File" dialog */
+/* 
+   opens an "Open File" dialog 
+*/
 void on_open_show (GtkImageMenuItem* test, gpointer user_data)
 {
   GtkWidget* open;
   GUI_* guisex;
-
+  /* so there's no unused parameter... */
+  (void)test;
   guisex = (GUI_ *)user_data;
-  
+  /* create an open file dialog */
   open = gtk_file_chooser_dialog_new (NULL,
 				      NULL,
 				      GTK_FILE_CHOOSER_ACTION_OPEN,
@@ -52,16 +62,19 @@ void on_open_show (GtkImageMenuItem* test, gpointer user_data)
   if (gtk_dialog_run (GTK_DIALOG (open)) == GTK_RESPONSE_ACCEPT)
     {
       char* filename;
-      // get the filename
+      /* get the filename */
       filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER 
 						(open));
-      // open the file
+      /* open the file */
       gtk_image_set_from_file(GTK_IMAGE(guisex->image),filename);
     }
   
   gtk_widget_destroy (open);
 }
 
+/*
+  the main function
+*/
 int main (int argc, char *argv[])
 {
   GUI_* gui;
@@ -74,14 +87,14 @@ int main (int argc, char *argv[])
   gui->window = glade_xml_get_widget (gui->gxml, "window");
   gui->image  = glade_xml_get_widget (gui->gxml, "image");
 
-  // signal to quit the app
+  /* signal to quit the app */
   glade_xml_signal_connect (gui->gxml, "on_window_destroy",
 			    G_CALLBACK (gtk_main_quit));
-  // signal to open the "Open File" dialog
+  /* signal to open the "Open File" dialog */
   glade_xml_signal_connect_data (gui->gxml, "on_open_show",
 				 G_CALLBACK (on_open_show),
 				 gui);
-  // signal to open the "about" dialog
+  /* signal to open the "about" dialog */
   glade_xml_signal_connect (gui->gxml, "on_about_show",
 			    G_CALLBACK (on_about_show));
 
