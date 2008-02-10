@@ -242,8 +242,22 @@ Premi\`ere Soutenance \\
 
     \section{M\'ethodes de segmentation} % (fold)
     \label{sec:m'ethodes_de_s\'egmentation}
-
-
+      La ségmentation permet de décomposer une image en plusieurs sous-images, que l'on appellera blocs. Chacun de ces blocs possédera ces propres caractèristiques, notamment ses coordonnées, sa taille ainsi que son type: texte, image ou graphique. Plusieurs méthodes de ségmentation existent. Comme la ségmentation est sensible au bruit, son traitement se fera à partir d'une image parfaite.
+      \subsection{Ségmentation par seuillage}
+      La plus simple et la plus rapide est la ségmentation par seuillage (threshold segmentation), qui permet de distinguer les objets de l'arrière plan.
+      
+      % subsection segmentation_par_seuillage (end)
+      
+      Il y a également la segmentation par contours (edge-based segmentation) qui est utilisé pour détécter les bords des objets contenus dans des images représentant des cartes ou des photos.
+      On distingue aussi la ségmentation par régions (region-based segmentation). Ce type de ségmentation consiste à créer des régions dans l'image composées de pixels similaires. Ce critère de similarité est important car c'est celui-ci qui détermine le résultat obtenu après la segmentation. La ségmentation par régions génére donc un ensemble de régions.
+      \begin{enumerate}
+        \item la réunion de toutes les régions compose l'image d'origine.
+        \item toutes les régions sont connexes.
+        \item les pixels d'une même région sont homogènes.
+        \item les pixels de deux régions adjacentes ne sont pas homogènes.
+      \end{enumerate}
+      
+      
     % section m'ethodes_de_s\'egmentation (end)
 
 	% chapter analyse_de_l'image_et_extraction (end)
