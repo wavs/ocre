@@ -13,6 +13,7 @@
 (** {2 definition of functions for arguments} *)
 let display = ref false
 let seuil = ref false
+let rotate = ref false
 
 let set_path_image s =
   Path.create_image s;
@@ -27,7 +28,8 @@ let set_seuil i =
 
 
 let set_angle a =
-  Rotation.create_angle a
+  Rotation.create_angle a;
+    rotate := true
 
 let speclist = [
   ("-o", Arg.String (fun s -> set_path_output s), "output path of your ouput image");

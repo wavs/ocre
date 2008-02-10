@@ -11,6 +11,7 @@
 *)
 val display : bool ref
 val seuil : bool ref
+val rotate : bool ref
 val set_path_image : string -> unit
 val set_path_output : string -> unit
 val set_angle : int -> unit
