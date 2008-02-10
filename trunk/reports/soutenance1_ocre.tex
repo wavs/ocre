@@ -230,13 +230,46 @@ Premi\`ere Soutenance \\
 
 	\chapter{Pr\'etraitement} % (fold)
 	\label{cha:pr'etraitement}
-
-		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-		%%%%%%%%%%%%%%%%%%%%%% FIXME
-		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 		%%%%%%%%%%%%%%%%%%%%%% PIERRE
-		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        \section{Chargement des images} % (fold)
+        Pour la première soutenance, nous avons hesité entre l'utilisation des bibliothèques OcamlSdl et Camlimages, tout deux étant
+        capable de charger un bon nombre de format d'images différents. Camlimages fournit une multitude de fonctions de traitement
+        d'images, OcamlSdl quand a lui permet un accés relativement facile aux données de l'image --en effet la representation sous
+        forme de tableau d'entiers n'est pas tres intuitive-- et une exportation au format windows BMP aisé.
+        Il s'est avéré qu'il était plus facile d'utiliser les bibliotheques fournies par le PIE. Notre choix s'est donc porté vers
+        la bibliothèque OcamlSdl.
+        Dans tout les cas notre programme, prend n'importe quel format d'images supporté par OcamlSdl -- png, jpeg, bmp \ldots--
+        et renvoie une image au format windows BMP en noir et blanc. La valeur de seuil peut etre passé en paramètre.
 
+        \label{sec:Ocamlsdl}
+        Nous sommes partis d'un fichier caml contenant l'initialisation de sdl et l'affichage d'une fenêtre. Il a fallut assimiler
+        l'utilisation de cette bibliotheque, l'utilisation d'objet de type Sdlvideo.Surface en est un exemple. Pour faire ce que
+        nous avons à faire nous procédons de la manière suivante:
+        \begin{enumerate}
+          \item On créer un objet de type Sdlvideo.surface par l'intermédiaire du module Sdlloader qui permet de charger des
+            images d'extension variées.
+          \item On transforme cette objet en un tableau d'entiers grâce à des fonctions de notre cru. Mais surtout grâce a
+            get_pixel du module Sdlvideo.
+          \item On applique alors une fonction de seuillage, de rotation, ou de reduction du bruit (filtre médiant)
+        \end{enumerate}
+        Nous devons cependant signaler, que la transformation en tableau d'entier provoque un étrange phénomène au niveau des
+        couleurs -- les valeurs de rouges et de bleus sont échangées --. Ce problème devra être résolue afin de sauvegarder
+        les images en couleurs lors de la partie segmentation, detection des blocs. Rappelons que les fichier png ont de
+        nombreux modes de gestion de la couleur ce qui pourrait expliquer deux trois phénomènes.
+
+        \section{Rotation de l'image}
+        \label{principe}
+        La rotation d'une image ce fait par rapport à son centre, nous devons donc prendre en compte le décalage.
+        Il faut aussi remarquer qu'une rotation d'un angle différent de $O mod \pi$ nous donne une position des
+        pixels de destinations qui dépasse les bornes du tableau source. De ce fait notre image
+        de sortie sera plus grande. A l'avenir les images seront plus petites, on devra pour cela determiner les valeurs réelles
+        des bornes du fichier source.
+        La rotation d'une image pose d'autres problèmes que ceux citées plus haut:
+        \begin{enumerate}
+          \item
+          \item
+          \item
+        \end{enumerate}
 	% chapter pr'etraitement (end)
 
 
