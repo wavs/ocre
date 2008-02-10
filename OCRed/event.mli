@@ -13,5 +13,6 @@ exception Error_windows
 exception Quit_onmouse
 exception Nothing_to_be_done
 exception Quit_input
+val rotate : unit -> unit
 val action : unit -> unit
 val run : unit -> unit

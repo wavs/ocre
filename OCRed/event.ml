@@ -14,8 +14,9 @@ exception Quit_onmouse
 exception Nothing_to_be_done
 exception Quit_input
 
-let f2 () =
-  print_endline "test_of_surf";
+let rotate () =
+print_endline "please wait while processing...";
+try
   (*FIXME for passing variable angle*)
   let img_rot = Rotation.hard_of_surf
     !Surface.image
@@ -30,14 +31,16 @@ let f2 () =
         Sdlvideo.save_BMP img_rot "rotation.bmp";
         Surface.image := img_rot;
       end
+with
+  | Sdlvideo.Video_exn s -> print_endline
+      (s^" --> you may have forgotten an option : try --help option")
 
 let action () =
-print_endline "please wait while processing...";
+print_endline "please wait while processing... no action";
 try
-  let img_rot = Rotation.hard_of_surf
-    !Surface.image
-    !Rotation.angle  in
-    Sdlvideo.save_BMP img_rot !Path.output
+      begin
+        Sdlvideo.save_BMP !Surface.image "../noaction.bmp"
+      end
 with
   | Sdlvideo.Video_exn s -> print_endline
       (s^" --> you may have forgotten an option : try --help option")
@@ -62,7 +65,7 @@ with
           Seuil.main ();
           run()
       | Sdlevent.KEYDOWN {Sdlevent.keysym=Sdlkey.KEY_F2} ->
-          f2();
+          rotate();
           run()
       | Sdlevent.QUIT -> raise Quit_onmouse
           (* User-requested quit *)
