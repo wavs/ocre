@@ -16,7 +16,7 @@ ext:
 	cd extraction && make && mv extract ../bin && cd ../ &&
 
 graph:
-	cd gui && make && mv gui ../bin && cp gui.glade ../bin && cd ../ &&
+	cd gui && make && mv gui ../bin && cd ../ &&
 
 
 
