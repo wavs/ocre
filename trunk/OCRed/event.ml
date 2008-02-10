@@ -27,12 +27,12 @@ let f2 () =
       end
     else
       begin
-        Sdlvideo.save_BMP img_rot "output.bmp";
+        Sdlvideo.save_BMP img_rot "rotation.bmp";
         Surface.image := img_rot;
       end
 
 let action () =
-print_endline "please wait while processing";
+print_endline "please wait while processing...";
 try
   let img_rot = Rotation.hard_of_surf
     !Surface.image
@@ -40,7 +40,7 @@ try
     Sdlvideo.save_BMP img_rot !Path.output
 with
   | Sdlvideo.Video_exn s -> print_endline
-      (s^" --> you may have forgotten an option: try --help option")
+      (s^" --> you may have forgotten an option : try --help option")
 
  let rec run () =
   try
@@ -53,13 +53,17 @@ with
     with
       | Sdlevent.KEYDOWN {Sdlevent.keysym=Sdlkey.KEY_F1} ->
         raise Quit_input
-      | Sdlevent.KEYDOWN {Sdlevent.keysym=Sdlkey.KEY_F3} ->
-          print_endline "test seuil";
+      | Sdlevent.KEYDOWN {Sdlevent.keysym=Sdlkey.KEY_F4} ->
+          print_endline "Median Filter";
           Digit.main ();
+          run()
+      | Sdlevent.KEYDOWN {Sdlevent.keysym=Sdlkey.KEY_F3} ->
+          print_endline "Treshold";
+          Seuil.main ();
           run()
       | Sdlevent.KEYDOWN {Sdlevent.keysym=Sdlkey.KEY_F2} ->
           f2();
-          run();
+          run()
       | Sdlevent.QUIT -> raise Quit_onmouse
           (* User-requested quit *)
       | Sdlevent.SYSWM ->
