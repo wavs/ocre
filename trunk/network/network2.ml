@@ -131,7 +131,7 @@ object (self)
       done; (*activation calculée pour chaque neurone de chaque couche*)
     done
 
-  method delta() = (*calcule le nouveau delta qui servira à calculer le nouveau poids de chaque connexion*)
+  (*method delta() = (*calcule le nouveau delta qui servira à calculer le nouveau poids de chaque connexion*)
     for i = 1 to (Array.length layers) - 1 do (*on parcourt la liste des couches*)
       for j = 0 to (Array.length (layers.(i)#getneurons())) - 1 do (*on traite différemment la couche de sortie des autres*)
         if i = (Array.length layers) - 1 then
@@ -149,7 +149,7 @@ object (self)
       for j = 1 to (Array.length (layers.(i)#getneurons())) - 1 do (*o*)
         
       done;
-    done
+    done*)
 end
 (******************************end*********************************)
 
