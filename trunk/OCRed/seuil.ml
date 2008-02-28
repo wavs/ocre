@@ -26,7 +26,7 @@ let seuillage s =
 	  (* Seuil à déterminer *)
 	  if ((0.21268*.(float_of_int r) +.
                  0.7151*.(float_of_int g) +.
-                 0.07217*. (float_of_int b)) 
+                 0.07217*. (float_of_int b))
               < float_of_int(!seuil)) then
 	    Sdlvideo.put_pixel_color s i j (0,0,0)
 	  else
