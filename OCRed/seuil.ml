@@ -24,7 +24,10 @@ let seuillage s =
       for j = 0 to h do
 	let (r,g,b) = Sdlvideo.get_pixel_color s i j in
 	  (* Seuil à déterminer *)
-	  if ((r+g+b) < !seuil) then
+	  if ((0.21268*.(float_of_int r) +.
+                 0.7151*.(float_of_int g) +.
+                 0.07217*. (float_of_int b)) 
+              < float_of_int(!seuil)) then
 	    Sdlvideo.put_pixel_color s i j (0,0,0)
 	  else
 	    Sdlvideo.put_pixel_color s i j (255,255,255)
