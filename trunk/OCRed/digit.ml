@@ -9,7 +9,6 @@
 	About this file:	OCRed/digitization.ml
 		This is the digitization.ml file.
 *)
-
 (*****************************************************)
 (*FILTRE MEDIAN*)
 (*****************************************************)

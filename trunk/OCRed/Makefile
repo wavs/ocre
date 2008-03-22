@@ -1,5 +1,5 @@
 PKG=sdl,sdl.sdlimage,sdl.sdlmixer,sdl.sdlttf
-FILES1=path.ml surface.ml transforme.ml seuil.ml digit.ml rotation.ml hough.ml argument.ml event.ml
+FILES1=path.ml surface.ml transforme.ml seuil.ml digit.ml rotation.ml interpolation.ml argument.ml event.ml
 FILES2= main.ml
 LIBRARY= bigarray.cma sdlloader.cma
 PROG=OCRed

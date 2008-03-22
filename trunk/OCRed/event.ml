@@ -36,16 +36,47 @@ with
       (s^" --> you may have forgotten an option : try --help option")
 
 let action () =
-print_endline "please wait while processing... no action";
+print_endline "please wait while processing...";
 try
-      begin
-        Sdlvideo.save_BMP !Surface.image "../noaction.bmp"
-      end
+  if (!Argument.resize) then
+    begin
+      Surface.image := (Interpolation.resize
+                          !Surface.image
+                          !Argument.resize_of_x
+                          !Argument.resize_of_y);
+      if (!Path.output <> "") then
+        begin
+          Sdlvideo.save_BMP !Surface.image !Path.output;
+        end
+      else
+        begin
+          Sdlvideo.save_BMP !Surface.image "../resize.bmp";
+        end
+    end;
+
+  if (!Argument.percent) then
+    begin
+            Surface.image := (Interpolation.resize_percent
+                                !Surface.image
+                                !Argument.percent_res);
+      if (!Path.output <> "") then
+              begin
+                Sdlvideo.save_BMP !Surface.image !Path.output;
+              end
+      else
+        begin
+          Sdlvideo.save_BMP !Surface.image "../resize.bmp"
+        end;
+          end
+  else
+    begin
+      Sdlvideo.save_BMP !Surface.image "../noaction.bmp"
+    end
 with
   | Sdlvideo.Video_exn s -> print_endline
       (s^" --> you may have forgotten an option : try --help option")
 
- let rec run () =
+let rec run () =
   try
     Sdlvideo.flip !Surface.screen;
     Sdlvideo.blit_surface
@@ -76,3 +107,4 @@ with
   with
       Quit_input -> raise Quit_input
     | Quit_onmouse -> raise Quit_onmouse
+
