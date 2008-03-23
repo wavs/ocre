@@ -121,3 +121,13 @@ let hard_of_surf surf angle =
     done;
   Transforme.matrix_to_surf my_output
 
+(*
+ ** Rotation output optimized:
+ * A = width in ; l = width out
+ * B = height in ; L = height out
+ * alpha an angle;
+ * then we have with thales theorem and trigo simplification
+ *
+ * L = (cos(alpha)*B - sin(alpha)*A) / (cos(2alpha))
+ * l = (cos(alpha)*A - sin(alpha)*B) / (cos(2alpha))
+ *)
