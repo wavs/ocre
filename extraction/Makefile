@@ -18,8 +18,8 @@ CFLAGS= -W -Wall -pedantic -ansi -Werror -pipe -g
 # Target
 TARGET= extract
 
-$(TARGET): main.c args.c tools.c launch.c process.c init.c infos.c pixel.c binarization.c projections.c extraction.c graphics.c event.c free.c
-	gcc $(CFLAGS) `sdl-config --cflags --libs` main.c args.c tools.c launch.c process.c init.c infos.c pixel.c binarization.c projections.c extraction.c graphics.c event.c free.c -o $(TARGET)
+$(TARGET): main.c args.c tools.c launch.c process.c init.c infos.c pixel.c binarization.c projections.c extraction.c graphics.c event.c free.c wrappers.c
+	gcc $(CFLAGS) `sdl-config --cflags --libs` main.c args.c tools.c launch.c process.c init.c infos.c pixel.c binarization.c projections.c extraction.c graphics.c event.c free.c wrappers.c -o $(TARGET)
 
 clean:
 	rm -f *~ *.o core
