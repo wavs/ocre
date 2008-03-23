@@ -9,7 +9,10 @@
 ** About this file: /extraction/args.h
 **   This is the header of "args.c".
 */
+#ifndef ARGS_H
+#define ARGS_H
 
+#endif /* ARGS_H */
 
 /*
 ** This function checks arguements and returns filenames of
