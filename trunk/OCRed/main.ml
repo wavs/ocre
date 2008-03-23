@@ -33,10 +33,10 @@ let main () =
     end
   else
     begin
-      if (!Argument.seuil)&& (!Argument.rotate)then
+      if (* (!Argument.seuil)&&  *)(!Argument.rotate)then
         begin
           init ();
-          Seuil.main ();
+(*           Seuil.main (); *)
           Event.rotate ();
           Sdl.quit ()
         end

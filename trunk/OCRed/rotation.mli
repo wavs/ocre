@@ -32,3 +32,4 @@ val center : Sdlvideo.surface -> int * int
 val mean_of_float : float -> int
 val simple_surf : Sdlvideo.surface -> float -> Sdlvideo.surface
 val hard_of_surf : Sdlvideo.surface -> float -> Sdlvideo.surface
+val optimized : Sdlvideo.surface -> Sdlvideo.surface

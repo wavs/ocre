@@ -17,6 +17,11 @@ let degree_to_rad degree = float_of_int (degree) *. deg
 let angle = ref 0.
 let create_angle a= angle := (degree_to_rad a)
 
+let foi x = float_of_int x
+let iof x = int_of_float x
+let soi x = string_of_int x
+let sof x = string_of_float x
+
 let mean_of_float x = match (modf x) with
   | (x,y) when (x >= 0.5)-> int_of_float(floor(y +. 1.))
   | (_,y) -> int_of_float(floor(y))
@@ -128,6 +133,52 @@ let hard_of_surf surf angle =
  * alpha an angle;
  * then we have with thales theorem and trigo simplification
  *
- * L = (cos(alpha)*B - sin(alpha)*A) / (cos(2alpha))
- * l = (cos(alpha)*A - sin(alpha)*B) / (cos(2alpha))
+ * L = (cos(alpha)*B - sin(alpha)*A) / (cos(2alpha)) ; L= lo
+ * l = (cos(alpha)*A - sin(alpha)*B) / (cos(2alpha)) ; l= la
+ *
+ * For your information there is a problem with a negative angle
  *)
+let optimized surf =
+  let (height,width,pitch) = Surface.dim surf in
+    print_string ("this is height: "^soi(height)^"\n");
+    print_string ("this is width: "^soi(width)^"\n");
+    print_string ("this is angle: "^sof(!angle)^"\n");
+  let a = foi(width) in
+  let b = foi(height) in
+  let lo = (cos(!angle)*.b -. sin(!angle)*.a) /. (cos(2.*.(!angle))) in
+  let la = (cos(!angle)*.a -. sin(!angle)*.b) /. (cos(2.*.(!angle))) in
+      print_string ("this is heightout: "^sof(lo)^"\n");
+      print_string ("this is widthout: "^sof(la)^"\n");
+  let hypot = hypotenuse surf  in
+  let center = hypot / 2 in
+  let cx = (center - width/2) in
+  let cy = (center - height/2) in
+    (*middle of the big matrix*)
+  let my_output = Transforme.bigarray2 hypot hypot in
+  let my_input = Transforme.surf_to_matrix surf in
+    for i=0 to (hypot - 1) do
+      for j=0 to (hypot - 1) do
+        let (x,y) = inverse_int (i - center) (j - center) !angle in
+        let (x,y) = (x + center - cx,y + center - cy) in
+          if (is_in_rect x y width height) then
+            begin
+              Bigarray.Array2.set
+                my_output
+                (j)
+                (i)
+                (Bigarray.Array2.get
+                   my_input
+                   ( y )
+                   ( x ));
+            end
+          else
+            begin
+              Bigarray.Array2.set
+                my_output
+                (j)
+                (i)
+                (Int32.of_int 255);
+            end
+      done;
+    done;
+  Transforme.matrix_to_surf my_output
