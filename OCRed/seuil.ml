@@ -16,7 +16,7 @@
 
 (*****************************************************)
 (**)
-let seuil = ref 0
+let seuil = ref 600
 
 let seuillage s =
   let (w,h,p) = Sdlvideo.surface_dims s in

@@ -17,10 +17,11 @@ exception Quit_input
 let rotate () =
 print_endline "please wait while processing...";
 try
-  (*FIXME for passing variable angle*)
-  let img_rot = Rotation.hard_of_surf
-    !Surface.image
-    !Rotation.angle  in
+  (*
+   * FIXME for passing variable angle
+   * We have to export different image type jpg, bmp, tiff and more
+   *)
+  let img_rot = Rotation.optimized !Surface.image in
     if (!Path.output <> "") then
       begin
         Sdlvideo.save_BMP img_rot !Path.output;
