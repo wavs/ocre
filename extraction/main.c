@@ -1,14 +1,14 @@
-/*
-** OCRe - The ultimate OCR - HUGE Software
-** OCRe is a project developed by 2nd year EPITA students
-** - website: http://huge.ocre.free.fr/
-** - svn repository: http://code.google.com/p/ocre
-**
-** About this folder: /extraction
-**   OCRec is the character extraction part of OCRe.
-** About this file: /extraction/main.c
-**   This is the main file. The program begins here.
-*/
+/**
+ * OCRe - The ultimate OCR - HUGE Software
+ * OCRe is a project developed by 2nd year EPITA students
+ * - website: http://huge.ocre.free.fr/
+ * - svn repository: http://code.google.com/p/ocre
+ *
+ * About this folder: /extraction
+ *   OCRec is the character extraction part of OCRe.
+ * About this file: /extraction/main.c
+ *   This is the main file. The program begins here.
+ */
 
 #include <stdlib.h>
 #include "structures.h"
@@ -22,10 +22,14 @@
 #include "binarization.h"
 #include "extraction.h"
 #include "SDL/SDL.h"
+#include "wrappers.h"
 
-/*
-** This is the main function.
-*/
+/**
+ * This is the main function.
+ * @param argc Number of arguements.
+ * @param argv Array of string arguements.
+ * @return Integer 0 if succeed, -1 if error.
+ */
 int main(int argc, char *argv[])
 {
   t_launch_infos *infos;
@@ -39,6 +43,6 @@ int main(int argc, char *argv[])
     {
       launchProgramWithoutDisplay(infos);
     }
-  free(infos);
+  wfree(infos);
   return (EXIT_SUCCESS);
 }
