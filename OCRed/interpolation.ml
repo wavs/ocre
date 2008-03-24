@@ -113,14 +113,15 @@ try
 with
   | Projection_error -> print_string ("Maybe we have a wrong table")
 
-let histo_to_file tab file =
-  let channel = open_out file in
-    for (i = 0 to ((Bigarray.Array1.dim tab) - 1)) do
-           begin
-             fprintf channel "%s\n" "lol";
-             close_out channel
-           end
-    done
+let histo_to_file file =
+  let chan = (open_out file) in
+    for i = 0 to ((Bigarray.Array1.dim !proj_h_table) -1) do
+      begin
+        let str = Int32.to_string(Bigarray.Array1.get !proj_h_table i) in
+          output chan (str) i (String.length str)
+      end
+    done;
+    close_out chan
 
 let print_tabh ()=
   let toi x = Int32.to_int x in

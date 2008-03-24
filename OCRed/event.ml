@@ -28,7 +28,8 @@ let dev () =
         Sdlvideo.save_BMP !Surface.image !Path.output;
         Sdlvideo.save_BMP
           (Transforme.matrix_to_surf !Surface.reduce)
-          (!Path.output^"reduce")
+          (!Path.output^"reduce");
+        Interpolation.histo_to_file "histo.cvs"
       end
     else
       Sdlvideo.save_BMP !Surface.image "../projection.bmp"
