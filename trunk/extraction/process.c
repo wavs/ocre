@@ -1,15 +1,15 @@
-/*
-** OCRe - The ultimate OCR - HUGE Software
-** OCRe is a project developed by 2nd year EPITA students
-** - website: http://huge.ocre.free.fr/
-** - svn repository: http://code.google.com/p/ocre
-**
-** About this folder: /extraction
-**   OCRec is the character extraction part of OCRe.
-** About this file: /extraction/process.c
-**   This file contains a function which executes the
-**   extraction process.
-*/
+/**
+ * OCRe - The ultimate OCR - HUGE Software
+ * OCRe is a project developed by 2nd year EPITA students
+ * - website: http://huge.ocre.free.fr/
+ * - svn repository: http://code.google.com/p/ocre
+ *
+ * About this folder: /extraction
+ *   OCRec is the character extraction part of OCRe.
+ * About this file: /extraction/process.c
+ *   This file contains a function which executes the
+ *   extraction process.
+ */
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -20,10 +20,12 @@
 #include "extraction.h"
 #include "graphics.h"
 #include "free.h"
+#include "wrappers.h"
 
-/*
-** This function executes the extraction process.
-*/
+/**
+ * This function executes the extraction process.
+ * @param infos Informations about the launch process.
+ */
 void processAll(t_launch_infos *infos)
 {
   t_binary_image *pic;
@@ -39,8 +41,6 @@ void processAll(t_launch_infos *infos)
       pic = bitmap_to_binaryimage(image,infos->inFile);
       if (pic != NULL)
 	{ printf("Binarization done.\n");
-	  horizontal_projection(pic);
-	  printf("Horizontal projection done.\n");
 	  result = extract_line(pic);
 	  if (result != NULL)
 	    { printf("Lines extraction done.\n");
@@ -49,7 +49,7 @@ void processAll(t_launch_infos *infos)
 		{ fprintf(stderr,"SDL BMP saving error"); }
 	      else
 		{ printf("Image %s saved.\n", infos->outFile); }
-	      /* free_all(pic,result); */
+	      free_all(pic,result);
 	    }
 	}
       SDL_FreeSurface(image);
@@ -57,6 +57,7 @@ void processAll(t_launch_infos *infos)
   else
     {
       fprintf(stderr, "SDL BMP Loader error\n");
+      wfree(infos);
       exit(EXIT_FAILURE);
     }
 }
