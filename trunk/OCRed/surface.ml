@@ -9,6 +9,12 @@
 	About this file:	OCRed/surface.ml
 		This is the surface.ml file.
 *)
+let reduce = ref (Bigarray.Array2.create
+                                Bigarray.int32
+                                Bigarray.c_layout
+                                1
+                                1)
+
 let image = ref (Sdlvideo.create_RGB_surface
                    []
                    ~w:600

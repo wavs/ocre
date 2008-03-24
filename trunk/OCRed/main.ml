@@ -30,31 +30,32 @@ let main () =
       with
         | Event.Quit_input ->  Sdl.quit ()
         | Event.Quit_onmouse -> Sdl.quit ()
+    end;
+  if (!Argument.dev) then
+    begin
+      init ();
+      Event.dev ();
+      Sdl.quit ()
+    end;
+  if (* (!Argument.seuil)&&  *)(!Argument.rotate)then
+    begin
+      init ();
+      (*           Seuil.main (); *)
+      Event.rotate ();
+      Sdl.quit ()
+    end;
+
+  if (!Argument.seuil) then
+    begin
+      init ();
+      Seuil.main ();
+      Sdl.quit ()
     end
   else
     begin
-      if (* (!Argument.seuil)&&  *)(!Argument.rotate)then
-        begin
-          init ();
-(*           Seuil.main (); *)
-          Event.rotate ();
-          Sdl.quit ()
-        end
-      else
-        begin
-          if (!Argument.seuil) then
-            begin
-              init ();
-              Seuil.main ();
-              Sdl.quit ()
-            end
-          else
-            begin
-              init ();
-              Event.action ();
-              Sdl.quit ()
-            end
-        end
+      init ();
+      Event.action ();
+      Sdl.quit ()
     end
 
 

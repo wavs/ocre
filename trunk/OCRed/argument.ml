@@ -19,6 +19,10 @@ let percent     = ref false
 let resize_of_x = ref 800
 let resize_of_y = ref 600
 let percent_res = ref 100
+let dev         = ref false
+
+let set_dev () =
+  dev := true
 
 let set_percent_resize x =
   percent_res := x;
@@ -39,6 +43,11 @@ let set_angle a =
   Rotation.create_angle a;
     rotate := true
 
+let set_anglef a =
+  Rotation.create_anglef a;
+    rotate := true
+
+
 let set_width i =
   resize        := true;
   resize_of_x   := i
@@ -56,6 +65,12 @@ let speclist = [
   ("-a",
    Arg.Int (fun i -> set_angle i),
    "integer Angle in degree");
+  ("-af",
+   Arg.Float (fun i -> set_anglef i),
+   "float Angle in degree");
+  ("-dev",
+   Arg.Unit ( fun () -> set_dev()),
+   "noparameter This option is ");
   ("-d",
    Arg.Set display,
    " allows to see your image being transformed");

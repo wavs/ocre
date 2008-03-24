@@ -9,8 +9,18 @@
 	About this file:	OCRed/interpolation.mli
 		This is the interpolation.mli file.
 *)
+val proj_h_table        : (int32, Bigarray.int32_elt,
+                           Bigarray.c_layout) Bigarray.Array1.t ref
 val roundf              : float -> int
 val inverse_resize      : int -> int -> float -> float -> int * int
 val is_in_rect          : int -> int -> int -> int -> bool
 val resize              : Sdlvideo.surface -> int -> int -> Sdlvideo.surface
 val resize_percent      : Sdlvideo.surface -> int -> Sdlvideo.surface
+val resize_percent_unit : Sdlvideo.surface -> int -> unit
+val projection_h        : (int32, Bigarray.int32_elt,
+                           Bigarray.c_layout) Bigarray.Array2.t -> unit
+val print_tabh          : unit -> unit
+val histo_to_file       : (int32, Bigarray.int32_elt,
+                           Bigarray.c_layout) Bigarray.Array1.t
+  -> string
+  -> unit
