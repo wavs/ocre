@@ -20,7 +20,4 @@ val resize_percent_unit : Sdlvideo.surface -> int -> unit
 val projection_h        : (int32, Bigarray.int32_elt,
                            Bigarray.c_layout) Bigarray.Array2.t -> unit
 val print_tabh          : unit -> unit
-val histo_to_file       : (int32, Bigarray.int32_elt,
-                           Bigarray.c_layout) Bigarray.Array1.t
-  -> string
-  -> unit
+val histo_to_file       : string -> unit
