@@ -14,14 +14,9 @@ val seuil               : bool ref
 val rotate              : bool ref
 val resize              : bool ref
 val percent             : bool ref
+val dev                 : bool ref
 val percent_res         : int ref
 val resize_of_x         : int ref
 val resize_of_y         : int ref
-val set_path_image      : string -> unit
-val set_path_output     : string -> unit
-val set_percent_resize  : int -> unit
-val set_angle           : int -> unit
-val set_width           : int -> unit
-val set_height          : int -> unit
 val speclist            : (string * Arg.spec * string) list
 val usage               : string

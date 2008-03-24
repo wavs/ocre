@@ -20,6 +20,8 @@ val rad : float
 val degree_to_rad : int -> float
 val angle : float ref
 val create_angle : int -> unit
+val create_anglef : float -> unit
+
 
 val direct_float : float -> float -> float -> int * int
 (** process rotation of point (float) needed by simple_surg *)
@@ -33,3 +35,4 @@ val mean_of_float : float -> int
 val simple_surf : Sdlvideo.surface -> float -> Sdlvideo.surface
 val hard_of_surf : Sdlvideo.surface -> float -> Sdlvideo.surface
 val optimized : Sdlvideo.surface -> Sdlvideo.surface
+val optimized2 : Sdlvideo.surface -> Sdlvideo.surface

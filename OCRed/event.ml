@@ -14,14 +14,36 @@ exception Quit_onmouse
 exception Nothing_to_be_done
 exception Quit_input
 
+let dev () =
+  print_endline "please wait while testing";
+  try
+    Seuil.seuillage !Surface.image;
+    Interpolation.resize_percent_unit
+      !Surface.image
+      !Argument.percent_res ;
+    Interpolation.projection_h !Surface.reduce;
+    Interpolation.print_tabh ();
+    if (!Path.output <> "") then
+      begin
+        Sdlvideo.save_BMP !Surface.image !Path.output;
+        Sdlvideo.save_BMP
+          (Transforme.matrix_to_surf !Surface.reduce)
+          (!Path.output^"reduce")
+      end
+    else
+      Sdlvideo.save_BMP !Surface.image "../projection.bmp"
+   with
+     | Sdlvideo.Video_exn s -> print_endline
+         (s^ "--> you may have forgotten an option : try --help option; for example --resize")
+
 let rotate () =
-print_endline "please wait while processing...";
-try
+  print_endline "please wait while processing...";
+  try
   (*
    * FIXME for passing variable angle
    * We have to export different image type jpg, bmp, tiff and more
    *)
-  let img_rot = Rotation.optimized !Surface.image in
+  let img_rot = Rotation.optimized2 !Surface.image  in
     if (!Path.output <> "") then
       begin
         Sdlvideo.save_BMP img_rot !Path.output;

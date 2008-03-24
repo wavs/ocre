@@ -17,6 +17,12 @@ let bigarray2 width height = (Bigarray.Array2.create
                                 height)
 (**we create this function to avoid lines of more than 72 characters*)
 
+let bigarray1 width = (Bigarray.Array1.create
+                                Bigarray.int32
+                                Bigarray.c_layout
+                                width)
+
+
 let shift_pixel input output ax ay bx by =
    Bigarray.Array2.set output bx by (Bigarray.Array2.get input ax ay)
 
