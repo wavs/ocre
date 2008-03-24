@@ -117,8 +117,8 @@ let histo_to_file file =
   let chan = (open_out file) in
     for i = 0 to ((Bigarray.Array1.dim !proj_h_table) -1) do
       begin
-        let str = Int32.to_string(Bigarray.Array1.get !proj_h_table i) in
-          output chan (str) i (String.length str)
+        let str = (Int32.to_string(Bigarray.Array1.get !proj_h_table i)^" \n\n") in
+          output chan (str) 0 ((String.length str) -1);
       end
     done;
     close_out chan

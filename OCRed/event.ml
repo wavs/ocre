@@ -18,24 +18,29 @@ let dev () =
   print_endline "please wait while testing";
   try
     Seuil.seuillage !Surface.image;
+    print_string ("apres seuillage");
     Interpolation.resize_percent_unit
       !Surface.image
       !Argument.percent_res ;
+    print_string ("apres resize");
     Interpolation.projection_h !Surface.reduce;
+    print_string ("apres projection");
     Interpolation.print_tabh ();
+    print_string ("apres print_tabh\n");
     if (!Path.output <> "") then
       begin
         Sdlvideo.save_BMP !Surface.image !Path.output;
         Sdlvideo.save_BMP
           (Transforme.matrix_to_surf !Surface.reduce)
           (!Path.output^"reduce");
-        Interpolation.histo_to_file "histo.cvs"
+        print_string ("apres 2 output \n");
+        Interpolation.histo_to_file "histo.csv"
       end
     else
       Sdlvideo.save_BMP !Surface.image "../projection.bmp"
-   with
-     | Sdlvideo.Video_exn s -> print_endline
-         (s^ "--> you may have forgotten an option : try --help option; for example --resize")
+  with
+    | Sdlvideo.Video_exn s -> print_endline
+        (s^ "--> you may have forgotten an option : try --help option; for example --resize")
 
 let rotate () =
   print_endline "please wait while processing...";
