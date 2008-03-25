@@ -39,37 +39,39 @@ void free_pic(t_binary_image *pic)
  */
 void free_result(t_result_extraction *result)
 {
-  t_character_set *son_char;
-  t_line_set *son_line;
+  /*  t_character_set *tmp_char; */
+  t_line_set *tmp_line;
+
+  /*wfree(result->linelist->charlist);*/
 
   /* Free of linked list of lines */
   if (result != NULL)
     {
       if (result->linelist != NULL)
 	{
-	  son_line = result->linelist->next;
-	  while (son_line != NULL)
+	  tmp_line = result->linelist;
+	  while (tmp_line != NULL)
 	    {
-	      /* Free of linked list of characters*/
-	      if (result->linelist->charlist != NULL)
+	      /*if (result->linelist->charlist != NULL)
 		{
-		  son_char = result->linelist->charlist->next;
-		  while (son_char != NULL)
+		  tmp_char = result->linelist->charlist->next;
+		  while (tmp_char != NULL)
 		    {
 		      wfree(result->linelist->charlist);
-		      result->linelist->charlist = son_char;
-		      son_char = son_char->next;
+		      result->linelist->charlist = tmp_char;
+		      tmp_char = result->linelist->charlist->next;
 		    }
 		  wfree(result->linelist->charlist);
 		}
+	      */
 	      wfree(result->linelist);
-	      result->linelist = son_line;
-	      son_line = son_line->next;
+	      result->linelist = tmp_line;
+	      tmp_line = result->linelist->next;
 	    }
 	  wfree(result->linelist);
 	}
       wfree(result);
-    }
+      }
 }
 
 /**
