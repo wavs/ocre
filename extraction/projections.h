@@ -27,4 +27,6 @@ void horizontal_projection(t_binary_image *pic);
  * contains the vertical projection of the picture.
  * @param linelist Set of extracted lines.
  */
-void vertical_projection(t_line_set *linelist);
+void vertical_projection(t_binary_image *pic,
+			 t_line_set *line,
+			 int *vproj);

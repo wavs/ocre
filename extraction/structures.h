@@ -37,7 +37,8 @@ struct s_character_set
 {
   int id;
   int id_line;
-  int pos;
+  int posx;
+  int posy;
   int width;
   struct s_character_set *next;
 };

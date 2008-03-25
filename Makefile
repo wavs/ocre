@@ -10,13 +10,13 @@
 all: red ext graph
 
 red:
-	rm -rf bin && mkdir bin && cd OCRed && make && mv OCRed ../bin && cd ../ &&
+	rm -rf bin && mkdir bin && cd OCRed && make && mv OCRed ../bin && cd ../ 
 
 ext:
-	cd extraction && make && mv extract ../bin && cd ../ &&
+	cd extraction && make && mv extract ../bin && cd ../ 
 
 graph:
-	cd gui && make && mv gui ../bin && cd ../ &&
+	cd gui && make && mv gui ../bin && cd ../ 
 
 
 
