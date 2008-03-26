@@ -113,6 +113,55 @@ try
 with
   | Projection_error -> print_string ("Maybe we have a wrong table")
 
+let sommet_of_h tab =
+  let i         = ref 1 in
+  let count     = ref 0 in
+  let monte     = ref false in
+  let descendre = ref false in
+  let get x i   = Bigarray.Array1.get x i in
+  let dim x     = Bigarray.Array1.dim x in
+    while (get tab !i) = (get tab (!i + 1)) do
+      i := !i + 1
+    done;
+    if (get tab !i) < (get tab (!i+1)) then
+      begin
+        monte           := true;
+        descendre       := false;
+        count           := 0;
+      end
+    else
+      begin
+        monte           := false;
+        descendre       := true;
+        count           := 1;
+      end;
+    i := !i + 1;
+    while (!i < (dim tab)) do
+      begin
+        if(!descendre) then
+          begin
+            while (!i < ((dim tab) - 1))
+              && ((get tab !i) >= (get tab (!i + 1))) do
+                i       := !i + 1
+            done;
+            monte       := true;
+            descendre   := false;
+          end
+        else
+          begin
+            while (!i < ((dim tab) - 1))
+              && ((get tab !i) >= (get tab (!i + 1))) do
+                i       := !i + 1
+            done;
+            monte       := false;
+            descendre   := true;
+            count       := !count + 1;
+          end;
+        i := !i + 1
+      end
+    done;
+    !count
+
 let histo_to_file file =
   let chan = (open_out file) in
     for i = 0 to ((Bigarray.Array1.dim !proj_h_table) -1) do
@@ -133,6 +182,26 @@ let print_tabh ()=
     done;
     print_string ("\n")
 
+let resize_for_disco surf =
+  resize_percent_unit surf 15
+
+let discover_angle surf =
+  resize_for_disco surf;
+  let opti_angle        = ref 0         in
+  let droite            = ref false     in
+  let gauche            = ref false     in
+    projection_h Surface.reduce;
+  let current_sommet    = ref sommet_of_h !proj_h_table in
+    Rotation.optimized
+  let next_sommet       = ref
+    (*pseudo code*)
+    trouver valeur sommet pour image origine
+      stocker l'angle
+    rotation +5 degree
+      si sommet de + 1 degree est superieur a sommet courrant
+      alors stocker l'angle
+    (*fin pseudo code*)
+
 let resize_percent_unit surf percent =
   try
   if (percent > 100) then
@@ -151,7 +220,7 @@ let resize_percent_unit surf percent =
           let outwidth = Bigarray.Array2.dim1 my_output in
           let outheight = Bigarray.Array2.dim2 my_output in
             print_string ("this is outheight: "^soi(outheight)^"\n");
-            print_string ("this is outwidth: "^soi(outwidth)^"\n");
+            print_string ("this is outwidthw: "^soi(outwidth)^"\n");
             let my_input = Transforme.surf_to_matrix surf in
               for i=0 to (x - 1) do
                 for j=0 to (y - 1) do
