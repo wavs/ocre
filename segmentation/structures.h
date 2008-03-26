@@ -100,16 +100,27 @@ typedef struct s_launch_infos t_launch_infos;
  */
 
 /**
+ * This structure stores the coordinates of a 
+ * connected component.
+ */
+struct s_cc_coordinate
+{
+  int xmin;
+  int xmax;
+  int ymin;
+  int ymax;
+};
+
+typedef struct s_cc_coordinate t_cc_coordinate;
+
+/**
  * This structure represents a connected component.
  */
 struct s_cc_elt
 {
   int id;
   int nbpix; /* Optionnal */
-  int xmin;
-  int ymin;
-  int xmax;
-  int ymax;
+  struct s_cc_coordinate coord;
   short int chr; /* if >0 then cc is a character */
   
 };
@@ -122,8 +133,8 @@ typedef struct s_cc_elt t_cc_elt;
  */
 struct s_cc
 {
-  s_cc_elt elt;
-  s_cc *next;
+  struct s_cc_elt *elt;
+  struct s_cc *next;
 };
 
 typedef struct s_cc t_cc_list;
@@ -135,7 +146,7 @@ typedef struct s_cc t_cc_list;
 struct s_block_elt
 {
   int id;
-  s_cc *cclist;
+  struct s_cc *cclist;
   int nbcc;
   int posx; /* Left upper corner x coordinate */
   int posy; /* Left upper corner y coordinate */
@@ -152,11 +163,11 @@ typedef struct s_block_elt t_block_elt;
  */
 struct s_block
 {
-  s_block_elt elt;
-  s_block *next;
+  struct s_block_elt *elt;
+  struct s_block *next;
 };
 
-typedef struct s_block t_block_list
+typedef struct s_block t_block_list;
 
 /**
  * This structure stores the left/right margin

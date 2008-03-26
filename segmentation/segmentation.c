@@ -13,10 +13,74 @@
 
 #include "segmentation.h"
 #include "structures.h"
+#include "tools.h"
 #include "wrappers.h"
 
+
 /**
- * This functions finds all the connected components of
+ * This function crosses a connected component
+ * and calculates the number of black boxes.
+ *
+ * @param i Current y coordinate
+ * @param j Current x coordinate
+ * @param matrix Binary matrix
+ * @param mark Matrix of marks
+ *
+ * @return Number of black boxes
+ */
+int crossCC(int i, int j, t_cc_elt *elt, int **matrix, short int **mark)
+{
+  int pix_count;
+
+  pix_count = 1;
+
+  /* FIXME */
+
+  return(pix_count);
+}
+
+/**
+ * This function create a connected component.
+ *
+ * @param i Current y coordinate
+ * @param j Current x coordinate
+ * @param cc_count Number of the connected component
+ * @param matrix Binary matrix
+ * @param mark Matrix of marks
+ * @param cc_list Linked list of connected components
+ */
+void makeCC(int i,
+	    int j,
+	    int cc_count,
+	    int **matrix,
+	    short int **mark,
+	    t_cc_list *cc_list)
+{
+  t_cc_elt *elt;
+  t_cc_list *res;
+
+  /* Initialization */
+  elt = wmalloc(sizeof(t_cc_elt));
+  elt->id = cc_count;
+  elt->chr = 0;
+
+  /* Route of the connected component */
+  elt->nbpix = crossCC(i, j, elt, matrix, mark);
+
+  /* Update of the linked list */
+  if (cc_list == NULL)
+    {
+      res = wmalloc(sizeof(t_cc_list));
+      res->elt = elt;
+      res->next = NULL;
+      cc_list = res;
+    }
+  /* else
+     addList(elt, cc_list); */
+}
+
+/**
+ * This function finds all the connected components of
  * the matrix.
  *
  * @param matrix Binary matrix
@@ -27,7 +91,27 @@
  */
 t_cc_list *findCC(int **matrix, int height, int width)
 {
-  //FIXME
+  short int **mark;
+  int i, j, cc_count;
+  t_cc_list *ret;
+
+  /* Initialization */
+  mark = initMarkMatrix(height, width);
+  cc_count = 0;
+  ret = NULL;
+
+  for (i=0; i < height; i++)
+    for(j=0; j < width; j++)
+      {
+	mark[i][j] = -1;
+	/* Creation of connected component */
+	if ((matrix[i][j]) && (mark[i][j] == 0))
+	  {
+	    cc_count++;
+	    makeCC(i, j, cc_count, matrix, mark, ret);
+	  }
+      }  
+  return(ret);
 }
 
 /**
@@ -40,7 +124,8 @@ t_cc_list *findCC(int **matrix, int height, int width)
  */
 t_block_list *makeBlocks(t_cc_list *cc_list)
 {
-  //FIXME
+  /* FIXME */
+  return(NULL);
 }
 
 /**
@@ -51,7 +136,7 @@ t_block_list *makeBlocks(t_cc_list *cc_list)
  */
 void checkIfCharacter(t_cc_list *cc_list)
 {
-  //FIXME
+  /* FIXME */
 }
 
 /**
@@ -62,7 +147,7 @@ void checkIfCharacter(t_cc_list *cc_list)
  */
 void detectTypeOfBlocks(t_block_list *block_list)
 {
-  //FIXME
+  /* FIXME */
 }
 
 /**
@@ -74,5 +159,5 @@ void detectTypeOfBlocks(t_block_list *block_list)
  */
 void traceBlocks(t_block_list *block_list, t_limit *limit)
 {
-  //FIXME
+  /* FIXME */
 }
