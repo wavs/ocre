@@ -13,13 +13,13 @@
 CC=gcc
 
 # Flags
-CFLAGS= -W -Wall -pedantic -ansi -Werror -pipe -g
+CFLAGS= -W -Wall -pedantic -ansi -pipe -g
 
 # Target
 TARGET= extract
 
-$(TARGET): projections.c segmentation.c free.c wrappers.c
-	gcc $(CFLAGS) projections.c segmentation.c free.c wrappers.c -o $(TARGET)
+$(TARGET): main.c projections.c segmentation.c tools.c wrappers.c
+	gcc $(CFLAGS) main.c projections.c segmentation.c tools.c wrappers.c -o $(TARGET)
 
 clean:
 	rm -f *~ *.o core

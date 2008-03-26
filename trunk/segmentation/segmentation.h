@@ -17,6 +17,36 @@
 #endif /* SEGMENTATION_H */
 
 /**
+ * This function crosses a connected component
+ * and calculates the number of black boxes.
+ *
+ * @param i Current y coordinate
+ * @param j Current x coordinate
+ * @param matrix Binary matrix
+ * @param mark Matrix of marks
+ *
+ * @return Number of black boxes
+ */
+int crossCC(int i, int j, t_cc_elt *elt, int **matrix, short int **mark);
+
+/**
+ * This function create a connected component.
+ *
+ * @param i Current y coordinate
+ * @param j Current x coordinate
+ * @param cc_count Number of the connected component
+ * @param matrix Binary matrix
+ * @param mark Matrix of marks
+ * @param cc_list Linked list of connected components
+ */
+void makeCC(int i,
+	    int j,
+	    int cc_count,
+	    int **matrix,
+	    short int **mark,
+	    t_cc_list *cc_list);
+
+/**
  * This functions finds all the connected components of
  * the matrix.
  *
