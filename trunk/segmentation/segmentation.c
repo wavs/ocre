@@ -28,15 +28,45 @@
  *
  * @return Number of black boxes
  */
-int crossCC(int i, int j, t_cc_elt *elt, int **matrix, short int **mark)
+void crossCC(int y, int x, t_cc_elt *elt, int **matrix, short int **mark)
 {
+  int i, j;
   int pix_count;
+  int xtmp, ytmp;
+  t_queue q;
 
+  /* Initialization */
   pix_count = 1;
+  newQueue(q);
+  xtmp = x;
+  ytmp = y;
 
-  /* FIXME */
+  /* Route of the connected component */
+  do
+    {
+      if ((matrix[ytmp][xtmp+1] == 1) && (mark[ytmp][xtmp+1] == 0))
+	{
+	  /* enfiler (i,j) dans q */
+	  mark[ytmp][xtmp+1] = -1;
+	  pix_count++;
+	}
+      
+      for (i=(x-1); i <= (x+1); i++)
+	{
+	  /* WARNING WE MUST TEST IF IT IS OVER LIMIT */
+	  if ((matrix[ytmp+1][i] == 1) && (mark[ytmp+1][i] == 0))
+	    {
+	      /* enfiler (i,j) dans q */
+	      mark[ytmp+1][i] = -1;
+	      pix_count++;
+	    }
+	}
+      /* xtmp, ytmp = defiler (i,j) */
+    }
+  while (q != NULL)
+  
 
-  return(pix_count);
+  elt->nbpix = pix_count;
 }
 
 /**
@@ -65,7 +95,7 @@ void makeCC(int i,
   elt->chr = 0;
 
   /* Route of the connected component */
-  elt->nbpix = crossCC(i, j, elt, matrix, mark);
+  crossCC(i, j, elt, matrix, mark);
 
   /* Update of the linked list */
   if (cc_list == NULL)
@@ -103,13 +133,14 @@ t_cc_list *findCC(int **matrix, int height, int width)
   for (i=0; i < height; i++)
     for(j=0; j < width; j++)
       {
-	mark[i][j] = -1;
 	/* Creation of connected component */
 	if ((matrix[i][j]) && (mark[i][j] == 0))
 	  {
+	    mark[i][j] = -1;
 	    cc_count++;
 	    makeCC(i, j, cc_count, matrix, mark, ret);
 	  }
+	mark[i][j] = -1;
       }  
   return(ret);
 }
