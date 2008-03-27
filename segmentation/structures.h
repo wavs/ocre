@@ -8,7 +8,7 @@
  *   OCRec is the character extraction part of OCRe.
  * About this file: /segmentation/structures.h
  *   This file contains declarations of all structures
- *   about the extraction.
+ *   about the segmentation.
  */
 
 #ifndef STRUCTURES_H
@@ -100,6 +100,18 @@ typedef struct s_launch_infos t_launch_infos;
  */
 
 /**
+ * This structure stores a set of two
+ * coordinates.
+ */
+struct s_coordinate
+{
+  int x;
+  int y;
+};
+
+typedef struct s_coordinate t_coordinate;
+
+/**
  * This structure stores the coordinates of a 
  * connected component.
  */
@@ -122,7 +134,7 @@ struct s_cc_elt
   int nbpix; /* Optionnal */
   struct s_cc_coordinate coord;
   short int chr; /* if >0 then cc is a character */
-  
+  struct s_cc_elt *next;
 };
 
 typedef struct s_cc_elt t_cc_elt;
@@ -131,13 +143,14 @@ typedef struct s_cc_elt t_cc_elt;
  * This structure represents a linked list of
  * connected components. 
  */
-struct s_cc
+struct s_cc_list
 {
-  struct s_cc_elt *elt;
-  struct s_cc *next;
+  struct s_cc_elt *head;
+  struct s_cc_elt *tail;
+  int nbcc;
 };
 
-typedef struct s_cc t_cc_list;
+typedef struct s_cc_list t_cc_list;
 
 /**
  * This structure represents a block in the image
@@ -146,7 +159,7 @@ typedef struct s_cc t_cc_list;
 struct s_block_elt
 {
   int id;
-  struct s_cc *cclist;
+  struct s_cc_list *cclist;
   int nbcc;
   int posx; /* Left upper corner x coordinate */
   int posy; /* Left upper corner y coordinate */
@@ -182,3 +195,15 @@ struct s_limit
 };
 
 typedef struct s_limit t_limit;
+
+/**
+ * This structure represents a queue.
+ */
+struct s_queue
+{
+  struct s_queue *prev;
+  struct s_queue *next;
+  void *data;
+};
+
+typedef struct s_queue t_queue;

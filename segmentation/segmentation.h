@@ -27,7 +27,7 @@
  *
  * @return Number of black boxes
  */
-void crossCC(int i, int j, t_cc_elt *elt, int **matrix, short int **mark);
+void crossCC(int y, int x, t_cc_elt *elt, int **matrix, short int **mark);
 
 /**
  * This function create a connected component.
@@ -66,7 +66,7 @@ t_cc_list *findCC(int **matrix, int height, int width);
  * 
  * @return Linked list of blocks
  */
-t_block_list *makeBlocks(t_cc_list *cc_list);
+/*t_block_list *makeBlocks(t_cc_list *cc_list);*/
 
 /**
  * This function checks if the connected components
@@ -74,7 +74,7 @@ t_block_list *makeBlocks(t_cc_list *cc_list);
  *
  * @param cc_list Linked list of connected components
  */
-void checkIfCharacter(t_cc_list *cc_list);
+/*void checkIfCharacter(t_cc_list *cc_list);*/
 
 /**
  * This function detects the type of blocks
@@ -82,7 +82,7 @@ void checkIfCharacter(t_cc_list *cc_list);
  * 
  * @param block_list Linked list of blocks
  */
-void detectTypeOfBlocks(t_block_list *block_list);
+/*void detectTypeOfBlocks(t_block_list *block_list);*/
 
 /**
  * This function traces all the blocks with boxes
@@ -91,4 +91,4 @@ void detectTypeOfBlocks(t_block_list *block_list);
  * @param block_list Linked list of blocks
  * @param limit Margins of the input image.
  */
-void traceBlocks(t_block_list *block_list, t_limit *limit);
+/*void traceBlocks(t_block_list *block_list, t_limit *limit);*/

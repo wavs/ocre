@@ -18,8 +18,8 @@ CFLAGS= -W -Wall -pedantic -ansi -pipe -g
 # Target
 TARGET= extract
 
-$(TARGET): main.c projections.c segmentation.c tools.c wrappers.c
-	gcc $(CFLAGS) main.c projections.c segmentation.c tools.c wrappers.c -o $(TARGET)
+$(TARGET): main.c projections.c segmentation.c tools.c tests.c wrappers.c
+	gcc $(CFLAGS) main.c projections.c segmentation.c tools.c tests.c wrappers.c -o $(TARGET)
 
 clean:
 	rm -f *~ *.o core
