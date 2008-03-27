@@ -10,12 +10,9 @@
  *   This is the main file. The program begins here.
  */
 
-#include <stdio.h>
 #include <stdlib.h>
-#include "main.h"
-#include "structures.h"
-#include "projections.h"
-#include "wrappers.h"
+#include <stdio.h>
+#include "tests.h"
 
 /**
  * This is the main function.
@@ -27,5 +24,10 @@
  */
 int main()
 {
+  /* testInit(); */
+  /* testProjections(); */
+  /* testInitMarkMatrix(); SEGFAULT */
+  /* testQueue(); SEGFAULT */
+
   return (EXIT_SUCCESS);
 }

@@ -11,11 +11,10 @@
  *   about the extraction.
  */
 
-#include "segmentation.h"
 #include "structures.h"
+#include "segmentation.h"
 #include "tools.h"
 #include "wrappers.h"
-
 
 /**
  * This function crosses a connected component
@@ -30,14 +29,14 @@
  */
 void crossCC(int y, int x, t_cc_elt *elt, int **matrix, short int **mark)
 {
-  int i, j;
+  int i;
   int pix_count;
   int xtmp, ytmp;
-  t_queue q;
+  t_queue **q;
 
   /* Initialization */
   pix_count = 1;
-  newQueue(q);
+  qNew(q);
   xtmp = x;
   ytmp = y;
 
@@ -63,9 +62,7 @@ void crossCC(int y, int x, t_cc_elt *elt, int **matrix, short int **mark)
 	}
       /* xtmp, ytmp = defiler (i,j) */
     }
-  while (q != NULL)
-  
-
+  while (q != NULL);
   elt->nbpix = pix_count;
 }
 
@@ -87,26 +84,18 @@ void makeCC(int i,
 	    t_cc_list *cc_list)
 {
   t_cc_elt *elt;
-  t_cc_list *res;
 
   /* Initialization */
   elt = wmalloc(sizeof(t_cc_elt));
   elt->id = cc_count;
   elt->chr = 0;
+  elt->next = NULL;
 
   /* Route of the connected component */
   crossCC(i, j, elt, matrix, mark);
 
   /* Update of the linked list */
-  if (cc_list == NULL)
-    {
-      res = wmalloc(sizeof(t_cc_list));
-      res->elt = elt;
-      res->next = NULL;
-      cc_list = res;
-    }
-  /* else
-     addList(elt, cc_list); */
+  addListCC(elt, cc_list);
 }
 
 /**
@@ -153,11 +142,12 @@ t_cc_list *findCC(int **matrix, int height, int width)
  * 
  * @return Linked list of blocks
  */
-t_block_list *makeBlocks(t_cc_list *cc_list)
+/*t_block_list *makeBlocks(t_cc_list *cc_list)
 {
-  /* FIXME */
+  // FIXME
   return(NULL);
 }
+*/
 
 /**
  * This function checks if the connected components
@@ -165,10 +155,11 @@ t_block_list *makeBlocks(t_cc_list *cc_list)
  *
  * @param cc_list Linked list of connected components
  */
-void checkIfCharacter(t_cc_list *cc_list)
+/*void checkIfCharacter(t_cc_list *cc_list)
 {
-  /* FIXME */
+  // FIXME
 }
+*/
 
 /**
  * This function detects the type of blocks
@@ -176,10 +167,11 @@ void checkIfCharacter(t_cc_list *cc_list)
  * 
  * @param block_list Linked list of blocks
  */
-void detectTypeOfBlocks(t_block_list *block_list)
+/*void detectTypeOfBlocks(t_block_list *block_list)
 {
-  /* FIXME */
+  // FIXME
 }
+*/
 
 /**
  * This function traces all the blocks with boxes
@@ -188,7 +180,8 @@ void detectTypeOfBlocks(t_block_list *block_list)
  * @param block_list Linked list of blocks
  * @param limit Margins of the input image.
  */
-void traceBlocks(t_block_list *block_list, t_limit *limit)
+/*void traceBlocks(t_block_list *block_list, t_limit *limit)
 {
-  /* FIXME */
+  // FIXME
 }
+*/
