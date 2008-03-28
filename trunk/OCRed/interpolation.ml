@@ -114,16 +114,19 @@ with
   | Projection_error -> print_string ("Maybe we have a wrong table")
 
 let sommet_of_h tab =
-  let i         = ref 1 in
+  let i         = ref 0 in
   let count     = ref 0 in
   let monte     = ref false in
   let descendre = ref false in
   let get x i   = Bigarray.Array1.get x i in
   let dim x     = Bigarray.Array1.dim x in
-    while (get tab !i) = (get tab (!i + 1)) do
+    while ((!i + 1) <= (dim tab -1)) &&
+      ((get tab !i) = (get tab (!i + 1))) do
       i := !i + 1
     done;
-    if (get tab !i) < (get tab (!i+1)) then
+    print_string((soi !i)^"\n");
+    if ((!i + 1) <= (dim tab -1)) &&
+      ((get tab !i) < (get tab (!i+1))) then
       begin
         monte           := true;
         descendre       := false;
@@ -166,41 +169,25 @@ let histo_to_file file =
   let chan = (open_out file) in
     for i = 0 to ((Bigarray.Array1.dim !proj_h_table) -1) do
       begin
-        let str = (Int32.to_string(Bigarray.Array1.get !proj_h_table i)^" \n\n") in
+        let str = (
+          Int32.to_string(Bigarray.Array1.get !proj_h_table i)^
+            " \n\n"
+        ) in
           output chan (str) 0 ((String.length str) -1);
       end
     done;
     close_out chan
 
-let print_tabh ()=
+let print_tabh () =
   let toi x = Int32.to_int x in
   let i2s x = soi(toi(x)) in
     for i = 0 to ((Bigarray.Array1.dim !proj_h_table) -1) do
       begin
-        print_string (i2s( (Bigarray.Array1.get !proj_h_table  i))^"; \n")
+        print_string (i2s( (Bigarray.Array1.get
+                              !proj_h_table  i))^"; \n")
       end
     done;
     print_string ("\n")
-
-let resize_for_disco surf =
-  resize_percent_unit surf 15
-
-let discover_angle surf =
-  resize_for_disco surf;
-  let opti_angle        = ref 0         in
-  let droite            = ref false     in
-  let gauche            = ref false     in
-    projection_h Surface.reduce;
-  let current_sommet    = ref sommet_of_h !proj_h_table in
-    Rotation.optimized
-  let next_sommet       = ref
-    (*pseudo code*)
-    trouver valeur sommet pour image origine
-      stocker l'angle
-    rotation +5 degree
-      si sommet de + 1 degree est superieur a sommet courrant
-      alors stocker l'angle
-    (*fin pseudo code*)
 
 let resize_percent_unit surf percent =
   try
@@ -300,3 +287,92 @@ let resize_percent surf percent =
 with
   | Percentage_too_high -> print_string ("image non-altere percentage too high\n");
       surf
+
+let resize_for_disco surf =
+  resize_percent_unit surf 15
+
+let discover_angle surf =
+  resize_for_disco surf;
+  let opti_angle        = ref 0.        in
+  let temp_angle        = ref 0.        in
+  let droite            = ref false     in
+  let gauche            = ref false     in
+(*   let trouve            = ref false     in *)
+    projection_h !Surface.reduce;
+  let current_sommet    = ref (sommet_of_h !proj_h_table) in
+    print_string("no error herep\n");
+    temp_angle  := ~-.1.;
+    Rotation.angle := Rotation.degreef_to_rad !temp_angle;
+    Surface.rotated := Rotation.optimized3 !Surface.reduce;
+    projection_h !Surface.rotated;
+    let next_sommet       = ref (sommet_of_h !proj_h_table) in
+      if (!next_sommet < !current_sommet) then
+        begin
+          gauche := true;
+        end
+      else
+        begin
+          droite := true;
+          opti_angle := !temp_angle;
+        end;
+(*       while not(!trouve) do *)
+(*         begin *)
+(*           if(!droite)then *)
+(*             begin *)
+              
+(*             end *)
+(*           else *)
+(*             begin *)
+(*             end *)
+(*         end *)
+(*       done; *)
+      !opti_angle
+
+
+      (*     print_string((soi !i)^"\n"); *)
+(*     if ((!i + 1) <= (dim tab -1)) && *)
+(*       ((get tab !i) < (get tab (!i+1))) then *)
+(*       begin *)
+(*         monte           := true; *)
+(*         descendre       := false; *)
+(*         count           := 0; *)
+(*       end *)
+(*     else *)
+(*       begin *)
+(*         monte           := false; *)
+(*         descendre       := true; *)
+(*         count           := 1; *)
+(*       end; *)
+(*     i := !i + 1; *)
+(*     while (!i < (dim tab)) do *)
+(*       begin *)
+(*         if(!descendre) then *)
+(*           begin *)
+(*             while (!i < ((dim tab) - 1)) *)
+(*               && ((get tab !i) >= (get tab (!i + 1))) do *)
+(*                 i       := !i + 1 *)
+(*             done; *)
+(*             monte       := true; *)
+(*             descendre   := false; *)
+(*           end *)
+(*         else *)
+(*           begin *)
+(*             while (!i < ((dim tab) - 1)) *)
+(*               && ((get tab !i) >= (get tab (!i + 1))) do *)
+(*                 i       := !i + 1 *)
+(*             done; *)
+(*             monte       := false; *)
+(*             descendre   := true; *)
+(*             count       := !count + 1; *)
+(*           end; *)
+(*         i := !i + 1 *)
+(*       end *)
+(*     done; *)
+(*     !count *)
+    (*pseudo code*)
+    (* trouver valeur sommet pour image origine *)
+(*       stocker l'angle *)
+(*     rotation +5 degree *)
+(*       si sommet de + 1 degree est superieur a sommet courrant *)
+(*       alors stocker l'angle *)
+    (*fin pseudo code*)

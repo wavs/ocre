@@ -14,6 +14,11 @@ let reduce = ref (Bigarray.Array2.create
                                 Bigarray.c_layout
                                 1
                                 1)
+let rotated = ref (Bigarray.Array2.create
+                                Bigarray.int32
+                                Bigarray.c_layout
+                                1
+                                1)
 
 let image = ref (Sdlvideo.create_RGB_surface
                    []

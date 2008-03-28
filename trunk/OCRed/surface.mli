@@ -11,6 +11,8 @@
 *)
 val reduce : (int32, Bigarray.int32_elt,
               Bigarray.c_layout) Bigarray.Array2.t ref
+val rotated : (int32, Bigarray.int32_elt,
+              Bigarray.c_layout) Bigarray.Array2.t ref
 val image : Sdlvideo.surface ref
 val screen : Sdlvideo.surface ref
 val set_image : string -> unit
