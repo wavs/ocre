@@ -230,7 +230,8 @@ let optimized2 surf =
     done;
   Transforme.matrix_to_surf my_output
 
-let optimized3 tab =
+let optimized3 tab angle =
+  let angle     = degreef_to_rad angle     in
   let height    = Bigarray.Array2.dim1 tab in
   let width     = Bigarray.Array2.dim2 tab in
   let cx        = height/2 + 1 in
@@ -238,7 +239,7 @@ let optimized3 tab =
   let my_output = Transforme.bigarray2 height width in
     for i=0 to (width -1) do
       for j=0 to (height -1) do
-        let (x,y) = inverse_int (i - cx) (j - cy) !angle in
+        let (x,y) = inverse_int (i - cx) (j - cy) angle in
         let (x,y) = (x + cx, y + cy) in
           if (is_in_rect x y (width) (height)) then
             begin
