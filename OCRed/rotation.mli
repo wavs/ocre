@@ -39,6 +39,8 @@ val optimized : Sdlvideo.surface -> Sdlvideo.surface
 val optimized2 : Sdlvideo.surface -> Sdlvideo.surface
 val optimized3 : (int32,
                        Bigarray.int32_elt,
-                       Bigarray.c_layout) Bigarray.Array2.t -> (int32,
+                       Bigarray.c_layout) Bigarray.Array2.t ->
+  float ->
+  (int32,
                        Bigarray.int32_elt,
                        Bigarray.c_layout) Bigarray.Array2.t
