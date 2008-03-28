@@ -10,26 +10,28 @@
  *   This file contains some test functions.
  */
 
-#include <stdio.h>
 #include "structures.h"
-#include "projections.h"
+#include <stdio.h>
 #include "tests.h"
+#include "projections.h"
 #include "tools.h"
 #include "wrappers.h"
 
-int **initializeEnv()
+t_matrix *initializeEnv()
 {
-  int i, j;
-  int **ret;
+  unsigned int i, j;
+  t_matrix *ret;
 
-  ret = NULL;
-  ret = wcalloc(10, sizeof(int));
-  for (i=0; i < 10; i++)
-    ret[i] = wcalloc(10, sizeof(int));
+  ret->nbrows = 10;
+  ret->nbcols = 10;
+  ret->data = NULL;
+  ret->data = (int **)wcalloc(ret->nbrows, sizeof(int *));
+  for (i=0; i < ret->nbrows; ++i)
+    ret->data[i] = (int *)wcalloc(ret->nbcols, sizeof(int));
 
-  for (i=0; i < 10; i++)
-    for(j=0; j < 10; j++)
-      ret[i][j] = 0;
+  for (i=0; i < ret->nbrows; ++i)
+    for(j=0; j < ret->nbcols; ++j)
+      ret->data[i][j] = 0;
 
   return(ret);
 }
@@ -45,32 +47,32 @@ void print_vector(int *vector, int length)
   printf("\n\n");
 }
 
-void print_matrix(int **matrix, int height, int width)
+void print_matrix(t_matrix *matrix)
 {
-  int i, j;
+  unsigned int i,j;
 
   printf("-- Matrix display --\n");
-  printf("  height: %d\n", height);
-  printf("  width: %d\n\n", width);
-  for (i=0; i < height; i++)
+  printf("  rows: %d\n", matrix->nbrows);
+  printf("  colums: %d\n\n", matrix->nbcols);
+  for (i=0; i < matrix->nbrows; ++i)
     {
       printf("\n");
-      for(j=0; j < width; j++)
-	printf(" %d",matrix[i][j]);
+      for(j=0; j < matrix->nbcols; ++j)
+	printf(" %d",matrix->data[i][j]);
     }
   printf("\n\n");
 }
 
 void testInit()
 {
-  int **matrix;
+  t_matrix *matrix;
 
   /* Initialization of the matrix */
   matrix = initializeEnv();
   
   /* Print of the matrix */
   if (matrix != NULL)
-    print_matrix(matrix, 10, 10);
+    print_matrix(matrix);
 }
 
 void testProjections()
@@ -82,20 +84,11 @@ void testProjections()
   pic->name = "test";
   pic->width = 10;
   pic->height = 10;
-  pic->data = initializeEnv();
+  pic->matrix = initializeEnv();
   pic->hproj = NULL;
   pic->vproj = NULL;
 
-  pic->data[2][3] = 1;
-  pic->data[2][5] = 1;
-
-  pic->data[7][1] = 1;
-  pic->data[2][1] = 1;
-  pic->data[4][1] = 1;
-  pic->data[9][1] = 1;
-  pic->data[0][1] = 1;
-
-  print_matrix(pic->data, 10, 10);
+  print_matrix(pic->matrix);
 
   /* Computation of projections*/
   horizontal_projection(pic);
@@ -116,7 +109,7 @@ void testProjections()
 
 void testInitMarkMatrix()
 {
-  short int **matrix;
+  char **matrix;
   int i, j;
 
   /* Initialization of the matrix */
@@ -133,7 +126,7 @@ void testInitMarkMatrix()
 	{
 	  printf("\n");
 	  for(j=0; j < 5; j++)
-	    printf(" %d",matrix[i][j]);
+	    printf(" %c",matrix[i][j]);
 	}
       printf("\n\n");
     }
@@ -173,5 +166,5 @@ void testQueue()
 	printf("Queue deleted\n");
     }
   else
-  printf("Queue error");
+    printf("Queue error");
 }

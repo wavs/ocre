@@ -11,10 +11,12 @@
  *   about the extraction.
  */
 
+#include <stdio.h>
+#include <stdlib.h>
+#include "wrappers.h"
 #include "structures.h"
 #include "segmentation.h"
 #include "tools.h"
-#include "wrappers.h"
 
 /**
  * This function crosses a connected component
@@ -27,11 +29,13 @@
  *
  * @return Number of black boxes
  */
-void crossCC(int y, int x, t_cc_elt *elt, int **matrix, short int **mark)
+void crossCC(int y, int x, t_cc_elt *elt, t_matrix *matrix, char **mark)
 {
   int i;
   int pix_count;
   int xtmp, ytmp;
+  t_coordinate *coord, *res;
+  t_cc_coordinate *minmax;
   t_queue **q;
 
   /* Initialization */
@@ -39,31 +43,61 @@ void crossCC(int y, int x, t_cc_elt *elt, int **matrix, short int **mark)
   qNew(q);
   xtmp = x;
   ytmp = y;
+  minmax = wcalloc(1, sizeof(t_cc_coordinate));
+  minmax->xmin = x;
+  minmax->xmax = x;
+  minmax->ymin = y;
+  minmax->ymax = y;
 
   /* Route of the connected component */
   do
     {
-      if ((matrix[ytmp][xtmp+1] == 1) && (mark[ytmp][xtmp+1] == 0))
+      if (checkIfUnderLimits(xtmp, ytmp, matrix->nbcols, matrix->nbrows))
 	{
-	  /* enfiler (i,j) dans q */
-	  mark[ytmp][xtmp+1] = -1;
-	  pix_count++;
-	}
-      
-      for (i=(x-1); i <= (x+1); i++)
-	{
-	  /* WARNING WE MUST TEST IF IT IS OVER LIMIT */
-	  if ((matrix[ytmp+1][i] == 1) && (mark[ytmp+1][i] == 0))
+	  if ((matrix->data[ytmp][xtmp+1] == 1) && (mark[ytmp][xtmp+1] == 'o'))
 	    {
 	      /* enfiler (i,j) dans q */
-	      mark[ytmp+1][i] = -1;
+	      coord = wcalloc(1, sizeof(t_coordinate));
+	      coord->x = xtmp + 1;
+	      coord->y = ytmp;
+	      qPost(q, coord);
+	      mark[ytmp][xtmp+1] = 'x';
+	      /* Update of min,max coordinates */
+	      updateMinMax(minmax, (xtmp+1), ytmp);
 	      pix_count++;
 	    }
+	  
+	  for (i=(xtmp-1); i <= (xtmp+1); ++i)
+	    {
+	      /* WARNING WE MUST TEST IF IT IS OVER LIMIT */
+	      if ((matrix->data[ytmp+1][i] == 1) && (mark[ytmp+1][i] == 'o'))
+		{
+		  /* enfiler (i,j) dans q */
+		  coord = wcalloc(1, sizeof(t_coordinate));
+		  coord->x = i;
+		  coord->y = ytmp + 1;
+		  qPost(q, coord);
+		  mark[ytmp+1][i] = 'x';
+		  /* Update of min,max coordinates */
+		  updateMinMax(minmax, i, (ytmp+1));
+		  pix_count++;
+		}
+	    }
+	  /* xtmp, ytmp = defiler (i,j) */
+	  res = qGet(q);
+	  xtmp = res->x;
+	  ytmp = res->y;
+	  wfree(res);
 	}
-      /* xtmp, ytmp = defiler (i,j) */
+      else
+	{
+	  printf("Matrix error: Out of range\n Process aborted.\n");
+	  exit(EXIT_FAILURE);
+	}
     }
-  while (q != NULL);
+      while (q != NULL);
   elt->nbpix = pix_count;
+  qDelete(q);
 }
 
 /**
@@ -79,14 +113,14 @@ void crossCC(int y, int x, t_cc_elt *elt, int **matrix, short int **mark)
 void makeCC(int i,
 	    int j,
 	    int cc_count,
-	    int **matrix,
-	    short int **mark,
+	    t_matrix *matrix,
+	    char **mark,
 	    t_cc_list *cc_list)
 {
   t_cc_elt *elt;
 
   /* Initialization */
-  elt = wmalloc(sizeof(t_cc_elt));
+  elt = wcalloc(1, sizeof(t_cc_elt));
   elt->id = cc_count;
   elt->chr = 0;
   elt->next = NULL;
@@ -108,29 +142,30 @@ void makeCC(int i,
  *
  * @return Linked list of connected components
  */
-t_cc_list *findCC(int **matrix, int height, int width)
+t_cc_list *findCC(t_matrix *matrix)
 {
-  short int **mark;
-  int i, j, cc_count;
+  char **mark;
+  unsigned int i, j;
+  int cc_count;
   t_cc_list *ret;
 
   /* Initialization */
-  mark = initMarkMatrix(height, width);
+  mark = initMarkMatrix(matrix->nbrows, matrix->nbcols);
   cc_count = 0;
   ret = NULL;
 
-  for (i=0; i < height; i++)
-    for(j=0; j < width; j++)
+  for (i=0; i < matrix->nbrows; ++i)
+    for(j=0; j < matrix->nbcols; ++j)
       {
 	/* Creation of connected component */
-	if ((matrix[i][j]) && (mark[i][j] == 0))
+	if ((matrix->data[i][j]) && (mark[i][j] == 'o'))
 	  {
-	    mark[i][j] = -1;
+	    mark[i][j] = 'x';
 	    cc_count++;
 	    makeCC(i, j, cc_count, matrix, mark, ret);
 	  }
-	mark[i][j] = -1;
-      }  
+	mark[i][j] = 'x';
+      }
   return(ret);
 }
 

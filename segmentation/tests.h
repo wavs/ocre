@@ -15,9 +15,11 @@
 
 #endif /* TESTS_H */
 
-int **initializeEnv();
+t_matrix *initializeEnv(void);
 
-void print_matrix(int **matrix, int height, int width);
+void print_vector(int *vector, int length);
+
+void print_matrix(t_matrix *matrix);
 
 void testInit();
 

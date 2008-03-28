@@ -21,16 +21,15 @@
  */
 void horizontal_projection(t_binary_image *pic)
 {
-  int i;
-  int j;
+  unsigned int i,j;
 
-  pic->hproj = wmalloc(pic->height * sizeof(int));
-  for (i=0; i < pic->height; i++)
+  pic->hproj = (int *)wcalloc(pic->matrix->nbrows, sizeof(int));
+  for (i=0; i < pic->matrix->nbrows; ++i)
     {
       pic->hproj[i] = 0;
-      for (j=0; j < pic->width; j++)
+      for (j=0; j < pic->matrix->nbcols; ++j)
 	{
-	  pic->hproj[i] = pic->hproj[i] + pic->data[j][i];
+	  pic->hproj[i] = pic->hproj[i] + pic->matrix->data[i][j];
 	}
     }
 }
@@ -43,16 +42,15 @@ void horizontal_projection(t_binary_image *pic)
  */
 void vertical_projection(t_binary_image *pic)
 {
-  int i;
-  int j;
+  unsigned int i,j;
 
-  pic->vproj = wmalloc(pic->width * sizeof(int));
-  for (i=0; i < pic->width; i++)
+  pic->vproj = (int*)wcalloc(pic->matrix->nbcols, sizeof(int));
+  for (i=0; i < pic->matrix->nbcols; ++i)
     {
       pic->vproj[i] = 0;
-      for (j=0; j < pic->height; j++)
+      for (j=0; j < pic->matrix->nbrows; ++j)
 	{
-	  pic->vproj[i] = pic->vproj[i] + pic->data[i][j];
+	  pic->vproj[i] = pic->vproj[i] + pic->matrix->data[j][i];
 	}
     }
 }

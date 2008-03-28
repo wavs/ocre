@@ -10,6 +10,7 @@
  *   This file contains some useful functions.
  */
 
+#include <stdlib.h>
 #include "structures.h"
 #include "tools.h"
 #include "wrappers.h"
@@ -42,6 +43,48 @@ int is_bmp(char *filename)
 }
 
 /**
+ * This function tests if we are under the limits.
+ *
+ * @param x X coordinate
+ * @param y Y coordinate
+ * @param limit_x Limit of x coordinate
+ * @param limit_y Limit of y coordinate
+ *
+ * @return 1 if under limits, 0 else
+ */
+int checkIfUnderLimits(int x, int y, int limit_x, int limit_y)
+{
+  if (((x-1) >= 0 && (x+1) < limit_x) &&
+      (y >= 0 && (y+1) < limit_y))
+    return(1);
+  else
+    return(0);
+}
+
+/**
+ * This function updates the minimum and the maximum
+ * values of the coodinates.
+ *
+ * @param minmax Structure which stores the min/max coordinates
+ * @param x X coordinate
+ * @param y Y coordinate
+ */
+void updateMinMax(t_cc_coordinate *minmax, int x, int y)
+{
+  /* Update of minimum */
+  if (x < minmax->xmin)
+    minmax->xmin = x;
+  if (y < minmax->ymin)
+    minmax->ymin = y;
+
+  /* Update of maximum */
+  if (x > minmax->xmax)
+    minmax->xmax = x;
+  if (y > minmax->ymax)
+    minmax->ymax = y;
+}
+
+/**
  * This function adds a connected component in
  * a list.
  * 
@@ -54,7 +97,7 @@ void addListCC(t_cc_elt *elt, t_cc_list *cc_list)
 
   if (cc_list == NULL)
     {
-      res = wmalloc(sizeof(t_cc_list));
+      res = wcalloc(1, sizeof(t_cc_list));
       res->head = elt;
       res->tail = elt;
       res->nbcc = 1;
@@ -76,21 +119,21 @@ void addListCC(t_cc_elt *elt, t_cc_list *cc_list)
  * 
  * @return Matrix filled with the value 0
  */
-short int **initMarkMatrix(int height, int width)
+char **initMarkMatrix(int height, int width)
 {
   int i, j;
-  short int **ret;
+  char **ret;
 
   ret = NULL;
   /* Allocation of memory */
-  ret = wcalloc(height, sizeof(short int));
+  ret = calloc(height, sizeof(char));
   for (i=0; i < width; i++)
-    ret[i] = wcalloc(height, sizeof(short int));
+    ret[i] = calloc(height, sizeof(char));
 
   /* Initialization of the matrix */
   for (i=0; i < height; i++)
     for (j=0; j < width; j++)
-      ret[i][j] = 1;
+      ret[i][j] = 'o';
  
   return(ret);
 }

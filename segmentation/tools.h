@@ -10,6 +10,11 @@
  *   This is the header of tools.c
  */
 
+#ifndef TOOLS_H
+#define TOOLS_H
+
+#endif /* TOOLS_H */
+
 /**
  * This function determines if the extension of a
  * filename is ".bmp".
@@ -19,6 +24,28 @@
 int is_bmp(char *filename);
 
 /**
+ * This function tests if we are under the limits.
+ *
+ * @param x X coordinate
+ * @param y Y coordinate
+ * @param limit_x Limit of x coordinate
+ * @param limit_y Limit of y coordinate
+ *
+ * @return 1 if under limits, 0 else
+ */
+int checkIfUnderLimits(int x, int y, int limit_x, int limit_y);
+
+/**
+ * This function updates the minimum and the maximum
+ * values of the coodinates.
+ *
+ * @param minmax Structure which stores the min/max coordinates
+ * @param x X coordinate
+ * @param y Y coordinate
+ */
+void updateMinMax(t_cc_coordinate *minmax, int x, int y);
+
+/**
  * This function initializes a matrix of marks.
  *
  * @param height Height of the matrix
@@ -26,7 +53,7 @@ int is_bmp(char *filename);
  * 
  * @return Matrix filled with the value 0
  */
-short int **initMarkMatrix(int height, int width);
+char **initMarkMatrix(int height, int width);
 
 /**
  * This function adds a connected component in

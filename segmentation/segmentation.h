@@ -16,6 +16,7 @@
 
 #endif /* SEGMENTATION_H */
 
+
 /**
  * This function crosses a connected component
  * and calculates the number of black boxes.
@@ -27,7 +28,7 @@
  *
  * @return Number of black boxes
  */
-void crossCC(int y, int x, t_cc_elt *elt, int **matrix, short int **mark);
+void crossCC(int y, int x, t_cc_elt *elt, t_matrix *matrix, char **mark);
 
 /**
  * This function create a connected component.
@@ -42,8 +43,8 @@ void crossCC(int y, int x, t_cc_elt *elt, int **matrix, short int **mark);
 void makeCC(int i,
 	    int j,
 	    int cc_count,
-	    int **matrix,
-	    short int **mark,
+	    t_matrix *matrix,
+	    char **mark,
 	    t_cc_list *cc_list);
 
 /**
@@ -56,7 +57,7 @@ void makeCC(int i,
  *
  * @return Linked list of connected components
  */
-t_cc_list *findCC(int **matrix, int height, int width);
+t_cc_list *findCC(t_matrix *matrix);
 
 /**
  * This function creates all the blocks according to
