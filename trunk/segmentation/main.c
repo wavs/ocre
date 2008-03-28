@@ -11,7 +11,7 @@
  */
 
 #include <stdlib.h>
-#include <stdio.h>
+#include "main.h"
 #include "tests.h"
 
 /**
@@ -24,10 +24,10 @@
  */
 int main()
 {
-  /* testInit(); */
+  /*testInit();*/
   /* testProjections(); */
-  /* testInitMarkMatrix(); SEGFAULT */
+  /*testInitMarkMatrix();*/
   /* testQueue(); SEGFAULT */
 
-  return (EXIT_SUCCESS);
+  return(EXIT_SUCCESS);
 }

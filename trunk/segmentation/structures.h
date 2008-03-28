@@ -21,6 +21,19 @@
 #endif /* STRUCTURES_H */
 
 /**
+ * This structure represents a matrix with its
+ * dimensions.
+ */
+struct s_matrix
+{
+  unsigned int nbrows;
+  unsigned int nbcols;
+  int **data;
+};
+
+typedef struct s_matrix t_matrix;
+
+/**
  * This structure represents a binary image.
  */
 struct s_binary_image
@@ -28,7 +41,7 @@ struct s_binary_image
   char *name;
   int width;
   int height;
-  int **data;  /* Matrix of binary integer */
+  struct s_matrix *matrix;  /* Matrix of binary integer */
   int *hproj;  /* Horizontal projection vector */
   int *vproj;  /* Vertical projection vector */
 };
