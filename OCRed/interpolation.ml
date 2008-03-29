@@ -52,7 +52,7 @@ let is_in_rect x y width height =
 
 let resize surf x y =
   let (width,height,pitch) = Surface.dim surf in
-    print_string ("height: "^(string_of_int height)^"\n"^"width: "^(string_of_int width)^"\n");
+(*     print_string ("height: "^(string_of_int height)^"\n"^"width: "^(string_of_int width)^"\n"); *)
   let gamma = float_of_int(width) /. float_of_int(x) in
   let beta = float_of_int(height) /. float_of_int(y) in
   let my_output = Transforme.bigarray2 x y in
@@ -124,7 +124,7 @@ let sommet_of_h tab =
       ((get tab !i) = (get tab (!i + 1))) do
       i := !i + 1
     done;
-    print_string((soi !i)^"\n");
+    print_string((soi !i)^"une fois j'ai fait une projection"^"\n");
     if ((!i + 1) <= (dim tab -1)) &&
       ((get tab !i) < (get tab (!i+1))) then
       begin
@@ -292,16 +292,16 @@ with
       surf
 
 let resize_for_disco surf =
-  resize_percent_unit surf 20
+  resize_percent_unit surf 8
 
 let discover_angle surf =
+  print_string("avant la boucle infinii je m'aime \n");
   resize_for_disco surf;
   let prev_angle        = ref 0.        in
   let angle             = ref 0.        in
-  let bool              = ref true      in
+  let bool              = ref false      in
   let droite            = ref false     in
   let gauche            = ref false     in
-  let trouve            = ref false     in
     (* c'est comme si on etait a un angle = a 0*)
     projection_h !Surface.reduce;
   let current_sommet    = ref (sommet_of_h !proj_h_table) in
@@ -317,7 +317,7 @@ let discover_angle surf =
         gauche := true;
         Surface.rotated := Rotation.optimized3
           !Surface.reduce
-          (Rotation.degreef_to_rad 5.);
+          (Rotation.degreef_to_rad 1.);
         projection_h !Surface.rotated;
         next_sommet       := sommet_of_h !proj_h_table;
       end
@@ -326,96 +326,89 @@ let discover_angle surf =
         droite := true;
         Surface.rotated := Rotation.optimized3
           !Surface.reduce
-          (Rotation.degreef_to_rad ~-.5.);
+          (Rotation.degreef_to_rad ~-.1.);
         projection_h !Surface.rotated;
         next_sommet       := sommet_of_h !proj_h_table;
       end;
-    while not(!trouve) do
+    print_string("un peu avant la boucle infinii je m'aime \n");
+    if(!droite)then
       begin
-        if(!droite)then
-          begin
-            let pas             = ref ~-.5.       in
-            let prev_sommet     = ref 0           in
-              while (!pas <> ~-.0.5) do
-                begin
-                  while (!current_sommet < !next_sommet ) do
-                    begin
-                      angle := !angle +. !pas;
-                      prev_sommet := !current_sommet;
-                      current_sommet := !next_sommet;
-                      Surface.rotated :=
-                        Rotation.optimized3
-                          !Surface.reduce
-                          (Rotation.degreef_to_rad (!angle +. !pas));
-                      projection_h !Surface.rotated;
-                      next_sommet       := sommet_of_h !proj_h_table;
-                    end
-                  done;
-                      prev_angle := !prev_angle +. !angle;
-                      angle := 0.;
-                      if !bool then
-                        begin
-                          bool := false;
-                          pas  := !pas  /. 5.;
-                        end
-                      else
-                        begin
-                          bool := true;
-                          pas  := !pas  /. 2.;
-                        end;
-                      Surface.rotated :=
-                        Rotation.optimized3
-                          !Surface.reduce
-                          (Rotation.degreef_to_rad (!angle +. !pas));
-                      projection_h !Surface.rotated;
-                      next_sommet       := sommet_of_h !proj_h_table;
-                end;
-              done;
-              if(!pas = ~-.0.05) then
-                trouve := true;
-          end
-        else
-          begin
-            let pas               = ref 5.        in
-            let prev_sommet       = ref 0         in
-              while (!pas <> 0.5) do
-                begin
-                  while (!current_sommet < !next_sommet ) do
-                    begin
-                      angle := !angle +. !pas;
-                      prev_sommet := !current_sommet;
-                      current_sommet := !next_sommet;
-                      Surface.rotated :=
-                        Rotation.optimized3
-                          !Surface.reduce
-                          (Rotation.degreef_to_rad (!angle +. !pas));
-                      projection_h !Surface.rotated;
-                      next_sommet       := sommet_of_h !proj_h_table;
-                    end
-                  done;
-                  prev_angle := !prev_angle +. !angle;
-                  angle := 0.;
-                      if !bool then
-                        begin
-                          bool := false;
-                          pas  := !pas  /. 5.;
-                        end
-                      else
-                        begin
-                          bool := true;
-                          pas  := !pas  /. 2.;
-                        end;
-                      Surface.rotated :=
-                        Rotation.optimized3
-                          !Surface.reduce
-                          (Rotation.degreef_to_rad (!angle +. !pas));
-                      projection_h !Surface.rotated;
-                      next_sommet       := sommet_of_h !proj_h_table;
-                end;
-              done;
-              if(!pas = 0.05) then
-                trouve := true;
-          end
+        let pas             = ref ~-.1.       in
+        let prev_sommet     = ref 0           in
+          while (!pas <> ~-.0.01) do
+            begin
+                while (!current_sommet < !next_sommet ) do
+                  begin
+                    angle := !angle +. !pas;
+                    prev_sommet := !current_sommet;
+                    current_sommet := !next_sommet;
+                    Surface.rotated :=
+                      Rotation.optimized3
+                        !Surface.reduce
+                        (Rotation.degreef_to_rad (!angle +. !pas));
+                    projection_h !Surface.rotated;
+                    next_sommet       := sommet_of_h !proj_h_table;
+                  end
+                done;
+              prev_angle := !prev_angle +. !angle;
+              angle := 0.;
+              if !bool then
+                  begin
+                    bool := false;
+                    pas  := !pas  /. 5.;
+                  end
+                else
+                  begin
+                    bool := true;
+                    pas  := !pas  /. 2.;
+                  end;
+              Surface.rotated :=
+                Rotation.optimized3
+                  !Surface.reduce
+                  (Rotation.degreef_to_rad (!angle +. !pas));
+              projection_h !Surface.rotated;
+                next_sommet       := sommet_of_h !proj_h_table;
+            end;
+          done;
       end
-    done;
+    else
+      begin
+        let pas               = ref 1.        in
+          let prev_sommet       = ref 0         in
+            while (!pas <> 0.01) do
+              begin
+                while (!current_sommet < !next_sommet ) do
+                  begin
+                    angle := !angle +. !pas;
+                    prev_sommet := !current_sommet;
+                    current_sommet := !next_sommet;
+                    Surface.rotated :=
+                      Rotation.optimized3
+                        !Surface.reduce
+                        (Rotation.degreef_to_rad (!angle +. !pas));
+                    projection_h !Surface.rotated;
+                    next_sommet       := sommet_of_h !proj_h_table;
+                  end
+                done;
+                prev_angle := !prev_angle +. !angle;
+                angle := 0.;
+                if !bool then
+                  begin
+                    bool := false;
+                    pas  := !pas  /. 5.;
+                  end
+                else
+                  begin
+                    bool := true;
+                    pas  := !pas  /. 2.;
+                  end;
+                Surface.rotated :=
+                  Rotation.optimized3
+                    !Surface.reduce
+                    (Rotation.degreef_to_rad (!angle +. !pas));
+                projection_h !Surface.rotated;
+                next_sommet       := sommet_of_h !proj_h_table;
+              end;
+            done;
+      end;
     !prev_angle

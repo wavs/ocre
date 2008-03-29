@@ -26,18 +26,20 @@ let dev () =
 (*     print_string(string_of_int(Interpolation.sommet_of_h *)
 (*                                  !Interpolation.proj_h_table)^ *)
 (*                    "\n"); *)
-    print_string(
-      string_of_float(Interpolation.discover_angle !Surface.image)^
-        "; \n");
-(*     let img_rot = Rotation.optimized2 !Surface.image  in *)
+(*     let i = (Interpolation.discover_angle !Surface.image) in *)
+(*       print_string(string_of_float i); *)
+      Rotation.angle := Rotation.degreef_to_rad (25133.);
+    let img_rot = (Rotation.optimized2
+                     !Surface.image
+                     1.14) in
     if (!Path.output <> "") then
       begin
-(*         Sdlvideo.save_BMP !Surface.image !Path.output; *)
-(*         Sdlvideo.save_BMP img_rot !Path.output; *)
-        Sdlvideo.save_BMP
-          (Transforme.matrix_to_surf !Surface.reduce)
-          (!Path.output^"reduce.bmp");
-        Interpolation.histo_to_file "histo.csv"
+       (*  Sdlvideo.save_BMP !Surface.image !Path.output; *)
+        Sdlvideo.save_BMP img_rot !Path.output;
+      (*   Sdlvideo.save_BMP *)
+(*           (Transforme.matrix_to_surf !Surface.reduce) *)
+(*           (!Path.output^"reduce.bmp"); *)
+      (*   Interpolation.histo_to_file "histo.csv" *)
       end
     else
       Sdlvideo.save_BMP !Surface.image "../projection.bmp"
@@ -53,7 +55,7 @@ let rotate () =
    * FIXME for passing variable angle
    * We have to export different image type jpg, bmp, tiff and more
    *)
-  let img_rot = Rotation.optimized2 !Surface.image  in
+  let img_rot = Rotation.optimized2 !Surface.image !Rotation.angle in
     if (!Path.output <> "") then
       begin
         Sdlvideo.save_BMP img_rot !Path.output;
