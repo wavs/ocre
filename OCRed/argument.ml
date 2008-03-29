@@ -83,17 +83,17 @@ let speclist = [
   ("--image",
    Arg.String (fun s -> set_path_image s),
    "input path of your input image");
-  ("--resize",
+  ("--resizepercent",
    Arg.Int (fun s -> set_percent_resize s),
   "percentage Value of the output image size");
-  (* ("--resize", *)
-(*    Arg.Tuple ( *)
-(*      [ *)
-(*        Arg.Int ( fun i -> set_width i); *)
-(*        Arg.Int ( fun j -> set_height j) *)
-(*      ] *)
-(*    ), *)
-(*    "height_width Size of the ouput image"); *)
+  ("--resize",
+   Arg.Tuple (
+     [
+       Arg.Int ( fun i -> set_width i);
+       Arg.Int ( fun j -> set_height j)
+     ]
+   ),
+   "height_width Size of the ouput image");
   ("--angle",
    Arg.Int (fun i -> set_angle i),
    "Angle in degree");

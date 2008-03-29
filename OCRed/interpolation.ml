@@ -57,8 +57,8 @@ let resize surf x y =
   let beta = float_of_int(height) /. float_of_int(y) in
   let my_output = Transforme.bigarray2 x y in
   let my_input = Transforme.surf_to_matrix surf in
-    for i=0 to (x - 1) do
-      for j=0 to (y - 1) do
+    for i=0 to (y - 1) do
+      for j=0 to (x - 1) do
         let (a,b) = inverse_resize (i + 1) (j + 1)  gamma beta in
           if (is_in_rect a b height width) then
             begin
@@ -71,10 +71,16 @@ let resize surf x y =
                    ( b )
                    ( a ));
             end
+          else
+            Bigarray.Array2.set
+                my_output
+                (j)
+                (i)
+              (Int32.of_int(255));
            (*  print_string ("a: "^(string_of_int a)^"\n"^"b:  "^(string_of_int b)^"\n\n"); *)
       done;
     done;
-  Transforme.matrix_to_surf my_output
+   Transforme.matrix_to_surf my_output
 
 let projection_h tableau =
 try
