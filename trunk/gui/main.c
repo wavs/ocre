@@ -44,18 +44,18 @@ void on_about_show (gpointer user_data)
 }
 
 
-
+/* fct qui balance du texte dans l'editeur */
 void on_text_show (GtkImageMenuItem* test, gpointer user_data)
 {
   GUI_* guisex;
   GtkTextBuffer *txtbuffer;
-
+  
   /* so there's no unused parameter... */
   (void)test;
   guisex = (GUI_ *)user_data;
   
-  txtbuffer = gtk_text_view_get_buffer(
-	      GTK_TEXT_VIEW(guisex->textview));
+  txtbuffer = gtk_text_view_get_buffer
+    (GTK_TEXT_VIEW(guisex->textview));
 
   gtk_text_buffer_set_text 
        (
@@ -123,18 +123,21 @@ void on_save_show (GtkImageMenuItem* test, gpointer user_data)
 
  if (gtk_dialog_run (GTK_DIALOG (save)) == GTK_RESPONSE_ACCEPT)
    {
-     GtkTextIter start, end;
-     (void)gtk_text_iter_forward_visible_word_ends (&end, 1);
+     GtkTextIter iStart, iEnd;
+     
      filename = gtk_file_chooser_get_filename 
        (
 	GTK_FILE_CHOOSER (save)
 	);
      
-     gtk_text_buffer_get_text
+     gtk_text_buffer_get_start_iter(txtbuffer, &iStart);
+     gtk_text_buffer_get_end_iter(txtbuffer, &iEnd);
+
+     text = gtk_text_buffer_get_text
        (
 	GTK_TEXT_BUFFER(txtbuffer), 
-	&start, 
-	&end, 
+	&iStart, 
+	&iEnd, 
 	FALSE
 	);
      save_as(text, filename);
