@@ -15,7 +15,7 @@ exception Nothing_to_be_done
 exception Quit_input
 
 let dev () =
-  print_endline "please wait while testing";
+(*   print_endline "please wait while testing"; *)
   try
     Seuil.seuillage !Surface.image;
     (* Interpolation.resize_percent_unit *)
@@ -35,7 +35,7 @@ let dev () =
     if (!Path.output <> "") then
       begin
        (*  Sdlvideo.save_BMP !Surface.image !Path.output; *)
-        Sdlvideo.save_BMP img_rot "Idecided.bmp"
+        Sdlvideo.save_BMP img_rot !Path.output
       (*   Sdlvideo.save_BMP *)
 (*           (Transforme.matrix_to_surf !Surface.reduce) *)
 (*           (!Path.output^"reduce.bmp"); *)
@@ -49,7 +49,7 @@ let dev () =
            ": try --help option; for example --resize")
 
 let rotate () =
-  print_endline "please wait while processing...";
+(*   print_endline "please wait while processing..."; *)
   try
   (*
    * FIXME for passing variable angle
@@ -71,7 +71,7 @@ with
       (s^" --> you may have forgotten an option : try --help option")
 
 let action () =
-print_endline "please wait while processing...";
+(* print_endline "please wait while processing..."; *)
 try
   if (!Argument.resize) then
     begin
