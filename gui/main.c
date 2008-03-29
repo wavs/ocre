@@ -1,8 +1,5 @@
 #include <unistd.h>
 #include "main.h"
-#include <pthread.h>
-#include <glib.h>
-
 
 
 /*
@@ -53,7 +50,9 @@ void on_text_show (GtkImageMenuItem* test, gpointer user_data)
   /* so there's no unused parameter... */
   (void)test;
   guisex = (GUI_ *)user_data;
-  
+
+  gtkspell_new_attach(GTK_TEXT_VIEW(guisex->textview), "fr", NULL);
+
   txtbuffer = gtk_text_view_get_buffer
     (GTK_TEXT_VIEW(guisex->textview));
 
@@ -130,6 +129,7 @@ void on_save_show (GtkImageMenuItem* test, gpointer user_data)
 	GTK_FILE_CHOOSER (save)
 	);
      
+     /* on chope le debut et la fin du buffer */
      gtk_text_buffer_get_start_iter(txtbuffer, &iStart);
      gtk_text_buffer_get_end_iter(txtbuffer, &iEnd);
 
