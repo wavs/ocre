@@ -19,23 +19,23 @@ let dev () =
   try
     Seuil.seuillage !Surface.image;
     (* Interpolation.resize_percent_unit *)
-(*       !Surface.image *)
-(*       !Argument.percent_res ; *)
-(*     Interpolation.projection_h !Surface.reduce; *)
-(*     (\* Interpolation.print_tabh (); *\) *)
-(*     print_string(string_of_int(Interpolation.sommet_of_h *)
-(*                                  !Interpolation.proj_h_table)^ *)
-(*                    "\n"); *)
-(*     let i = (Interpolation.discover_angle !Surface.image) in *)
-(*       print_string(string_of_float i); *)
-      Rotation.angle := Rotation.degreef_to_rad (25133.);
+    (*       !Surface.image *)
+    (*       !Argument.percent_res ; *)
+    (*     Interpolation.projection_h !Surface.reduce; *)
+    (*     (\* Interpolation.print_tabh (); *\) *)
+    (*     print_string(string_of_int(Interpolation.sommet_of_h *)
+    (*                                  !Interpolation.proj_h_table)^ *)
+    (*                    "\n"); *)
+    (*     let i = (Interpolation.discover_angle !Surface.image) in *)
+    (*       print_string(string_of_float i); *)
+(*     Rotation.angle := Rotation.degreef_to_rad (25133.); *)
     let img_rot = (Rotation.optimized2
                      !Surface.image
-                     1.14) in
+                     ~-.2.) in
     if (!Path.output <> "") then
       begin
        (*  Sdlvideo.save_BMP !Surface.image !Path.output; *)
-        Sdlvideo.save_BMP img_rot !Path.output;
+        Sdlvideo.save_BMP img_rot "Idecided.bmp"
       (*   Sdlvideo.save_BMP *)
 (*           (Transforme.matrix_to_surf !Surface.reduce) *)
 (*           (!Path.output^"reduce.bmp"); *)
