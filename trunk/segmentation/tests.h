@@ -15,17 +15,19 @@
 
 #endif /* TESTS_H */
 
+#include "structures.h"
+
 t_matrix *initializeEnv(void);
-
-void print_vector(int *vector, int length);
-
-void print_matrix(t_matrix *matrix);
 
 void testInit();
 
 void testProjections();
 
 void testInitMarkMatrix();
+
+void testCheckIfUnderLimits();
+
+void testIsBmp();
 
 void testAddListCC();
 

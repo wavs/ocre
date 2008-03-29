@@ -62,7 +62,7 @@ char **initMarkMatrix(int height, int width);
  * @param elt Connected component
  * @param cc_list List of connected components
  */
-void addListCC(t_cc_elt *elt, t_cc_list *cc_list);
+t_cc_list *addListCC(t_cc_elt *elt, t_cc_list *cc_list);
 
 /**
  * This function creates an emtpy queue.

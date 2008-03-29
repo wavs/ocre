@@ -11,6 +11,7 @@
  */
 
 #include <stdlib.h>
+#include <stdio.h>
 #include "structures.h"
 #include "tools.h"
 #include "wrappers.h"
@@ -91,24 +92,29 @@ void updateMinMax(t_cc_coordinate *minmax, int x, int y)
  * @param elt Connected component
  * @param cc_list List of connected components
  */
-void addListCC(t_cc_elt *elt, t_cc_list *cc_list)
+t_cc_list *addListCC(t_cc_elt *elt, t_cc_list *cc_list)
 {
   t_cc_list *res;
 
-  if (cc_list == NULL)
+  if (elt != NULL)
     {
-      res = wcalloc(1, sizeof(t_cc_list));
-      res->head = elt;
-      res->tail = elt;
-      res->nbcc = 1;
-      cc_list = res;
+      if (cc_list == NULL)
+	{
+	  res = (t_cc_list *)wcalloc(1, sizeof(t_cc_list));
+	  res->head = elt;
+	  res->tail = elt;
+	  res->nbcc = 1;
+	  return(res);
+	}
+      else
+	{
+	  cc_list->nbcc++;
+	  cc_list->tail->next = elt;
+	  cc_list->tail = elt;
+	  return(cc_list);
+	}
     }
-  else
-    {
-      cc_list->nbcc++;
-      cc_list->tail->next = elt;
-      cc_list->tail = elt;
-    }
+  return(NULL);
 }
 
 /**
@@ -126,14 +132,14 @@ char **initMarkMatrix(int height, int width)
 
   ret = NULL;
   /* Allocation of memory */
-  ret = calloc(height, sizeof(char));
-  for (i=0; i < width; i++)
-    ret[i] = calloc(height, sizeof(char));
+  ret = (char **)wmalloc(height * sizeof(char *));
+  for (i=0; i < height; ++i)
+    ret[i] = (char *)wcalloc(width, sizeof(char));
 
   /* Initialization of the matrix */
-  for (i=0; i < height; i++)
-    for (j=0; j < width; j++)
-      ret[i][j] = 'o';
+  for (i=0; i < height; ++i)
+    for (j=0; j < width; ++j)
+      ret[i][j] = 'x';
  
   return(ret);
 }
