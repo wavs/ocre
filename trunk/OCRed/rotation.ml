@@ -197,7 +197,7 @@ let optimized surf =
     done;
   Transforme.matrix_to_surf my_output
 
-let optimized2 surf =
+let optimized2 surf rota =
   let (height,width,pitch) = Surface.dim surf in
   let cx        = height/2 + 1 in
   let cy        = width/2  + 1 in
@@ -205,7 +205,7 @@ let optimized2 surf =
   let my_input  = Transforme.surf_to_matrix surf in
     for i=0 to (width -1) do
       for j=0 to (height -1) do
-        let (x,y) = inverse_int (i - cx) (j - cy) !angle in
+        let (x,y) = inverse_int (i - cx) (j - cy) rota in
         let (x,y) = (x + cx, y + cy) in
           if (is_in_rect x y (width) (height)) then
             begin

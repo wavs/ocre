@@ -36,7 +36,7 @@ val mean_of_float : float -> int
 val simple_surf : Sdlvideo.surface -> float -> Sdlvideo.surface
 val hard_of_surf : Sdlvideo.surface -> float -> Sdlvideo.surface
 val optimized : Sdlvideo.surface -> Sdlvideo.surface
-val optimized2 : Sdlvideo.surface -> Sdlvideo.surface
+val optimized2 : Sdlvideo.surface -> float ->Sdlvideo.surface
 val optimized3 : (int32,
                        Bigarray.int32_elt,
                        Bigarray.c_layout) Bigarray.Array2.t ->
