@@ -24,9 +24,14 @@
  */
 int main()
 {
-  /*testInit();*/
-  /* testProjections(); */
-  /*testInitMarkMatrix();*/
+  /*
+    testInit();
+    testProjections(); 
+    testInitMarkMatrix();
+    testCheckIfUnderLimits();
+    testIsBmp();
+  */
+  testAddListCC();
   /* testQueue(); SEGFAULT */
 
   return(EXIT_SUCCESS);
