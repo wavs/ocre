@@ -49,8 +49,8 @@ let set_anglef a =
 
 let set_resize_auto () =
   resize        := true;
-  resize_of_x   := 300;
-  resize_of_y   := 200
+  resize_of_x   := 200;
+  resize_of_y   := 300
 
 let set_width i =
   resize        := true;
