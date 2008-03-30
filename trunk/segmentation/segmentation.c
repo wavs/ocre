@@ -74,8 +74,9 @@ void crossCC(int y, int x, t_cc_elt *elt, t_matrix *matrix, char **mark)
 	    }
 	}
 
+      k = xtmp;
       if (xtmp-1 < 0)
-	k = xtmp;
+	k = 0;
       for (i=k; i <= (xtmp+1); i++)
 	{
 	  if (((ytmp+1) < matrix->nbrows) && (i < matrix->nbcols) )
@@ -100,7 +101,6 @@ void crossCC(int y, int x, t_cc_elt *elt, t_matrix *matrix, char **mark)
       res = qDequeue(q);
       if (res != NULL)
 	{
-	  printf("\nXtmp: %d  Ytmp: %d\n",xtmp,ytmp);
 	  xtmp = res->x;
 	  ytmp = res->y;
 	}
@@ -168,7 +168,7 @@ t_cc_list *makeCC(int i,
 t_cc_list *findCC(t_matrix *matrix)
 {
   char **mark;
-  unsigned int i, j, k, o;
+  unsigned int i, j ;
   int cc_count;
   t_cc_list *ret,*cc_list;
 
@@ -186,10 +186,13 @@ t_cc_list *findCC(t_matrix *matrix)
 	  {
 	    mark[i][j] = 'x';
 	    cc_count++;
-	    ret = makeCC(i, j, cc_count, matrix, mark, cc_list);
+	    ret = makeCC(i, j, cc_count, matrix, mark, ret);
+	    if (ret == NULL)
+	      printf("DEBUG: il est a NULL");
 	  }
 	mark[i][j] = 'x';
-
+	
+	/* DEBUG 
 	printf("\n\n");
 	for (k=0; k < matrix->nbrows; k++)
 	  {
@@ -198,6 +201,7 @@ t_cc_list *findCC(t_matrix *matrix)
 	      printf(" %c",mark[k][o]);
 	  }
 	printf("\n\n");
+	 DEBUG */
 
       }
 
