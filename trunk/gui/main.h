@@ -8,6 +8,7 @@ libglade-2.0`
 #include <stdlib.h>
 #include <pthread.h>
 #include <glib.h>
+#include <unistd.h>
 
 
 typedef struct {

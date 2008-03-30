@@ -1,5 +1,18 @@
-#include <unistd.h>
 #include "main.h"
+
+void on_window_show (GtkImageMenuItem* test, gpointer user_data)
+{
+  GUI_* guisex;
+/*   GtkWidget *scrolledwindow; */
+  (void)test;
+  guisex = (GUI_ *)user_data;
+
+
+/*   scrolledwindow = gtk_scrolled_window_new(NULL,NULL); */
+/*   gtk_container_add(GTK_CONTAINER(guisex->window), scrolledwindow); */
+/*   gtk_scrolled_window_add_with_viewport */
+/*     (GTK_SCROLLED_WINDOW(scrolledwindow), guisex->image); */
+}
 
 
 /*
@@ -9,7 +22,6 @@ void on_about_show (gpointer user_data)
 {
   GtkWidget* about;
   GtkWidget* label;
-  /* so there is no unused parameter... */
   (void)user_data;
   /* create adn About dialog */
   about = gtk_dialog_new_with_buttons("About",
@@ -26,12 +38,9 @@ void on_about_show (gpointer user_data)
 			    "response",
 			    G_CALLBACK (gtk_widget_destroy),
 			    about);
-  
   gtk_container_add (GTK_CONTAINER (GTK_DIALOG(about)->vbox),
 		     label);
-  
   gtk_widget_show_all(about);
-  
   /* destroy the widget if clicks on OK */
   if (gtk_dialog_run(GTK_DIALOG (about)) ==
       GTK_RESPONSE_ACCEPT)
@@ -46,29 +55,19 @@ void on_text_show (GtkImageMenuItem* test, gpointer user_data)
 {
   GUI_* guisex;
   GtkTextBuffer *txtbuffer;
-  
-  /* so there's no unused parameter... */
   (void)test;
   guisex = (GUI_ *)user_data;
-
   gtkspell_new_attach(GTK_TEXT_VIEW(guisex->textview), "fr", NULL);
-
   txtbuffer = gtk_text_view_get_buffer
     (GTK_TEXT_VIEW(guisex->textview));
-
-  gtk_text_buffer_set_text 
-       (
-	txtbuffer,
-	"Hello\n",
-	-1
-	);
+  gtk_text_buffer_set_text
+    (txtbuffer,"Hello\n",-1);
 }
 
 
 void save_as (char *text, char *filename)
 {
   FILE *fp;
-
   fp = fopen(filename, "w");
   if(!fp)
     fprintf(stderr, "Can't open file\n");
@@ -83,8 +82,6 @@ void on_save_show (GtkImageMenuItem* test, gpointer user_data)
   GUI_* guisex;
   GtkTextBuffer *txtbuffer;
   char *filename, *text;
-
-  /* so there's no unused parameter... */
   (void)test;
   guisex = (GUI_ *)user_data;
   /* guisex->textview = gtk_text_view_new (); */
@@ -99,52 +96,45 @@ void on_save_show (GtkImageMenuItem* test, gpointer user_data)
 				      GTK_STOCK_CANCEL,
 				      GTK_RESPONSE_CANCEL,
 				      NULL);
-  gtk_file_chooser_set_do_overwrite_confirmation 
+  gtk_file_chooser_set_do_overwrite_confirmation
     (
-     GTK_FILE_CHOOSER(save), 
+     GTK_FILE_CHOOSER(save),
      TRUE
      );
-
   /*if (!gtk_text_buffer_get_modified (txtbuffer))
     {*/
-    gtk_file_chooser_set_current_folder 
-      (
-       GTK_FILE_CHOOSER (save), 
-       "/"
-       );
-    gtk_file_chooser_set_current_name 
-      (
-       GTK_FILE_CHOOSER (save), 
-       "Untitled"
-       );
-    gtk_text_buffer_set_modified (txtbuffer, FALSE);
-  
-
- if (gtk_dialog_run (GTK_DIALOG (save)) == GTK_RESPONSE_ACCEPT)
-   {
-     GtkTextIter iStart, iEnd;
-     
-     filename = gtk_file_chooser_get_filename 
-       (
-	GTK_FILE_CHOOSER (save)
-	);
-     
-     /* on chope le debut et la fin du buffer */
-     gtk_text_buffer_get_start_iter(txtbuffer, &iStart);
-     gtk_text_buffer_get_end_iter(txtbuffer, &iEnd);
-
-     text = gtk_text_buffer_get_text
-       (
-	GTK_TEXT_BUFFER(txtbuffer), 
-	&iStart, 
-	&iEnd, 
-	FALSE
-	);
-     save_as(text, filename);
-     g_free (filename);
-   }  
- gtk_widget_destroy (save);
-
+  gtk_file_chooser_set_current_folder
+    (
+     GTK_FILE_CHOOSER (save),
+     "/"
+     );
+  gtk_file_chooser_set_current_name
+    (
+     GTK_FILE_CHOOSER (save),
+     "Untitled"
+     );
+  gtk_text_buffer_set_modified (txtbuffer, FALSE);
+  if (gtk_dialog_run (GTK_DIALOG (save)) == GTK_RESPONSE_ACCEPT)
+    {
+      GtkTextIter iStart, iEnd;
+      filename = gtk_file_chooser_get_filename
+        (
+         GTK_FILE_CHOOSER (save)
+         );
+      /* on chope le debut et la fin du buffer */
+      gtk_text_buffer_get_start_iter(txtbuffer, &iStart);
+      gtk_text_buffer_get_end_iter(txtbuffer, &iEnd);
+      text = gtk_text_buffer_get_text
+        (
+         GTK_TEXT_BUFFER(txtbuffer),
+         &iStart,
+         &iEnd,
+         FALSE
+         );
+      save_as(text, filename);
+      g_free (filename);
+    }
+  gtk_widget_destroy (save);
 }
 
 /*
@@ -157,8 +147,6 @@ void on_open_show (GtkImageMenuItem* test, gpointer user_data)
   /* so there's no unused parameter... */
   (void)test;
   guisex = (GUI_ *)user_data;
-
-  
   /* create an open file dialog */
   open = gtk_file_chooser_dialog_new (NULL,
 				      NULL,
@@ -169,20 +157,23 @@ void on_open_show (GtkImageMenuItem* test, gpointer user_data)
 				      GTK_RESPONSE_CANCEL,
 				      NULL);
   gtk_widget_show(open);
-
   if (gtk_dialog_run (GTK_DIALOG (open)) == GTK_RESPONSE_ACCEPT)
     {
       char* filename;
       /* get the filename */
       filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER
 						(open));
+      printf(filename);
       /* preprocessing */
+/*       if (fork()) */
+/* 	execl("../bin/OCRed", "-i", filename, "-dev", NULL); */
       if (fork())
-	execl("../bin/OCRed", "-i", filename, "-dev", NULL);
+        execl("../bin/OCRed", "-i", filename, "--resize-auto", NULL);
+      sleep(2);
       /* open the file */
-      gtk_image_set_from_file(GTK_IMAGE(guisex->image),filename);
+      filename = "../resize.bmp";
+      gtk_image_set_from_file(GTK_IMAGE(guisex->image), filename);
     }
-
   gtk_widget_destroy (open);
 }
 
@@ -192,9 +183,9 @@ void on_open_show (GtkImageMenuItem* test, gpointer user_data)
 int main (int argc, char *argv[])
 {
   GUI_* gui;
-  
+/*   GtkWidget *scrolledwindow; */
+
   gtk_init (&argc, &argv);
- 
   gui = g_slice_new(GUI_);
 
   gui->gxml   = glade_xml_new ("../gui/gui.glade", NULL, NULL);
@@ -202,10 +193,9 @@ int main (int argc, char *argv[])
   gui->image  = glade_xml_get_widget (gui->gxml, "image");
   gui->textview = glade_xml_get_widget (gui->gxml, "textview");
 
-  /* signal to quit the app */
+
   glade_xml_signal_connect (gui->gxml, "on_window_destroy",
 			    G_CALLBACK (gtk_main_quit));
-  /* signal to open the "Open File" dialog */
   glade_xml_signal_connect_data (gui->gxml, "on_open_show",
 				 G_CALLBACK (on_open_show),
 				 gui);
@@ -215,11 +205,19 @@ int main (int argc, char *argv[])
   glade_xml_signal_connect_data (gui->gxml, "on_text_show",
 				 G_CALLBACK (on_text_show),
 				 gui);
-  /* signal to open the "about" dialog */
   glade_xml_signal_connect (gui->gxml, "on_about_show",
 			    G_CALLBACK (on_about_show));
 
+/*   scrolledwindow = gtk_scrolled_window_new(NULL,NULL); */
+  /* gtk_container_add(GTK_CONTAINER(gui->window), scrolledwindow);*/
+/*   gtk_scrolled_window_add_with_viewport */
+/*     (GTK_SCROLLED_WINDOW(scrolledwindow), gui->image); */
+/*   gtk_window_set_default_size(GTK_WINDOW(gui->window), 300, 200); */
   gtk_widget_show (gui->window);
+
+/*   glade_xml_signal_connect_data (gui->gxml, "on_window_show", */
+/*                                  G_CALLBACK(on_window_show), */
+/*                                  gui); */
   gtk_main ();
 
   return 0;
