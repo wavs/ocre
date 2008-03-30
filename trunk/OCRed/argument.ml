@@ -47,6 +47,10 @@ let set_anglef a =
   Rotation.create_anglef a;
     rotate := true
 
+let set_resize_auto () =
+  resize        := true;
+  resize_of_x   := 300;
+  resize_of_y   := 200
 
 let set_width i =
   resize        := true;
@@ -86,6 +90,9 @@ let speclist = [
   ("--resizepercent",
    Arg.Int (fun s -> set_percent_resize s),
   "percentage Value of the output image size");
+  ("--resize-auto",
+   Arg.Unit (fun () -> set_resize_auto()),
+  "noargument Value auto for testu of the output image size");
   ("--resize",
    Arg.Tuple (
      [

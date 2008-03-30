@@ -56,10 +56,16 @@ let proj_and_average tableau =
     done;
     average := (!average / y)
 
-(* let take_coef () = *)
+(* let        take_coef () = *)
 (*   let dim = Bigarray.Array1.dim !proj_h_table in *)
+(*   let get x i   = Bigarray.Array1.get x i in *)
+(*   let dim x     = Bigarray.Array1.dim x in *)
 (*   let i         = ref 0 in *)
-(*     while (!i < *)
+(*     while (!i <!average) do *)
+(*       begin *)
+        
+(*       end *)
+(*     done; *)
   (*
       let sommet_of_h tab =
   let i         = ref 0 in
