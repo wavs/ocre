@@ -56,15 +56,84 @@ let proj_and_average tableau =
     done;
     average := (!average / y)
 
-(* let        take_coef () = *)
+
+(*subfunction for take_coef ... thanks to the "norme" *)
+
+(* return the value of the box i in the table x *)
+let get x i   = Bigarray.Array1.get x i
+
+(* return the length of the table x *)
+let dim x     = Bigarray.Array1.dim x
+
+(* wrapper of base functions for manipulating int string float *)
+let foi x = float_of_int x
+let iof x = int_of_float x
+let soi x = string_of_int x
+let sof x = string_of_float x
+
+(* refresh the sum of the coef director*)
+let refresh_coefs tab i j nbr_coefs sum_coefs =
+  let a = foi(i) in
+  let b = foi(j) in
+  let fa = foi(get tab i) in
+  let fb = foi(get tab j) in
+  let current_coef = (fb -. fa) /. (b -. a) in
+    sum_coefs := !sum_coefs +. current_coef;
+    nbr_coefs := !nbr_coefs + 1
+
+(* send to the future of your world -_avoid the bounds_-*)
+let til_not_bound tab bound pos =
+  let i = ref (get tab !pos) in
+    while (!i = bound) do
+      begin
+        pos := !pos + 1;
+        i := get tab !pos;
+      end
+    done;
+    !pos
+
+(* send you where you're  upon the average *)
+let after_average tab pos =
+  let i = ref (get tab !pos) in
+    while (!i <= !average) do
+      begin
+        pos := !pos + 1;
+        i := get tab !pos;
+      end
+    done;
+    !pos
+
+(* send you where you're below the average *)
+let before_average tab pos =
+  let i = ref (get tab !pos) in
+    while (!i >= !average) do
+      begin
+        pos := !pos + 1;
+        i := get tab !pos;
+      end
+    done;
+    !pos
+
+(* when you're bent on the righ, i is the current position j is the
+   next value*)
+(* let bent_right tab i = *)
+(*   let j         = ref i in *)
+(*   let tabi      = get tab i in *)
+(*   let tabj      = get tab j in *)
+(*     while () do *)
+(*       begin *)
+(*       end *)
+(*     done; *)
+    
+
+
+(* let  take_coef () = *)
 (*   let dim = Bigarray.Array1.dim !proj_h_table in *)
-(*   let get x i   = Bigarray.Array1.get x i in *)
-(*   let dim x     = Bigarray.Array1.dim x in *)
-(*   let i         = ref 0 in *)
+(*    let i         = ref 0 in *)
 (*     while (!i <!average) do *)
 (*       begin *)
         
-(*       end *)
+(*        end *)
 (*     done; *)
   (*
       let sommet_of_h tab =
