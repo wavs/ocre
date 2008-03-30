@@ -36,26 +36,28 @@ let main () =
       init ();
       Event.dev ();
       Sdl.quit ()
-    end;
-  if (* (!Argument.seuil)&&  *)(!Argument.rotate)then
-    begin
-      init ();
-      (*           Seuil.main (); *)
-      Event.rotate ();
-      Sdl.quit ()
-    end;
-
-  if (!Argument.seuil) then
-    begin
-      init ();
-      Seuil.main ();
-      Sdl.quit ()
     end
   else
     begin
-      init ();
-      Event.action ();
-      Sdl.quit ()
+      if (* (!Argument.seuil)&&  *)(!Argument.rotate)then
+        begin
+          init ();
+          (*           Seuil.main (); *)
+          Event.rotate ();
+          Sdl.quit ()
+        end;
+      if (!Argument.seuil) then
+        begin
+          init ();
+          Seuil.main ();
+          Sdl.quit ()
+        end
+      else
+        begin
+          init ();
+          Event.action ();
+          Sdl.quit ()
+        end
     end
 
 

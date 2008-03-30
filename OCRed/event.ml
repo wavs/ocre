@@ -17,7 +17,12 @@ exception Quit_input
 let dev () =
 (*   print_endline "please wait while testing"; *)
   try
+    (*Le seuil est super long checkout*)
     Seuil.seuillage !Surface.image;
+    Interpolation.resize_for_disco !Surface.image 30;
+    Surface.image := Transforme.matrix_to_surf !Surface.reduce;
+    Detection.projection_h !Surface.reduce;
+    print_string(string_of_int(!Detection.average)^"\n");
     (* Interpolation.resize_percent_unit *)
     (*       !Surface.image *)
     (*       !Argument.percent_res ; *)
@@ -26,23 +31,25 @@ let dev () =
     (*     print_string(string_of_int(Interpolation.sommet_of_h *)
     (*                                  !Interpolation.proj_h_table)^ *)
     (*                    "\n"); *)
-    (*     let i = (Interpolation.discover_angle !Surface.image) in *)
-    (*       print_string(string_of_float i); *)
-(*     Rotation.angle := Rotation.degreef_to_rad (25133.); *)
-    let img_rot = (Rotation.optimized2
-                     !Surface.image
-                     ~-.2.) in
-    if (!Path.output <> "") then
-      begin
-       (*  Sdlvideo.save_BMP !Surface.image !Path.output; *)
-        Sdlvideo.save_BMP img_rot !Path.output
-      (*   Sdlvideo.save_BMP *)
-(*           (Transforme.matrix_to_surf !Surface.reduce) *)
-(*           (!Path.output^"reduce.bmp"); *)
-      (*   Interpolation.histo_to_file "histo.csv" *)
-      end
-    else
-      Sdlvideo.save_BMP !Surface.image "../projection.bmp"
+(*     let i = (Interpolation.discover_angle !Surface.image) in *)
+(*     Rotation.angle := Rotation.degreef_to_rad (1.53); *)
+(*     Surface.image := (Rotation.optimized2 *)
+(*                           !Surface.image *)
+(*                           !Rotation.angle); *)
+      if (!Path.output <> "") then
+        begin
+          (* print_string(!Path.output); *)
+            print_string(string_of_float(i)^"\n"); *)
+          (*  Sdlvideo.save_BMP !Surface.image !Path.output; *)
+          Sdlvideo.save_BMP !Surface.image !Path.output;
+          Detection.histo_to_file (!Path.output^".csv");
+            (*   Sdlvideo.save_BMP *)
+            (*           (Transforme.matrix_to_surf !Surface.reduce) *)
+            (*           (!Path.output^"reduce.bmp"); *)
+            (*   Interpolation.histo_to_file "histo.csv" *)
+        end
+      else
+        Sdlvideo.save_BMP !Surface.image "../projection.bmp"
   with
     | Sdlvideo.Video_exn s -> print_endline
         (s^ "--> you may have forgotten an option"^
