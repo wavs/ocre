@@ -130,7 +130,6 @@ let sommet_of_h tab =
       ((get tab !i) = (get tab (!i + 1))) do
       i := !i + 1
     done;
-    print_string((soi !i)^"une fois j'ai fait une projection"^"\n");
     if ((!i + 1) <= (dim tab -1)) &&
       ((get tab !i) < (get tab (!i+1))) then
       begin
@@ -169,6 +168,7 @@ let sommet_of_h tab =
         i := !i + 1
       end
     done;
+    print_string((soi !count)^" une fois j'ai fait une projection"^"\n");
     !count
 
 let histo_to_file file =
@@ -297,12 +297,12 @@ with
       ("image non-altere percentage too high\n");
       surf
 
-let resize_for_disco surf =
-  resize_percent_unit surf 8
+let resize_for_disco surf perc =
+  resize_percent_unit surf perc
 
 let discover_angle surf =
   print_string("avant la boucle infinii je m'aime \n");
-  resize_for_disco surf;
+  resize_for_disco surf 10;
   let prev_angle        = ref 0.        in
   let angle             = ref 0.        in
   let bool              = ref false      in
@@ -312,12 +312,14 @@ let discover_angle surf =
     projection_h !Surface.reduce;
   let current_sommet    = ref (sommet_of_h !proj_h_table) in
     (* on fait des test pour voir le sens probable de rot*)
+    print_string("current_sommet\n");
     Surface.rotated := Rotation.optimized3
       !Surface.reduce
-      (Rotation.degreef_to_rad ~-.1.);
+      (Rotation.degreef_to_rad ~-.0.1);
     projection_h !Surface.rotated;
     (* nbres de sommet avec la valeur d'angle de test *)
   let next_sommet       = ref (sommet_of_h !proj_h_table) in
+    print_string("next_sommet\n");
     if (!next_sommet < !current_sommet) then
       begin
         gauche := true;
@@ -329,23 +331,22 @@ let discover_angle surf =
       end
     else
       begin
-        droite := true;
-        Surface.rotated := Rotation.optimized3
-          !Surface.reduce
-          (Rotation.degreef_to_rad ~-.1.);
-        projection_h !Surface.rotated;
-        next_sommet       := sommet_of_h !proj_h_table;
+        print_string("1 er passage a droite \n");
+        print_string(string_of_float(!angle)^"\n");
+        droite  := true;
       end;
     print_string("un peu avant la boucle infinii je m'aime \n");
     if(!droite)then
       begin
-        let pas             = ref ~-.1.       in
+        let pas             = ref ~-.0.1       in
         let prev_sommet     = ref 0           in
           while (!pas <> ~-.0.01) do
             begin
                 while (!current_sommet < !next_sommet ) do
                   begin
+                    print_string(string_of_float(!angle)^"\n");
                     angle := !angle +. !pas;
+                    print_string(string_of_float(!angle)^"\n");
                     prev_sommet := !current_sommet;
                     current_sommet := !next_sommet;
                     Surface.rotated :=
@@ -356,8 +357,11 @@ let discover_angle surf =
                     next_sommet       := sommet_of_h !proj_h_table;
                   end
                 done;
+              print_string(string_of_int(!current_sommet)^"cs\n");
+              print_string(string_of_int(!next_sommet)^"ns\n");
               prev_angle := !prev_angle +. !angle;
               angle := 0.;
+              print_string("pas avant:"^string_of_float(!pas)^"\n");
               if !bool then
                   begin
                     bool := false;
@@ -368,6 +372,7 @@ let discover_angle surf =
                     bool := true;
                     pas  := !pas  /. 2.;
                   end;
+              print_string("pas apres:"^string_of_float(!pas)^"\n");
               Surface.rotated :=
                 Rotation.optimized3
                   !Surface.reduce
