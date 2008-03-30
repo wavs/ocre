@@ -38,7 +38,11 @@ t_matrix *initializeEnv()
     for(j=0; j < ret->nbcols; ++j)
       ret->data[i][j] = 1;
 
-  ret->data[2][2] = 1;
+  ret->data[0][0] = 0;
+  ret->data[0][2] = 0;
+  ret->data[3][1] = 0;
+  ret->data[2][3] = 0;
+  ret->data[3][0] = 0;
 
   
   return(ret);
