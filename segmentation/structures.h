@@ -214,9 +214,8 @@ typedef struct s_limit t_limit;
  */
 struct s_queue
 {
-  struct s_queue *prev;
+  struct s_coordinate *coord;
   struct s_queue *next;
-  void *data;
 };
 
 typedef struct s_queue t_queue;

@@ -17,8 +17,6 @@
 
 #include "structures.h"
 
-t_matrix *initializeEnv(void);
-
 void testInit();
 
 void testProjections();
@@ -32,3 +30,7 @@ void testIsBmp();
 void testAddListCC();
 
 void testQueue();
+
+void testUpdateMinMax();
+
+void testCC();

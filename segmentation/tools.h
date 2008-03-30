@@ -16,6 +16,13 @@
 #endif /* TOOLS_H */
 
 /**
+ * This functions initiates a matrix;
+ *
+ * @return Matrix
+ */
+t_matrix *initializeEnv();
+
+/**
  * This function determines if the extension of a
  * filename is ".bmp".
  *
@@ -65,32 +72,37 @@ char **initMarkMatrix(int height, int width);
 t_cc_list *addListCC(t_cc_elt *elt, t_cc_list *cc_list);
 
 /**
- * This function creates an emtpy queue.
- *
- * @return Queue
- */
-t_queue *qNew();
-
-/**
  * This function adds an element to
  * the queue.
  *
- * @param pp Queue
- * @param data Data stored in the queue
+ * @param p_queue Queue
+ * @param coord Data stored in the queue
  */
-void qPost (t_queue **pp, void *data);
+void qEnqueue(t_queue **p_queue, t_coordinate *coord);
+
 
 /**
  * This function extracts an element of
  * the queue.
  *
- * @param pp Queue
+ * @param p_queue Queue
+ *
+ * @return Data stored in the first element of the queue
  */
-void *qGet (t_queue **pp);
+t_coordinate *qDequeue(t_queue **p_queue);
 
 /**
  * This function deletes the queue.
  *
- * @param pp Queue
+ * @param p_queue Queue
  */
-void qDelete (t_queue **pp);
+void qDelete(t_queue **p_queue);
+/**
+ * This function returns the value of the
+ * first element of the queue. (without destroy).
+ *
+ * @param p_queue Queue
+ *
+ * @return Data stored in the first element of the queue
+ */
+t_coordinate *qQeek(t_queue *p_queue);
