@@ -33,7 +33,7 @@ let dev () =
     (*                    "\n"); *)
 (*     let i = (Interpolation.discover_angle !Surface.image) in *)
     Surface.image := Transforme.matrix_to_surf !Surface.reduce;
-    Rotation.angle := Rotation.degreef_to_rad (1.7);
+    Rotation.angle := Rotation.degreef_to_rad (1.2);
     Surface.image := (Rotation.optimized2
                           !Surface.image
                           !Rotation.angle);
