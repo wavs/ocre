@@ -32,7 +32,7 @@
  */
 void crossCC(int y, int x, t_cc_elt *elt, t_matrix *matrix, char **mark)
 {
-  unsigned int i;
+  int i, j, kmin, kmax, pmin, pmax, first;
   int pix_count;
   unsigned int xtmp, ytmp;
   t_coordinate *coord, *res;
@@ -50,61 +50,61 @@ void crossCC(int y, int x, t_cc_elt *elt, t_matrix *matrix, char **mark)
   minmax->xmax = x;
   minmax->ymin = y;
   minmax->ymax = y;
+  first = 1;
 
   /* Route of the connected component */
   do
     {
-
-      printf("x: %d   y: %d\n",xtmp,ytmp);
-
-      if ((ytmp < matrix->nbrows) && ((xtmp+1) < matrix->nbcols))
+      /* xtmp, ytmp = defiler (i,j) */
+      if (!first)
 	{
-	  if ((matrix->data[ytmp][xtmp+1] == 1) && (mark[ytmp][xtmp+1] == 'o'))
+	  res = qDequeue(q);
+	  if (res != NULL)
 	    {
-	      printf("A");
-	      /* enfiler (i,j) dans q */
-	      coord = wmalloc(sizeof(t_coordinate));
-	      coord->x = xtmp + 1;
-	      coord->y = ytmp;
-	      qEnqueue(q, coord);
-	      mark[ytmp][xtmp+1] = 'x';
-	      /* Update of min,max coordinates */
-	      updateMinMax(minmax, (xtmp+1), ytmp);
-	      pix_count++;
+	      xtmp = res->x;
+	      ytmp = res->y;
 	    }
+	  /*if (*q == NULL)
+	    printf("La file est vide\n");*/
 	}
-
-      k = xtmp;
-      if (xtmp-1 < 0)
-	k = 0;
-      for (i=k; i <= (xtmp+1); i++)
+      
+      /*printf("x: %d   y: %d\n",xtmp,ytmp);
+	printf("je repasse la \n"); */
+      kmin = ytmp-1;
+      if (kmin < 0)
+	kmin = 0;
+      kmax = ytmp+1;
+      if (kmax >= matrix->nbrows)
+	kmax = matrix->nbrows - 1;
+      for (i=kmin; i <= kmax; i++)
 	{
-	  if (((ytmp+1) < matrix->nbrows) && (i < matrix->nbcols) )
+	  pmin = xtmp-1;
+	  if (pmin < 0)
+	    pmin = 0;
+	  pmax = xtmp+1;
+	  if (pmax >= matrix->nbcols)
+	    pmax = matrix->nbcols - 1;
+	  for (j=pmin; j <= pmax; j++)
 	    {
-	      if ((matrix->data[ytmp+1][i] == 1) && (mark[ytmp+1][i] == 'o'))
+	     
+	      /* printf("\n >> Test de la case (%d,%d)\n", j, i); */
+	      if ((matrix->data[i][j] == 1) && (mark[i][j] == 'o'))
 		{
-		  printf("R");
-		  /* enfiler (i,j) dans q */
 		  coord = wmalloc(sizeof(t_coordinate));
-		  coord->x = i;
-		  coord->y = ytmp + 1;
+		  coord->x = j;
+		  coord->y = i;
+		  /*if (*q == NULL)
+		    printf("Cest ici que la file est vide avant.\n");*/
 		  qEnqueue(q, coord);
-		  mark[ytmp+1][i] = 'x';
-		  /* Update of min,max coordinates */
-		  updateMinMax(minmax, i, (ytmp+1));
+		  /*if (*q == NULL)
+		  printf("Cest ici que la file est vide apres.\n");*/
+		  mark[i][j] = 'x';
+		  updateMinMax(minmax, j, i);
 		  pix_count++;
 		}
 	    }
 	}
-
-      /* xtmp, ytmp = defiler (i,j) */
-      res = qDequeue(q);
-      if (res != NULL)
-	{
-	  xtmp = res->x;
-	  ytmp = res->y;
-	}
-
+      first = 0;
       /*wfree(res);*/
     }
   while (*q != NULL);
