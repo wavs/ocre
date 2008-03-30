@@ -20,9 +20,9 @@ let dev () =
     (*Le seuil est super long checkout*)
     Seuil.seuillage !Surface.image;
     Interpolation.resize_for_disco !Surface.image 30;
-    Surface.image := Transforme.matrix_to_surf !Surface.reduce;
-    Detection.projection_h !Surface.reduce;
-    print_string(string_of_int(!Detection.average)^"\n");
+   (*  Surface.image := Transforme.matrix_to_surf !Surface.reduce; *)
+(*     Detection.proj_and_average !Surface.reduce; *)
+(*     print_string(string_of_int(!Detection.average)^"\n"); *)
     (* Interpolation.resize_percent_unit *)
     (*       !Surface.image *)
     (*       !Argument.percent_res ; *)
@@ -32,14 +32,18 @@ let dev () =
     (*                                  !Interpolation.proj_h_table)^ *)
     (*                    "\n"); *)
 (*     let i = (Interpolation.discover_angle !Surface.image) in *)
-(*     Rotation.angle := Rotation.degreef_to_rad (1.53); *)
-(*     Surface.image := (Rotation.optimized2 *)
-(*                           !Surface.image *)
-(*                           !Rotation.angle); *)
+    Surface.image := Transforme.matrix_to_surf !Surface.reduce;
+    Rotation.angle := Rotation.degreef_to_rad (30.);
+    Surface.image := (Rotation.optimized2
+                          !Surface.image
+                          !Rotation.angle);
+    Surface.reduce := Transforme.surf_to_matrix !Surface.image;
+    Detection.proj_and_average !Surface.reduce;
+    print_string(string_of_int(!Detection.average)^"\n");
       if (!Path.output <> "") then
         begin
           (* print_string(!Path.output); *)
-            print_string(string_of_float(i)^"\n"); *)
+(*             print_string(string_of_float(i)^"\n"); *)
           (*  Sdlvideo.save_BMP !Surface.image !Path.output; *)
           Sdlvideo.save_BMP !Surface.image !Path.output;
           Detection.histo_to_file (!Path.output^".csv");
