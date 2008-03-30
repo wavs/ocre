@@ -95,7 +95,7 @@ typedef struct s_result_extraction t_result_extraction;
 /**
  * This structure contains some informations about how
  * the program begin and with which files.
- * 
+ *
  * DEPRECATED
  */
 struct s_launch_infos
@@ -125,7 +125,7 @@ struct s_coordinate
 typedef struct s_coordinate t_coordinate;
 
 /**
- * This structure stores the coordinates of a 
+ * This structure stores the coordinates of a
  * connected component.
  */
 struct s_cc_coordinate
@@ -154,7 +154,7 @@ typedef struct s_cc_elt t_cc_elt;
 
 /**
  * This structure represents a linked list of
- * connected components. 
+ * connected components.
  */
 struct s_cc_list
 {
@@ -167,7 +167,7 @@ typedef struct s_cc_list t_cc_list;
 
 /**
  * This structure represents a block in the image
- * with (or not) connnected components.
+ * with(out) connnected components.
  */
 struct s_block_elt
 {

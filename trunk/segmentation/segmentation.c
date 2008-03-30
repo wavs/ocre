@@ -96,7 +96,7 @@ void crossCC(int y, int x, t_cc_elt *elt, t_matrix *matrix, char **mark)
 		}
 	    }
 	}
- 
+
       /* xtmp, ytmp = defiler (i,j) */
       res = qDequeue(q);
       if (res != NULL)
@@ -104,7 +104,7 @@ void crossCC(int y, int x, t_cc_elt *elt, t_matrix *matrix, char **mark)
 	  xtmp = res->x;
 	  ytmp = res->y;
 	}
- 
+
       /*wfree(res);*/
     }
   while (*q != NULL);
@@ -195,7 +195,7 @@ t_cc_list *findCC(t_matrix *matrix)
 	  }
 	mark[i][j] = 'x';
 	
-	/* DEBUG 
+	/* DEBUG
 	printf("\n\n");
 	for (k=0; k < matrix->nbrows; k++)
 	  {
@@ -219,20 +219,63 @@ t_cc_list *findCC(t_matrix *matrix)
   return(ret);
 }
 
+
+t_block_elt *create_block(int id, t_cc_list *cclist,
+                          int nbcc, int xmin, int xmax,
+                          int ymin, int ymax, int type)
+{
+  t_block_elt *block;
+  block = wmalloc(sizeof(t_block_elt));
+
+  block->id = id;
+  block->cclist = cclist;
+  block->posx = xmin;
+  block->posy = ymin;
+  block->height = ymax - ymin;
+  block->width = xmax - xmin;
+  block->type = type;
+
+  return block;
+}
+
 /**
  * This function creates all the blocks according to
  * the list of connected components.
  *
  * @param cc_list Linked list of connected components
- * 
+ *
  * @return Linked list of blocks
  */
-/*t_block_list *makeBlocks(t_cc_list *cc_list)
+t_block_list *makeBlocks(t_cc_list *cc_list)
 {
-  // FIXME
+  int id = 0;
+  t_block_list *blocklist;
+  t_block_elt *block, *head;
+  t_cc_list *tmplist;
+  t_cc_elt *tmp;
+  blocklist = wmalloc(sizeof(t_block_list));
+  block = wmalloc(sizeof(t_block_elt));
+  head = block;
+  tmplist = wmalloc(sizeof(t_cc_list));
+  tmp = wmalloc(sizeof(t_cc_elt));
+  tmp = cc_list->head;
+  while (tmp != NULL)
+    {
+      if (tmp->chr == 0)
+        {
+          tmplist->head = tmp;
+          tmplist->tail = tmp;
+          block = create_block(id, tmplist, 1,
+                               tmp->coord.xmin, tmp->coord.xmax,
+                               tmp->coord.ymin, tmp->coord.ymax, 2);
+        }
+      id++;
+    }
+
+
   return(NULL);
 }
-*/
+
 
 /**
  * This function checks if the connected components
@@ -243,23 +286,29 @@ t_cc_list *findCC(t_matrix *matrix)
 void checkIfCharacter(t_cc_list *cc_list)
 {
   int nbpixtot;
-  t_cc_elt tmp = wmalloc(sizeof(t_cc_elt));
+  float seuil = 1.6;
+  t_cc_elt* tmp;
+  tmp = wmalloc(sizeof(t_cc_elt));
   tmp = cc_list->head;
 
-  while (tmp <> NULL)
+  while (tmp != NULL)
     {
       nbpixtot = (tmp->coord.xmax - tmp->coord.xmin)
         * (tmp->coord.ymax - tmp->coord.ymin);
+      if (tmp->nbpix < seuil*nbpixtot)
+        {
+          tmp->chr = 1;
+        }
       tmp = tmp->next;
     }
-  free(tmp);
+  wfree(tmp);
 }
 
 
 /**
  * This function detects the type of blocks
  * (text, image, ...)
- * 
+ *
  * @param block_list Linked list of blocks
  */
 /*void detectTypeOfBlocks(t_block_list *block_list)
