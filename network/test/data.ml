@@ -6,5 +6,5 @@ object (self)
     
   val mutable endurance = "42 secondes"
   method get_e() = endurance
-  method set_e a0 = endurance <- e0
+  method set_e e0 = endurance <- e0
 end
