@@ -163,13 +163,12 @@ void on_open_show (GtkImageMenuItem* test, gpointer user_data)
       /* get the filename */
       filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER
 						(open));
-      printf(filename);
       /* preprocessing */
 /*       if (fork()) */
 /* 	execl("../bin/OCRed", "-i", filename, "-dev", NULL); */
       if (fork())
-        execl("../bin/OCRed", "-i", filename, "--resize-auto", NULL);
-      sleep(2);
+        execlp("../bin/OCRed", "-i", filename, "--resize-auto", NULL);
+      sleep(3);
       /* open the file */
       filename = "../resize.bmp";
       gtk_image_set_from_file(GTK_IMAGE(guisex->image), filename);
