@@ -178,6 +178,7 @@ t_cc_list *findCC(t_matrix *matrix)
   mark = initMarkMatrix(matrix->nbrows, matrix->nbcols);
   cc_count = 0;
   cc_list = NULL;
+  ret = NULL;
 
   for (i=0; i < matrix->nbrows; ++i)
     for(j=0; j < matrix->nbcols; ++j)
@@ -187,7 +188,7 @@ t_cc_list *findCC(t_matrix *matrix)
 	  {
 	    mark[i][j] = 'x';
 	    cc_count++;
-	    ret = makeCC(i, j, cc_count, matrix, mark,cc_list);
+	    ret = makeCC(i, j, cc_count, matrix, mark, cc_list);
 	    if (ret == NULL)
 	      printf("IOP()()");
 	  }
@@ -210,7 +211,7 @@ t_cc_list *findCC(t_matrix *matrix)
   free(mark);
 
   if (ret == NULL)
-    printf("IOP");
+    printf("DEBUG: Ret = NULL\n");
 
   return(ret);
 }
