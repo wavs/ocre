@@ -17,6 +17,34 @@
 #include "wrappers.h"
 
 /**
+ * This functions initiates a matrix;
+ *
+ * @return Matrix
+ */
+t_matrix *initializeEnv()
+{
+  unsigned int i, j;
+  t_matrix *ret;
+
+  ret = wmalloc(sizeof(t_matrix));
+  ret->nbrows = 4;
+  ret->nbcols = 4;
+  ret->data = NULL;
+  ret->data = (int **)wmalloc(ret->nbrows * sizeof(int *));
+  for (i=0; i < ret->nbrows; ++i)
+    ret->data[i] = (int *)wcalloc(ret->nbcols, sizeof(int));
+
+  for (i=0; i < ret->nbrows; ++i)
+    for(j=0; j < ret->nbcols; ++j)
+      ret->data[i][j] = 0;
+
+  ret->data[2][2] = 1;
+
+  
+  return(ret);
+}
+
+/**
  * This function determines if the extension of a
  * filename is ".bmp".
  *
@@ -55,8 +83,11 @@ int is_bmp(char *filename)
  */
 int checkIfUnderLimits(int x, int y, int limit_x, int limit_y)
 {
-  if (((x-1) >= 0 && (x+1) < limit_x) &&
-      (y >= 0 && (y+1) < limit_y))
+  if (((x+1) >= 0 && (x+1) < limit_x) &&
+      ((x-1) >= 0 && (x-1) < limit_x) &&
+      (x >= 0 && x < limit_x) &&
+      (y >= 0 && y < limit_y) &&
+      ((y+1) >= 0 && (y+1) < limit_y))
     return(1);
   else
     return(0);
@@ -100,14 +131,18 @@ t_cc_list *addListCC(t_cc_elt *elt, t_cc_list *cc_list)
     {
       if (cc_list == NULL)
 	{
-	  res = (t_cc_list *)wcalloc(1, sizeof(t_cc_list));
+	  printf("A");
+	  res = wmalloc(sizeof(t_cc_list));
 	  res->head = elt;
 	  res->tail = elt;
 	  res->nbcc = 1;
+	  if (res == NULL)
+	    printf("NULL");
 	  return(res);
 	}
       else
 	{
+	  printf("B");
 	  cc_list->nbcc++;
 	  cc_list->tail->next = elt;
 	  cc_list->tail = elt;
@@ -139,139 +174,91 @@ char **initMarkMatrix(int height, int width)
   /* Initialization of the matrix */
   for (i=0; i < height; ++i)
     for (j=0; j < width; ++j)
-      ret[i][j] = 'x';
+      ret[i][j] = 'o';
  
   return(ret);
-}
-
-/**
- * This function gives the precedent
- * element in the queue.
- *
- * @param pp Queue
- */
-static void qPrev (t_queue **pp)
-{
-  if (pp != NULL && *pp != NULL)
-    *pp = (*pp)->prev;
-}
-
-/**
- * This function allows to move at the
- * beginning of the queue.
- *
- * @param pp Queue
- */
-static void qFirst (t_queue **pp)
-{
-  if (pp != NULL && *pp != NULL)
-    while ((*pp)->prev != NULL)
-      qPrev(pp);
-}
-
-/**
- * This function gives the next element
- * in the queue.
- *
- * @param pp Queue
- */
-static void qNext (t_queue **pp)
-{
-  if (pp != NULL && *pp != NULL)
-    *pp = (*pp)->next;
-}
-
-/**
- * This function allows to move at the end
- * of the queue.
- *
- * @param pp Queue
- */
-static void qLast (t_queue **pp)
-{
-  if (pp != NULL && *pp != NULL)
-    {
-      while ((*pp)->next != NULL)
-	qNext(pp);
-    }
-}
-
-/**
- * This function creates an emtpy queue.
- *
- * @return Queue
- */
-t_queue *qNew()
-{
-  return(NULL);
 }
 
 /**
  * This function adds an element to
  * the queue.
  *
- * @param pp Queue
- * @param data Data stored in the queue
+ * @param p_queue Queue
+ * @param coord Data stored in the queue
  */
-void qPost (t_queue **pp, void *data)
+void qEnqueue(t_queue **p_queue, t_coordinate *coord)
 {
-  t_queue *pl, *tmp;
+  t_queue *p_new, *p_tmp;
   
-  if (pp != NULL)
+  p_new = wmalloc(sizeof(*p_new));
+  if (p_new != NULL)
     {
-      pl = NULL;
-      tmp = NULL;
-      qFirst(pp);
-      pl = *pp;
-      tmp = wmalloc(sizeof(t_queue));
-      tmp->data = data;
-      tmp->next = pl;
-      tmp->prev = NULL;
-      if (pl != NULL)
-	pl->prev = tmp;
-      *pp = tmp;
+      p_new->next = NULL;
+      p_new->coord = coord;
+      if (*p_queue == NULL)
+	*p_queue = p_new;
+      else
+	{
+	  p_tmp = *p_queue;
+	  while (p_tmp->next != NULL)
+	    p_tmp = p_tmp->next;
+	  p_tmp->next = p_new;
+	}
     }
 }
+
 
 /**
  * This function extracts an element of
  * the queue.
  *
- * @param pp Queue
+ * @param p_queue Queue
+ *
+ * @return Data stored in the first element of the queue
  */
-void *qGet (t_queue **pp)
+t_coordinate *qDequeue(t_queue **p_queue)
 {
-  void *ret;
-  t_queue *pl, *tmp;
-
+  t_coordinate *ret;
+  t_queue *p_tmp;
+  
   ret = NULL;
-  if (pp != NULL && *pp != NULL)
+  if (*p_queue != NULL)
     {
-      pl = NULL;
-      tmp = NULL;
-      qLast(pp);
-      pl = *pp;
-      if (pl != NULL)
-	tmp = pl->prev;
-      ret = pl->data;
-      wfree(pl);
-      if (tmp != NULL)
-	tmp->next = NULL;
-      *pp = tmp;
+      p_tmp = (*p_queue)->next;
+      ret = (*p_queue)->coord;
+      wfree((*p_queue)->coord);
+      wfree(*p_queue);
+      *p_queue = NULL;
+      *p_queue = p_tmp;
     }
   return(ret);
-  
 }
+
 /**
  * This function deletes the queue.
  *
- * @param pp Queue
+ * @param p_queue Queue
  */
-void qDelete (t_queue **pp)
+void qDelete(t_queue **p_queue)
 {
-  if (pp != NULL && *pp != NULL)
-    {
-      while (*pp != NULL)
-	qGet(pp);
-    }
+  while(*p_queue != NULL)
+    qDequeue(p_queue);
+}
+
+/**
+ * This function returns the value of the
+ * first element of the queue. (without destroy).
+ *
+ * @param p_queue Queue
+ *
+ * @return Data stored in the first element of the queue
+ */
+t_coordinate *qQeek(t_queue *p_queue)
+{
+  t_coordinate *ret;
+  
+  ret = NULL;
+  if (p_queue != NULL)
+    ret = p_queue->coord;
+  return(ret);
 }

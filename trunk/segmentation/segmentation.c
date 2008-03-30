@@ -17,6 +17,7 @@
 #include "structures.h"
 #include "segmentation.h"
 #include "tools.h"
+#include "print.h"
 
 /**
  * This function crosses a connected component
@@ -31,16 +32,17 @@
  */
 void crossCC(int y, int x, t_cc_elt *elt, t_matrix *matrix, char **mark)
 {
-  int i;
+  unsigned int i;
   int pix_count;
-  int xtmp, ytmp;
+  unsigned int xtmp, ytmp;
   t_coordinate *coord, *res;
   t_cc_coordinate *minmax;
   t_queue **q;
 
   /* Initialization */
   pix_count = 1;
-  qNew(q);
+  q = NULL;
+  q = (t_queue **)wcalloc(1, sizeof(t_queue *));
   xtmp = x;
   ytmp = y;
   minmax = wcalloc(1, sizeof(t_cc_coordinate));
@@ -52,52 +54,62 @@ void crossCC(int y, int x, t_cc_elt *elt, t_matrix *matrix, char **mark)
   /* Route of the connected component */
   do
     {
-      if (checkIfUnderLimits(xtmp, ytmp, matrix->nbcols, matrix->nbrows))
+
+      printf("x: %d   y: %d\n",xtmp,ytmp);
+
+      if ((ytmp < matrix->nbrows) && ((xtmp+1) < matrix->nbcols))
 	{
 	  if ((matrix->data[ytmp][xtmp+1] == 1) && (mark[ytmp][xtmp+1] == 'o'))
 	    {
+	      printf("A");
 	      /* enfiler (i,j) dans q */
-	      coord = wcalloc(1, sizeof(t_coordinate));
+	      coord = wmalloc(sizeof(t_coordinate));
 	      coord->x = xtmp + 1;
 	      coord->y = ytmp;
-	      qPost(q, coord);
+	      qEnqueue(q, coord);
 	      mark[ytmp][xtmp+1] = 'x';
 	      /* Update of min,max coordinates */
 	      updateMinMax(minmax, (xtmp+1), ytmp);
 	      pix_count++;
 	    }
-	  
-	  for (i=(xtmp-1); i <= (xtmp+1); ++i)
+	}
+      
+      for (i=(xtmp-1); i <= (xtmp+1); i++)
+	{
+	  if (((ytmp+1) < matrix->nbrows) && (i < matrix->nbcols) )
 	    {
-	      /* WARNING WE MUST TEST IF IT IS OVER LIMIT */
 	      if ((matrix->data[ytmp+1][i] == 1) && (mark[ytmp+1][i] == 'o'))
 		{
+		  printf("R");
 		  /* enfiler (i,j) dans q */
-		  coord = wcalloc(1, sizeof(t_coordinate));
+		  coord = wmalloc(sizeof(t_coordinate));
 		  coord->x = i;
 		  coord->y = ytmp + 1;
-		  qPost(q, coord);
+		  qEnqueue(q, coord);
 		  mark[ytmp+1][i] = 'x';
 		  /* Update of min,max coordinates */
 		  updateMinMax(minmax, i, (ytmp+1));
 		  pix_count++;
 		}
 	    }
-	  /* xtmp, ytmp = defiler (i,j) */
-	  res = qGet(q);
+	}
+ 
+      /* xtmp, ytmp = defiler (i,j) */
+      res = qDequeue(q);
+      if (res != NULL)
+	{
+	  printf("\nXtmp: %d  Ytmp: %d\n",xtmp,ytmp);
 	  xtmp = res->x;
 	  ytmp = res->y;
-	  wfree(res);
 	}
-      else
-	{
-	  printf("Matrix error: Out of range\n Process aborted.\n");
-	  exit(EXIT_FAILURE);
-	}
+ 
+      /*wfree(res);*/
     }
-      while (q != NULL);
+  while (*q != NULL);
+  elt->coord = *minmax;
   elt->nbpix = pix_count;
   qDelete(q);
+  wfree(q);
 }
 
 /**
@@ -110,17 +122,17 @@ void crossCC(int y, int x, t_cc_elt *elt, t_matrix *matrix, char **mark)
  * @param mark Matrix of marks
  * @param cc_list Linked list of connected components
  */
-void makeCC(int i,
-	    int j,
-	    int cc_count,
-	    t_matrix *matrix,
-	    char **mark,
-	    t_cc_list *cc_list)
+t_cc_list *makeCC(int i,
+		  int j,
+		  int cc_count,
+		  t_matrix *matrix,
+		  char **mark,
+		  t_cc_list *cc_list)
 {
   t_cc_elt *elt;
 
   /* Initialization */
-  elt = wcalloc(1, sizeof(t_cc_elt));
+  elt = wmalloc(sizeof(t_cc_elt));
   elt->id = cc_count;
   elt->chr = 0;
   elt->next = NULL;
@@ -128,8 +140,21 @@ void makeCC(int i,
   /* Route of the connected component */
   crossCC(i, j, elt, matrix, mark);
 
+  /* DEBUG */
+  printf("\n\n >> CC <<\n");
+  printf(" id: %d\n",elt->id);
+  printf(" chr: %d\n",elt->chr);
+  printf(" nbpix: %d\n",elt->nbpix);
+  printf(" (x,y)min: (%d,%d)\n",elt->coord.xmin,elt->coord.ymin);
+  printf(" (x,y)max: (%d,%d)\n\n",elt->coord.xmax,elt->coord.ymax);
+
   /* Update of the linked list */
-  addListCC(elt, cc_list);
+
+  if (cc_list == NULL)
+    printf("IOPapres");
+
+  return(addListCC(elt, cc_list));
+
 }
 
 /**
@@ -145,14 +170,14 @@ void makeCC(int i,
 t_cc_list *findCC(t_matrix *matrix)
 {
   char **mark;
-  unsigned int i, j;
+  unsigned int i, j, k, o;
   int cc_count;
-  t_cc_list *ret;
+  t_cc_list *ret,*cc_list;
 
   /* Initialization */
   mark = initMarkMatrix(matrix->nbrows, matrix->nbcols);
   cc_count = 0;
-  ret = NULL;
+  cc_list = NULL;
 
   for (i=0; i < matrix->nbrows; ++i)
     for(j=0; j < matrix->nbcols; ++j)
@@ -162,10 +187,31 @@ t_cc_list *findCC(t_matrix *matrix)
 	  {
 	    mark[i][j] = 'x';
 	    cc_count++;
-	    makeCC(i, j, cc_count, matrix, mark, ret);
+	    ret = makeCC(i, j, cc_count, matrix, mark,cc_list);
+	    if (ret == NULL)
+	      printf("IOP()()");
 	  }
 	mark[i][j] = 'x';
+
+	printf("\n\n");
+	for (k=0; k < matrix->nbrows; k++)
+	  {
+	    printf("\n");
+	    for(o=0; o < matrix->nbcols; o++)
+	      printf(" %c",mark[k][o]);
+	  }
+	printf("\n\n");
+
       }
+
+  /* Free memory */
+  for (i=0; i < matrix->nbrows; i++)
+    free(mark[i]);
+  free(mark);
+
+  if (ret == NULL)
+    printf("IOP");
+
   return(ret);
 }
 

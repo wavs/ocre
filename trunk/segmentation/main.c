@@ -24,15 +24,16 @@
  */
 int main()
 {
-  /*
-    testInit();
-    testProjections(); 
+  /* testInit();
+    testProjections();
     testInitMarkMatrix();
     testCheckIfUnderLimits();
     testIsBmp();
+    testAddListCC();
+    testQueue();
+    testUpdateMinMax();
   */
-  testAddListCC();
-  /* testQueue(); SEGFAULT */
+  testCC();
 
   return(EXIT_SUCCESS);
 }

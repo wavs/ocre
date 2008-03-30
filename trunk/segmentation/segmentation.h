@@ -40,12 +40,12 @@ void crossCC(int y, int x, t_cc_elt *elt, t_matrix *matrix, char **mark);
  * @param mark Matrix of marks
  * @param cc_list Linked list of connected components
  */
-void makeCC(int i,
-	    int j,
-	    int cc_count,
-	    t_matrix *matrix,
-	    char **mark,
-	    t_cc_list *cc_list);
+t_cc_list *makeCC(int i,
+		  int j,
+		  int cc_count,
+		  t_matrix *matrix,
+		  char **mark,
+		  t_cc_list *cc_list);
 
 /**
  * This functions finds all the connected components of
