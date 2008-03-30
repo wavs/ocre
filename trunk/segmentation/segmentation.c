@@ -32,7 +32,7 @@
  */
 void crossCC(int y, int x, t_cc_elt *elt, t_matrix *matrix, char **mark)
 {
-  unsigned int i;
+  unsigned int i, k;
   int pix_count;
   unsigned int xtmp, ytmp;
   t_coordinate *coord, *res;
@@ -44,7 +44,7 @@ void crossCC(int y, int x, t_cc_elt *elt, t_matrix *matrix, char **mark)
   q = NULL;
   q = (t_queue **)wcalloc(1, sizeof(t_queue *));
   xtmp = x;
-  ytmp = y;
+  ytmp = y    ;
   minmax = wcalloc(1, sizeof(t_cc_coordinate));
   minmax->xmin = x;
   minmax->xmax = x;
@@ -61,7 +61,7 @@ void crossCC(int y, int x, t_cc_elt *elt, t_matrix *matrix, char **mark)
 	{
 	  if ((matrix->data[ytmp][xtmp+1] == 1) && (mark[ytmp][xtmp+1] == 'o'))
 	    {
-	      printf("A");
+	      printf("\n >> Test sur la case de droite (%d,%d)\n", ytmp, xtmp+1);
 	      /* enfiler (i,j) dans q */
 	      coord = wmalloc(sizeof(t_coordinate));
 	      coord->x = xtmp + 1;
@@ -73,14 +73,16 @@ void crossCC(int y, int x, t_cc_elt *elt, t_matrix *matrix, char **mark)
 	      pix_count++;
 	    }
 	}
-      
-      for (i=(xtmp-1); i <= (xtmp+1); i++)
+
+      if (xtmp-1 < 0)
+	k = xtmp;
+      for (i=k; i <= (xtmp+1); i++)
 	{
 	  if (((ytmp+1) < matrix->nbrows) && (i < matrix->nbcols) )
 	    {
 	      if ((matrix->data[ytmp+1][i] == 1) && (mark[ytmp+1][i] == 'o'))
 		{
-		  printf("R");
+		  printf("\n >> Test de la case (%d,%d)\n", ytmp+1, i);
 		  /* enfiler (i,j) dans q */
 		  coord = wmalloc(sizeof(t_coordinate));
 		  coord->x = i;
@@ -149,10 +151,6 @@ t_cc_list *makeCC(int i,
   printf(" (x,y)max: (%d,%d)\n\n",elt->coord.xmax,elt->coord.ymax);
 
   /* Update of the linked list */
-
-  if (cc_list == NULL)
-    printf("IOPapres");
-
   return(addListCC(elt, cc_list));
 
 }
@@ -189,8 +187,6 @@ t_cc_list *findCC(t_matrix *matrix)
 	    mark[i][j] = 'x';
 	    cc_count++;
 	    ret = makeCC(i, j, cc_count, matrix, mark, cc_list);
-	    if (ret == NULL)
-	      printf("IOP()()");
 	  }
 	mark[i][j] = 'x';
 

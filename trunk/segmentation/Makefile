@@ -13,7 +13,7 @@
 CC=gcc
 
 # Flags
-CFLAGS= -W -Werror -Wall -pedantic -ansi -pipe -g
+CFLAGS= -W -Wall -pedantic -ansi -pipe -g
 
 # Target
 TARGET= extract
