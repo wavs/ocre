@@ -114,17 +114,46 @@ let before_average tab pos =
     done;
     !pos
 
-(* when you're bent on the righ, i is the current position j is the
-   next value*)
-(* let bent_right tab i = *)
-(*   let j         = ref i in *)
-(*   let tabi      = get tab i in *)
-(*   let tabj      = get tab j in *)
-(*     while () do *)
-(*       begin *)
-(*       end *)
-(*     done; *)
-    
+(* we don't really know why, but we know we have to*)
+let check_position_start tab pos =
+  if ((get tab !pos) > !average) then
+    before_average tab pos
+  else
+    after_average tab pos
+
+
+(* when you're bent on the righ, i is the current position j is the *)
+(*    next value *)
+let bent_right tab i j boundup bounddown =
+  let gett i    = get tab i in
+  let tabi      = gett i in
+  let tabj      = ref (gett !j) in
+    while
+      (tabj <> boundup) &&
+      (tabj <> bounddown) &&
+      (gett (!j + 1 ) > tabi)
+    do
+      begin
+        j := !j + 1;
+        tabj := gett !j;
+      end
+    done
+
+(* when you're bent on the left, i is the current position j is the *)
+(*    next value *)
+let bent_left tab i j boundup bounddown =
+  let gett i    = get tab i in
+  let tabi      = gett i in
+    while
+      (gett (!j + 1 ) <> boundup) &&
+      (gett (!j + 1 ) <> bounddown) &&
+      (gett (!j + 1 ) < tabi)
+    do
+      begin
+        j := !j + 1;
+      end
+    done
+
 
 
 (* let  take_coef () = *)
@@ -132,7 +161,7 @@ let before_average tab pos =
 (*    let i         = ref 0 in *)
 (*     while (!i <!average) do *)
 (*       begin *)
-        
+
 (*        end *)
 (*     done; *)
   (*
