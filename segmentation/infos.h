@@ -16,12 +16,14 @@
 /**
  * This function shows an error message when the user types
  * a wrong command line.
+ *
  * @param exe Name of the executable.
  */
 void unknown_command_line(char *exe);
 
 /**
  * This function shows the short help of the program.
+ *
  * @param exe Name of the executable.
  */
 void help(char *exe);

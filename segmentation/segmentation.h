@@ -26,7 +26,11 @@
  *
  * @return Number of black boxes
  */
-void crossCC(int y, int x, t_cc_elt *elt, t_matrix *matrix, char **mark);
+void crossCC(int y,
+	     int x,
+	     t_cc_elt *elt,
+	     t_matrix *matrix,
+	     char **mark);
 
 /**
  * This function create a connected component.

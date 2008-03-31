@@ -24,6 +24,7 @@
 /**
  * This function starts the extraction process without
  * the display option.
+ *
  * @param infos Informations about the launch process.
  */
 void launchProgramWithoutDisplay(t_launch_infos *infos)
@@ -38,7 +39,6 @@ void launchProgramWithoutDisplay(t_launch_infos *infos)
 	  InitSDL(screen);
 	  processAll(infos);
 	  SDL_Quit();
-	  printf("SDL closed.\n");
 	}
       else
 	{

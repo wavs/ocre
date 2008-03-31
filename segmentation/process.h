@@ -15,6 +15,7 @@
 
 /**
  * This function executes the extraction process.
+ *
  * @param infos Informations about the launch process.
  */
 void processAll(t_launch_infos *infos);

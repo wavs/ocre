@@ -27,7 +27,7 @@ void print_vector(int *vector, int length)
 
 void print_matrix(t_matrix *matrix)
 {
-  unsigned int i,j;
+  int i,j;
 
   printf("-- Matrix display --\n");
   printf("  rows: %d\n", matrix->nbrows);

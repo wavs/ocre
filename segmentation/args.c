@@ -20,8 +20,11 @@
 /**
  * This function checks arguements and returns filenames of
  * I/O files and options which are activate.
+ *
  * @param argc Number of arguements.
  * @param argv Array of strings passed in arguements.
+ *
+ * @return Informations about arguements
  */
 t_launch_infos *apply_args(int argc, char *argv[])
 {
@@ -32,14 +35,22 @@ t_launch_infos *apply_args(int argc, char *argv[])
   res = wmalloc(sizeof(t_launch_infos));
   res->inFile = NULL;
   res->outFile = NULL;
+  res->textfile = 0;
+  res->verbose = 0;
   if (argc > 1)
-    { while ((optchar = getopt(argc, argv, "i:o:h")) != -1)
+    { while ((optchar = getopt(argc, argv, "i:o:h:t:v")) != -1)
 	{ switch (optchar)
 	    {  case 'i':
 		res->inFile = strdup(optarg);
 		break;
 	    case 'o':
 	      res->outFile = strdup(optarg);
+	      break;
+	    case 't':
+	      res->textfile = 1;
+	      break;
+	    case 'v':
+	      res->verbose = 1;
 	      break;
 	    case 'h':
 	      help(argv[0]);
@@ -51,8 +62,7 @@ t_launch_infos *apply_args(int argc, char *argv[])
 	      wfree(res);
 	      exit(EXIT_SUCCESS); }
 	}
-    } else {
-    help(argv[0]);
+    } else { help(argv[0]);
     wfree(res);
     exit(EXIT_SUCCESS);
     }
