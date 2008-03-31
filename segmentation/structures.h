@@ -18,7 +18,6 @@
 #define TEXT 1;
 #define IMAGE 2;
 
-#endif
 
 /**
  * This structure represents a matrix with its
@@ -221,3 +220,5 @@ struct s_queue
 
 typedef struct s_queue t_queue;
 
+
+#endif
