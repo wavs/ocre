@@ -81,15 +81,13 @@ let refresh_coefs tab i j nbr_coefs sum_coefs filter_d filter_u =
   let fb = foi(io32(get tab !j)) in
     if ((b -. a) <> (0.)) && ((fb -. fa)<> (0.)) then
       begin
-        print_string(sof(b -. a)^" b -a\n");
-        print_string(sof(fb -. fa)^" fb -fa\n");
         let current_coef = (fb -. fa) /. (b -. a) in
           if ( 10. < abs_float(current_coef)) &&
             (abs_float(current_coef) < 200. ) then
               begin
                 sum_coefs := !sum_coefs +. current_coef;
-                print_string(sof(current_coef)^" "^
-                               soi(!nbr_coefs)^"coefs\n");
+(*                 print_string(sof(current_coef)^" "^ *)
+(*                                soi(!nbr_coefs)^"coefs\n"); *)
                 nbr_coefs := !nbr_coefs + 1;
               end
       end
