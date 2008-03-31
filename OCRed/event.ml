@@ -15,49 +15,20 @@ exception Nothing_to_be_done
 exception Quit_input
 
 let dev () =
-(*   print_endline "please wait while testing"; *)
-  try
-    (*Le seuil est super long checkout*)
-    Seuil.seuillage !Surface.image;
-    Interpolation.resize_for_disco !Surface.image;
-   (*  Surface.image := Transforme.matrix_to_surf !Surface.reduce; *)
-(*     Detection.proj_and_average !Surface.reduce; *)
-(*     print_string(string_of_int(!Detection.average)^"\n"); *)
-    (* Interpolation.resize_percent_unit *)
-    (*       !Surface.image *)
-    (*       !Argument.percent_res ; *)
-    (*     Interpolation.projection_h !Surface.reduce; *)
-    (*     (\* Interpolation.print_tabh (); *\) *)
-    (*     print_string(string_of_int(Interpolation.sommet_of_h *)
-    (*                                  !Interpolation.proj_h_table)^ *)
-    (*                    "\n"); *)
-(*     let i = (Interpolation.discover_angle !Surface.image) in *)
-    Surface.image := Transforme.matrix_to_surf !Surface.reduce;
-(*     Rotation.angle := Rotation.degreef_to_rad (1.2); *)
-(*     Surface.image := (Rotation.optimized2 *)
-(*                           !Surface.image *)
-(*                           !Rotation.angle); *)
-(*     Surface.reduce := Transforme.surf_to_matrix !Surface.image; *)
-    Detection.proj_and_average !Surface.reduce;
-(*     print_string(string_of_int(!Detection.average)^"\n"); *)
-      if (!Path.output <> "") then
-        begin
-          (* print_string(!Path.output); *)
-(*             print_string(string_of_float(i)^"\n"); *)
-          (*  Sdlvideo.save_BMP !Surface.image !Path.output; *)
-          Sdlvideo.save_BMP !Surface.image !Path.output;
-          Detection.histo_to_file (!Path.output^".csv");
-            (*   Sdlvideo.save_BMP *)
-            (*           (Transforme.matrix_to_surf !Surface.reduce) *)
-            (*           (!Path.output^"reduce.bmp"); *)
-            (*   Interpolation.histo_to_file "histo.csv" *)
-        end
-      else
-        Sdlvideo.save_BMP !Surface.image "../projection.bmp"
-  with
-    | Sdlvideo.Video_exn s -> print_endline
-        (s^ "--> you may have forgotten an option"^
-           ": try --help option; for example --resize")
+ try
+   let f = Detection.detect_angle () in
+     print_string(string_of_float(f));
+   if (!Path.output <> "") then
+     begin
+       Sdlvideo.save_BMP !Surface.image !Path.output;
+       Detection.histo_to_file (!Path.output^".csv");
+     end
+   else
+     Sdlvideo.save_BMP !Surface.image "../projection.bmp"
+ with
+   | Sdlvideo.Video_exn s -> print_endline
+       (s^ "--> you may have forgotten an option"^
+          ": try --help option; for example --resize")
 
 let rotate () =
 (*   print_endline "please wait while processing..."; *)
