@@ -19,4 +19,4 @@ val proj_and_average    : (int32, Bigarray.int32_elt,
                            Bigarray.c_layout) Bigarray.Array2.t ->
   unit
 val histo_to_file       : string -> unit
-val detect_angle        : unit -> float
+val detect_angle        : unit -> unit
