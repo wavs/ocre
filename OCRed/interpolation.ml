@@ -117,7 +117,7 @@ try
 with
   | Projection_error -> print_string ("Maybe we have a wrong table")
 
-let som i tab monte descendre count =
+let asom i tab monte descendre count =
   let gett i   = Bigarray.Array1.get tab i in
   let dim x     = Bigarray.Array1.dim x in
   while (!i < (dim tab)) do
@@ -134,7 +134,7 @@ let som i tab monte descendre count =
       else
         begin
           while (!i < ((dim tab) - 1))
-            && ((get tab !i) >= (get tab (!i + 1))) do
+            && ((gett !i) >= (gett (!i + 1))) do
               i       := !i + 1
           done;
           monte       := false;
@@ -143,7 +143,7 @@ let som i tab monte descendre count =
         end;
       i := !i + 1
     end
-  done;
+  done
 
 let sommet_of_h tab =
   let i         = ref 0 in
@@ -170,7 +170,7 @@ let sommet_of_h tab =
         count           := 1;
       end;
     i := !i + 1;
-    som i tab monte descendre count;
+    asom i tab monte descendre count;
     !count
 
 let histo_to_file file =
@@ -412,8 +412,7 @@ let discover_angle surf =
       end;
     print_string("un peu avant la boucle infinii je m'aime \n");
     if(!droite)then
-      fundroite current_sommet next_sommet angle bool prev_angle;
+      fundroite current_sommet next_sommet angle bool prev_angle
     else
       fungauche current_sommet next_sommet angle bool prev_angle;
-      end;
     !prev_angle
