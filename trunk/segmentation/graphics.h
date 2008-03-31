@@ -13,6 +13,8 @@
 #ifndef GRAPHICS_H
 #define GRAPHICS_H
 
+#include "SDL/SDL.h"
+
 /**
  * This function loads a bitmap image.
  * @param flename Name of bitmap file.

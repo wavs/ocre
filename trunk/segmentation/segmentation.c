@@ -18,6 +18,8 @@
 #include "segmentation.h"
 #include "tools.h"
 #include "print.h"
+#include "graphics.h"
+#include "SDL/SDL.h"
 
 /**
  * This function crosses a connected component
@@ -359,9 +361,32 @@ void checkIfCharacter(t_cc_list *cc_list, int height, int width)
  * @param block_list Linked list of blocks
  * @param limit Margins of the input image.
  */
-void traceCC(t_cc_list *cc_list, t_limit *limit)
+void traceCC(SDL_Surface *image, t_cc_list *cc_list)
 {
-  // FIXME
+  t_cc_elt *tmp;
+  Uint32 cl;
+  int width, height;
+  	  
+  cl = SDL_MapRGB(image->format, 0x00, 0x53, 0xdd);
+  if (cc_list != NULL)
+    {
+      tmp = cc_list->head;
+      while (tmp != NULL)
+	{
+	  width = tmp->coord.xmax - tmp->coord.xmin;
+	  height = tmp->coord.ymax - tmp->coord.ymin;
+
+	  if (tmp->chr)
+	    {
+	      draw_line(tmp->coord.xmin, tmp->coord.ymin, width, 1, cl, image);
+	      draw_line(tmp->coord.xmin, tmp->coord.ymax, width, 1, cl, image);
+	      draw_line(tmp->coord.xmin, tmp->coord.ymin, 1, height, cl, image);
+	      draw_line(tmp->coord.xmax, tmp->coord.ymin, 1, height, cl, image);
+	    }
+
+	  tmp = tmp->next;
+	}
+    }
 }
 
 

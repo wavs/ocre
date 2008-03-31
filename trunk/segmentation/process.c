@@ -44,16 +44,16 @@ void processAll(t_launch_infos *infos)
 	  cc_list = findCC(pic->matrix);
 	  if (cc_list != NULL)
 	    {
-	      print_listCC(cc_list);
+	      checkIfCharacter(cc_list);
+	      /*print_listCC(cc_list);*/
 	      printf("\nExtraction of connected components done.\n");
 
-	      /*
-	      trace_boxline(image,result->linelist);
+	      traceCC(image, cc_list);
 	      if (SDL_SaveBMP(image, infos->outFile) < 0)
 		fprintf(stderr,"SDL BMP saving error");
 	      else
 		printf("Image %s saved.\n", infos->outFile);
-	      */
+
 	      /* free_listCC(cc_list) */
 	      free_pic(pic);
 	    }
