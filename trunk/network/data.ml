@@ -45,8 +45,52 @@ end
 
 (****************************************************)
 
- 
-class tabdata =
+class tabdata = (*XOR*)
+object (self)
+  val mutable tab = Array.make 4 (new data 2 4)
+  method get_tab() = tab
+  method set_tab tab0 = tab <- tab0
+  method get_tab2() = 
+  let n0 = new data 2 4 in
+    n0#set_input 0 0.;
+    n0#set_input 1 0.;
+
+    n0#set_output 0 1.; (*0*)
+    n0#set_output 1 0.; (*1*)
+    n0#set_output 2 0.; (*1*)
+    n0#set_output 3 0.; (*0*)
+
+  let n1 = new data 2 4 in
+    n1#set_input 0 0.;
+    n1#set_input 1 1.;
+
+    n1#set_output 0 0.; (*0*)
+    n1#set_output 1 1.; (*1*)
+    n1#set_output 2 0.; (*1*)
+    n1#set_output 3 0.; (*0*)
+
+  let n2 = new data 2 4 in
+    n2#set_input 0 1.;
+    n2#set_input 1 0.;
+
+    n2#set_output 0 0.; (*0*)
+    n2#set_output 1 0.; (*1*)
+    n2#set_output 2 1.; (*1*)
+    n2#set_output 3 0.; (*0*)
+
+  let n3 = new data 2 4 in
+    n3#set_input 0 1.;
+    n3#set_input 1 1.;
+
+    n3#set_output 0 0.; (*0*)
+    n3#set_output 1 0.; (*1*)
+    n3#set_output 2 0.; (*1*)
+    n3#set_output 3 1.; (*0*) 
+
+    [|n0;n1;n2;n3|]
+end
+
+class tabdata2 = (*7segaff*)
 object (self)
   val mutable tab = Array.make 10 (new data 7 10)
   method get_tab() = tab
