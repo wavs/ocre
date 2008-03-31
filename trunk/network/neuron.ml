@@ -60,8 +60,6 @@ object (self)
   method activate()=
     (*calcule la valeur d'activation d'un neurone*)
     self#set_observed_output (1. /. (1. +. exp(-. weight_sum)))
-      (*((2./.(1. +.(exp((-. 2. *. tangente hyperbolique
-        weight_sum))))) -. 1.); *)
 
       
   method neuron_print() =
