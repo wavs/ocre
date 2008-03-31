@@ -299,6 +299,7 @@ t_block_list *makeBlocks(t_cc_list *cc_list)
       if (tmp->next != NULL)
 	tmp = tmp->next;
       blocklist->elt = block;
+      blocklist->elt = block;
       blocklist = blocklist->next;
       id++;
       nbcc = 1;
