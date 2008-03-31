@@ -14,7 +14,7 @@
 #ifndef SEGMENTATION_H
 #define SEGMENTATION_H
 
-
+#include "SDL/SDL.h"
 /**
  * This function crosses a connected component
  * and calculates the number of black boxes.
@@ -90,7 +90,7 @@ void checkIfCharacter(t_cc_list *cc_list, height, int width);
  * @param block_list Linked list of blocks
  * @param limit Margins of the input image.
  */
-void traceCC(t_cc_list *cc_list, t_limit *limit);
+void traceCC(SDL_Surface *image, t_cc_list *cc_list);
 
 /**
  * This function traces all the blocks with boxes
