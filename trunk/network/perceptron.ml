@@ -121,8 +121,7 @@ val mutable nb_n_by_l = 8
                        && (connection#get_v1() = neuron2#get_id())) then
                           weight_sum := !weight_sum
                                      +. (neuron#get_observed_output()
-                                     +. bias) (*checker que le biais
-    est la*)
+                                     +. bias)
                                      *. connection#get_weight()
                   done
                 end
@@ -130,7 +129,6 @@ val mutable nb_n_by_l = 8
         neuron#set_weight_sum !weight_sum;
         neuron#activate()
     done
-
   val mutable error_sum = 007.
   method get_error_sum() = error_sum
   method set_error_sum error_sum0 = error_sum <- error_sum0
@@ -140,34 +138,12 @@ val mutable nb_n_by_l = 8
         let neuron = neurons.(i) in
           if neuron#get_layer() = nb_layers then
             begin
-              neuron#calc_error2()
+              neuron#calc_error();
+              sum := !sum +. (neuron#get_error())*.(neuron#get_error())
             end
       done;
-      error_sum <- !sum;
-      for i = 0 to Array.length neurons - 1 do
-        let neuron1 = neurons.(i) in
-        let sum2 = ref 0. in
-          if (neuron1#get_layer() > 1)
-            && (neuron1#get_layer() < nb_layers) then
-              begin
-                for j = 0 to Array.length neurons - 1 do
-                    let neuron2 = neurons.(j) in
-                      if neuron2#get_layer() = nb_layers then
-                        begin
-                          for k = 0 to Array.length connections - 1 do
-                            let connection = connections.(k) in
-                              if ((connection#get_v1() = neuron1#get_id())
-                                  && (connection#get_v2() = neuron2#get_id()))
-                                || ((connection#get_v2() = neuron1#get_id())
-                                    && (connection#get_v1() = neuron2#get_id())) then
-                                  sum2 := !sum2 +. neuron2#get_error()
-                                  *. connection#get_weight()
-                          done
-                        end
-                  done
-              end;
-          error_sum <- error_sum +. !sum2
-      done
+      error_sum <- !sum*.0.5
+ 
   method error_sum_print() = 
     print_float(error_sum);
     print_newline() 
