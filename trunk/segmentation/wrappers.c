@@ -26,7 +26,7 @@
 void *wmalloc(size_t size)
 {
   void *tmp;
-  
+
   tmp = NULL;
   tmp = malloc(size);
   if (tmp == NULL)
@@ -48,7 +48,7 @@ void *wmalloc(size_t size)
 void *wcalloc(size_t nelements, size_t bytes)
 {
   void *tmp;
-  
+
   tmp = NULL;
   tmp = calloc(nelements, bytes);
   if (tmp == NULL)
@@ -70,7 +70,7 @@ void *wcalloc(size_t nelements, size_t bytes)
 void *wrealloc(void *block, size_t size)
 {
   void *tmp;
-  
+
   tmp = NULL;
   tmp = realloc(block, size);
   if (tmp == NULL)
@@ -87,7 +87,7 @@ void *wrealloc(void *block, size_t size)
  * @param pointer Pointer to the allocated block
  */
 void wfree(void *pointer)
-{  
+{
   free(pointer);
   pointer = NULL;
 }

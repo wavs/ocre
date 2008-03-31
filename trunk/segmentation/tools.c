@@ -42,7 +42,7 @@ t_matrix *initializeEnv()
       ret->data[3][1] = 1;
       ret->data[3][2] = 1;
       ret->data[3][3] = 1;
- 
+
   return(ret);
 }
 
@@ -121,7 +121,7 @@ void updateMinMax(t_cc_coordinate *minmax, int x, int y)
 /**
  * This function adds a connected component in
  * a list.
- * 
+ *
  * @param elt Connected component
  * @param cc_list List of connected components
  */
@@ -155,7 +155,7 @@ t_cc_list *addListCC(t_cc_elt *elt, t_cc_list *cc_list)
  *
  * @param height Height of the matrix
  * @param width Width of the matrix
- * 
+ *
  * @return Matrix filled with the value 0
  */
 char **initMarkMatrix(int height, int width)
@@ -173,7 +173,7 @@ char **initMarkMatrix(int height, int width)
   for (i=0; i < height; ++i)
     for (j=0; j < width; ++j)
       ret[i][j] = 'o';
- 
+
   return(ret);
 }
 
@@ -187,7 +187,7 @@ char **initMarkMatrix(int height, int width)
 void qEnqueue(t_queue **p_queue, t_coordinate *coord)
 {
   t_queue *p_new, *p_tmp;
-  
+
   p_new = wmalloc(sizeof(*p_new));
   if (p_new != NULL)
     {
@@ -218,7 +218,7 @@ t_coordinate *qDequeue(t_queue **p_queue)
 {
   t_coordinate *ret;
   t_queue *p_tmp;
-  
+
   ret = NULL;
   if (*p_queue != NULL)
     {
@@ -254,7 +254,7 @@ void qDelete(t_queue **p_queue)
 t_coordinate *qQeek(t_queue *p_queue)
 {
   t_coordinate *ret;
-  
+
   ret = NULL;
   if (p_queue != NULL)
     ret = p_queue->coord;

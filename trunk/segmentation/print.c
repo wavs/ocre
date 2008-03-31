@@ -17,7 +17,7 @@
 void print_vector(int *vector, int length)
 {
   int i;
-  
+
   printf("-- Vector display --\n");
   printf("  length: %d\n", length);
   for (i=0; i < length; i++)
