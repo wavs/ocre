@@ -33,7 +33,11 @@ object (self)
   val mutable error = 1337. 
   method get_error() = error
   method set_error err0= error <- err0
-  method calc_error() = error <- wanted_output -. observed_output
+  method calc_error() = error <- wanted_output
+  -. observed_output(*couche sortie*)
+  method calc_error2() = (*pour la couche de sortie*)
+    self#calc_error();
+    error <- error /. (2. *. (1. +. cosh(observed_output)))
   method error_print() =
     print_float(error);
     print_newline()
@@ -45,7 +49,7 @@ object (self)
     print_float(weight_sum);
     print_newline()
 
-  val mutable beta = 0.5;
+  val mutable beta = 0.7
     (*para de la fct d'activ ; prendre 0,5, 1 ou 5 par ex*)
   method get_beta() = beta;
   method set_beta beta0 = beta <- beta0;
@@ -54,9 +58,11 @@ object (self)
     print_newline()
 
   method activate()=
-    self#set_observed_output (1./.(1.+.(exp((-.beta)
-                           *.(weight_sum))))); 
     (*calcule la valeur d'activation d'un neurone*)
+    self#set_observed_output (1. /. (1. +. exp(-. weight_sum)))
+      (*((2./.(1. +.(exp((-. 2. *. tangente hyperbolique
+        weight_sum))))) -. 1.); *)
+
       
   method neuron_print() =
     print_string("id : ");

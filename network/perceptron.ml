@@ -1,16 +1,19 @@
 
 class perceptron =
 object (self)
+  val mutable bias = 1.
+  method get_bias() = bias
+  method set_bias bias0 = bias <- bias0
 
-  val mutable treshold = 42. 
+  val mutable treshold = 300
     (*seuil d'apprentissage*)
   method get_treshold() = treshold
   method set_treshold treshold0 = treshold <- treshold0
   method treshold_print() =
-    print_float(treshold);
+    print_int(treshold);
     print_newline()
 
-  val mutable eta = 0.5  
+  val mutable eta = 0.1
     (*avec 0 <= eta <= 1 le coef d'apprentissage*)
   method get_eta() = eta
   method set_eta eta0 = eta <- eta0
@@ -26,7 +29,7 @@ object (self)
     print_int(nb_layers);
     print_newline()
 
-val mutable nb_n_by_l = 6 
+val mutable nb_n_by_l = 8 
   (*nb neurones par couche cachée*)
   method get_nb_n_by_l() = nb_n_by_l
   method set_nb_n_by_l nb_n_by_l0 = nb_n_by_l <- nb_n_by_l0
@@ -116,8 +119,10 @@ val mutable nb_n_by_l = 6
                        && (connection#get_v2() = neuron2#get_id()))
                       || ((connection#get_v2() = neuron#get_id())
                        && (connection#get_v1() = neuron2#get_id())) then
-                          weight_sum:= !weight_sum
-                                     +. neuron#get_observed_output()
+                          weight_sum := !weight_sum
+                                     +. (neuron#get_observed_output()
+                                     +. bias) (*checker que le biais
+    est la*)
                                      *. connection#get_weight()
                   done
                 end
@@ -135,11 +140,34 @@ val mutable nb_n_by_l = 6
         let neuron = neurons.(i) in
           if neuron#get_layer() = nb_layers then
             begin
-              neuron#calc_error();
-              sum := !sum +. (neuron#get_error())*.(neuron#get_error())
+              neuron#calc_error2()
             end
       done;
-      error_sum <- !sum*.0.5
+      error_sum <- !sum;
+      for i = 0 to Array.length neurons - 1 do
+        let neuron1 = neurons.(i) in
+        let sum2 = ref 0. in
+          if (neuron1#get_layer() > 1)
+            && (neuron1#get_layer() < nb_layers) then
+              begin
+                for j = 0 to Array.length neurons - 1 do
+                    let neuron2 = neurons.(j) in
+                      if neuron2#get_layer() = nb_layers then
+                        begin
+                          for k = 0 to Array.length connections - 1 do
+                            let connection = connections.(k) in
+                              if ((connection#get_v1() = neuron1#get_id())
+                                  && (connection#get_v2() = neuron2#get_id()))
+                                || ((connection#get_v2() = neuron1#get_id())
+                                    && (connection#get_v1() = neuron2#get_id())) then
+                                  sum2 := !sum2 +. neuron2#get_error()
+                                  *. connection#get_weight()
+                          done
+                        end
+                  done
+              end;
+          error_sum <- error_sum +. !sum2
+      done
   method error_sum_print() = 
     print_float(error_sum);
     print_newline() 
@@ -156,7 +184,7 @@ val mutable nb_n_by_l = 6
         let neuron = neurons.(i) in
           if neuron#get_layer() = nb_layers then
             begin
-              self#set_obs_out !z (neuron#get_observed_output());
+              v_obs_out.(!z) <- (neuron#get_observed_output());
               z := !z + 1
             end
       done
@@ -226,7 +254,7 @@ val mutable nb_n_by_l = 6
       done;
       !sum
 
-  val mutable delta = 42.
+  val mutable delta = 2.
   method get_delta() = delta
   method set_delta delta0 = delta <- delta0
   method calc_delta connection =
@@ -252,7 +280,7 @@ val mutable nb_n_by_l = 6
         self#calc_delta connection;
         connection#set_weight (connection#get_weight()
        +. eta *. delta 
-       *. ((self#find_neuron (connection#get_v1()))#get_observed_output()))        
+       *. ((self#find_neuron (connection#get_v1()))#get_observed_output()))    
     done
 
   method init_neurons() = 
@@ -295,28 +323,57 @@ val mutable nb_n_by_l = 6
     let td = new Data.tabdata in
       td#set_tab (td#get_tab2());
       self#set_learning_data (td#get_tab());
-    (*init des neurones*)
+      (*init des neurones*)
       self#init_neurons();
       (*init des connexions*)
-      self#init_connections()
+      self#init_connections();
+      (*init des sorties*)
+      self#update_v_obs_out()
         
-  method run() (*input_data*) =
-    self#v_obs_out_print();
-    self#update_v_obs_out();
-    self#v_obs_out_print()
+  method run data (*input_data*) =
+    for i = 0 to Array.length (learning_data.(0)#get_outputs()) - 1 do
+      for j = 0 to Array.length (learning_data.(0)#get_inputs()) - 1 do
+        neurons.(i)#set_observed_output
+          (((learning_data.(data))#get_inputs()).(j))
+      done
+    done;
+    self#activation();
+    self#update_v_obs_out()
 
   method train() =
-    (*while sqrt(error_sum) < treshold do *)                   
-      (*3 Permuter aléatoirement les données d'entrainement*)
-    for l = 0 to 100 do
+    (*while sqrt(error_sum) < treshold do*)                   
+    for l = 0 to treshold do
+      self#calc_error_sum;
+      print_string "erreur : ";
+      print_float (self#get_error_sum());
+      print_newline();
+    (*3 Permuter aléatoirement les données d'entrainement*)
     self#permute_data();
       for i = 0 to Array.length learning_data - 1 do
-        self#activation();        
-        (* calculer les sorties observées*)
-        self#adjust_weights();
-        print_string "prout"
+        (*initialiser les valeurs des neurones d'entrée et de sortie*)
+        for j = 0 to  Array.length (learning_data.(0)#get_inputs()) - 1
+        do
+          neurons.(j)#set_observed_output (((learning_data.(i))#get_inputs()).(j))
+        done;
+        
+        let nb_output = Array.length (learning_data.(0)#get_outputs())
+        in
+        let k = ref 0 in
+          for j = Array.length neurons - nb_output to Array.length neurons - 1
+          do
+            neurons.(j)#set_wanted_output
+              (((learning_data.(i))#get_outputs()).(!k));
+            k := !k + 1
+          done;
+          (*calculer les sorties observées*)
+          self#activation();        
+          (*ajuster les poids*)
+          self#adjust_weights()
       done
-    done
-    
+    done;
+    print_string "done";
+    self#update_v_obs_out()
+      
   method save() = print_int(42)
+  method load() = print_int(69)
 end
