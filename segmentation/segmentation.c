@@ -357,11 +357,11 @@ void checkIfCharacter(t_cc_list *cc_list)
  * @param block_list Linked list of blocks
  * @param limit Margins of the input image.
  */
-/*void traceCC(t_cc_list *cc_list, t_limit *limit)
+void traceCC(t_cc_list *cc_list, t_limit *limit)
 {
   // FIXME
 }
-*/
+
 
 /**
  * This function traces all the blocks with boxes
