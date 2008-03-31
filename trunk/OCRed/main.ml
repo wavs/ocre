@@ -15,6 +15,36 @@ Sdl.init [`VIDEO;`EVENTTHREAD;`TIMER];
           Sdlkey.enable_unicode true;
           Sdlkey.enable_key_repeat ()
 
+let submain() =
+      if (!Argument.seuil) then
+        begin
+          init ();
+          Argument.seuil := false;
+                Seuil.main ();
+                Sdl.quit ()
+        end;
+      if (!Argument.rotate)then
+        begin
+          init ();
+          Argument.rotate := false;
+          Event.rotate ();
+          Sdl.quit ()
+        end;
+      if(!Argument.resize) ||
+        (!Argument.percent) then
+        begin
+          init ();
+          Event.action ();
+          Sdl.quit ()
+        end;
+      if(!Argument.median) then
+        begin
+          init ();
+          Digit.main ();
+          Sdl.quit();
+        end
+
+
 let main () =
   Arg.parse
     (Arg.align Argument.speclist)
@@ -35,30 +65,10 @@ let main () =
     begin
       init ();
       Event.dev ();
-      Sdl.quit ()
+      Sdl.quit ();
     end
   else
-    begin
-      if (* (!Argument.seuil)&&  *)(!Argument.rotate)then
-        begin
-          init ();
-          (*           Seuil.main (); *)
-          Event.rotate ();
-          Sdl.quit ()
-        end;
-      if (!Argument.seuil) then
-        begin
-          init ();
-          Seuil.main ();
-          Sdl.quit ()
-        end
-      else
-        begin
-          init ();
-          Event.action ();
-          Sdl.quit ()
-        end
-    end
+    submain ()
 
 
 let _ = main ()
