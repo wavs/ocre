@@ -222,7 +222,7 @@ t_block_elt *create_block(int id, t_cc_list *cclist,
 
   block->id = id;
   block->cclist = cclist;
-	block->nbcc = nbcc;
+  block->nbcc = nbcc;
   block->posx = xmin;
   block->posy = ymin;
   block->height = ymax - ymin;
@@ -250,33 +250,34 @@ t_block_list *makeBlocks(t_cc_list *cc_list)
   t_cc_elt *tmp;
 
   blocklist = wmalloc(sizeof(t_block_list));
-  headlist = wmalloc(sizeof(t_block_list));
   block = wmalloc(sizeof(t_block_elt));
   tmplist = wmalloc(sizeof(t_cc_list));
-  tmp = wmalloc(sizeof(t_cc_elt));
   blocklist->elt = block;
   headlist = blocklist;
   tmp = cc_list->head;
+  nbcc = 1;
 
   while (tmp != NULL)
     {
       if (tmp->chr == 0)
         {
-          nbcc++;
           tmplist->head = tmp;
           tmplist->tail = tmp;
-          block = create_block(id, tmplist, nbcc,
+          block = create_block(id, tmplist, 1,
                                tmp->coord.xmin, tmp->coord.xmax,
                                tmp->coord.ymin, tmp->coord.ymax, 2);
         }
       else
         {
+	  tmplist->head = tmp;
           do
             {
-              tmplist->head = tmp; /* /!\ CAS NEXT = NULL! */
               hchar = tmp->coord.xmax - tmp->coord.xmin;
               wchar = tmp->coord.ymax - tmp->coord.ymin;
-              disty = tmp->next->coord.ymin - tmp->coord.ymax;
+	      if (tmp->next != NULL)
+		disty = tmp->next->coord.ymin - tmp->coord.ymax;
+	      else
+		disty = wchar;
               hmoy = ( hchar + (tmp->next->coord.xmax
                                 - tmp->next->coord.xmin))/2;
               seuil_hmoy = 0.2*hchar;
@@ -285,17 +286,20 @@ t_block_list *makeBlocks(t_cc_list *cc_list)
             }
           while (((hmoy < seuil_hmoy) /* diff de hauteur entre 2 lettres  */
                   || ( (hmoy > hchar*0.8) && (hmoy < hchar*1.2) )) /* diff de hauteur entre 2 lignes */
-                 && (disty < (wchar/2))); /* distance entre 2 lettres */
-          tmplist->head = tmp;
+                 && (disty < (wchar/2))
+		 && (tmp->next != NULL)); /* distance entre 2 lettres */
+          tmplist->tail = tmp;
           block = create_block (id, tmplist, nbcc,
                                 tmplist->head->coord.xmin,
                                 tmplist->head->coord.xmax,
                                 tmplist->head->coord.ymin,
                                 tmplist->head->coord.ymax, 1);
         }
-      tmp = tmp->next;
-      blocklist = blocklist->next;
+      tmplist = wmalloc(sizeof(t_cc_list));
+      if (tmp->next != NULL)
+	tmp = tmp->next;
       blocklist->elt = block;
+      blocklist = blocklist->next;
       id++;
       nbcc = 1;
     }
@@ -340,6 +344,19 @@ void checkIfCharacter(t_cc_list *cc_list)
  * @param block_list Linked list of blocks
  */
 /*void detectTypeOfBlocks(t_block_list *block_list)
+{
+  // FIXME
+}
+*/
+
+/**
+ * This function traces all the CC with boxes
+ * in an output image.
+ *
+ * @param block_list Linked list of blocks
+ * @param limit Margins of the input image.
+ */
+/*void traceCC(t_cc_list *cc_list, t_limit *limit)
 {
   // FIXME
 }
