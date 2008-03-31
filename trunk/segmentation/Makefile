@@ -16,10 +16,10 @@ CC=gcc
 CFLAGS= -W -Wall -pedantic -ansi -pipe -g
 
 # Target
-TARGET= extract
+TARGET= seg
 
-$(TARGET): main.c projections.c print.c free.c segmentation.c tools.c tests.c wrappers.c
-	gcc $(CFLAGS) main.c projections.c print.c free.c segmentation.c tools.c tests.c wrappers.c -o $(TARGET)
+$(TARGET): main.c args.c binarization.c infos.c init.c graphics.c pixel.c launch.c process.c projections.c print.c free.c segmentation.c tools.c tests.c wrappers.c
+	gcc $(CFLAGS) `sdl-config --cflags --libs` main.c args.c binarization.c infos.c init.c graphics.c pixel.c launch.c process.c projections.c print.c free.c segmentation.c tools.c tests.c wrappers.c -o $(TARGET)
 
 clean:
 	rm -f *~ *.o core

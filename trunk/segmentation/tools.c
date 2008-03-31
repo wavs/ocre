@@ -133,18 +133,14 @@ t_cc_list *addListCC(t_cc_elt *elt, t_cc_list *cc_list)
     {
       if (cc_list == NULL)
 	{
-	  printf("A");
 	  res = wmalloc(sizeof(t_cc_list));
 	  res->head = elt;
 	  res->tail = elt;
 	  res->nbcc = 1;
-	  if (res == NULL)
-	    printf("NULL");
 	  return(res);
 	}
       else
 	{
-	  printf("B");
 	  cc_list->nbcc++;
 	  cc_list->tail->next = elt;
 	  cc_list->tail = elt;

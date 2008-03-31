@@ -7,13 +7,11 @@
  * About this folder: /segmentation
  *   OCRec is the character extraction part of OCRe.
  * About this file: /segmentation/main.h
- *   This is the header of "main.c".
+ *   This is the header file of main.c
  */
 
 #ifndef MAIN_H
 #define MAIN_H
-
-#endif /* MAIN_H */
 
 /**
  * This is the main function.
@@ -23,4 +21,6 @@
  *
  * @return Integer 0 if succeed, -1 if error
  */
-int main();
+int main(int argc, char *argv[]);
+
+#endif /* MAIN_H */

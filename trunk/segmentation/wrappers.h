@@ -14,8 +14,6 @@
 #ifndef WRAPPERS_H
 #define WRAPPERS_H
 
-#endif /* WRAPPERS_H */
-
 #include <unistd.h>
 
 /**
@@ -53,3 +51,5 @@ void *wrealloc(void *block, size_t size);
  * @param pointer Pointer to the allocated block
  */
 void wfree(void *pointer);
+
+#endif /* WRAPPERS_H */

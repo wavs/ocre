@@ -13,10 +13,10 @@
 #ifndef PRINT_H
 #define PRINT_H
 
-#endif /* PRINT_H */
-
 void print_vector(int *vector, int length);
 
 void print_matrix(t_matrix *matrix);
 
 void print_listCC(t_cc_list *cc_list);
+
+#endif /* PRINT_H */
