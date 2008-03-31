@@ -16,6 +16,8 @@ val rotate              : bool ref
 val resize              : bool ref
 val percent             : bool ref
 val dev                 : bool ref
+val right               : bool ref
+val left                : bool ref
 val percent_res         : int ref
 val resize_of_x         : int ref
 val resize_of_y         : int ref

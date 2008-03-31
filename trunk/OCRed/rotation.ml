@@ -264,3 +264,43 @@ let optimized3 tab angle =
     done;
   my_output
 
+let simple_right tab =
+  let height    = Bigarray.Array2.dim1 tab in
+  let width     = Bigarray.Array2.dim2 tab in
+  let my_output = Transforme.bigarray2 width height in
+    for i=0 to (height -1) do
+      for j=0 to (width -1) do
+        begin
+          Bigarray.Array2.set
+            my_output
+            (j)
+            (i)
+            (Bigarray.Array2.get
+               tab
+               ( i )
+               ( j ));
+        end
+      done;
+    done;
+  my_output
+
+let simple_left tab =
+  let height    = Bigarray.Array2.dim1 tab in
+  let width     = Bigarray.Array2.dim2 tab in
+  let my_output = Transforme.bigarray2 width height in
+    for i=0 to (height -1) do
+      for j=0 to (width -1) do
+        begin
+          Bigarray.Array2.set
+            my_output
+            (j)
+            (i)
+            (Bigarray.Array2.get
+               tab
+               ( i )
+               ( j ));
+        end
+      done;
+    done;
+  my_output
+
