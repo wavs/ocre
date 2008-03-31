@@ -73,7 +73,7 @@ t_block_list *makeBlocks(t_cc_list *cc_list);
  *
  * @param cc_list Linked list of connected components
  */
-void checkIfCharacter(t_cc_list *cc_list, height, int width);
+void checkIfCharacter(t_cc_list *cc_list, int height, int width);
 
 /**
  * This function detects the type of blocks

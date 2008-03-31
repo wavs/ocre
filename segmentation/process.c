@@ -44,7 +44,7 @@ void processAll(t_launch_infos *infos)
 	  cc_list = findCC(pic->matrix);
 	  if (cc_list != NULL)
 	    {
-	      checkIfCharacter(cc_list);
+	      checkIfCharacter(cc_list, pic->height, pic->width);
 	      /*print_listCC(cc_list);*/
 	      printf("\nExtraction of connected components done.\n");
 

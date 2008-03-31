@@ -326,8 +326,8 @@ void checkIfCharacter(t_cc_list *cc_list, int height, int width)
 
   while (tmp != NULL)
     {
-      width = tmp->coord.xmax - tmp->coord.xmin;
-      height = tmp->coord.ymax - tmp->coord.ymin;
+      w = tmp->coord.xmax - tmp->coord.xmin;
+      h = tmp->coord.ymax - tmp->coord.ymin;
       nbpixtot = h * w;
       if ((tmp->nbpix < seuil*nbpixtot)
           && (w < 2.5*h)
