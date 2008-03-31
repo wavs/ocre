@@ -18,7 +18,6 @@
 #define TEXT 1;
 #define IMAGE 2;
 
-#endif /* STRUCTURES_H */
 
 /**
  * This structure represents a matrix with its
@@ -218,3 +217,5 @@ struct s_queue
 };
 
 typedef struct s_queue t_queue;
+
+#endif /* STRUCTURES_H */
