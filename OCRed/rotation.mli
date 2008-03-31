@@ -44,3 +44,15 @@ val optimized3 : (int32,
   (int32,
                        Bigarray.int32_elt,
                        Bigarray.c_layout) Bigarray.Array2.t
+val simple_right:  (int32,
+                    Bigarray.int32_elt,
+                    Bigarray.c_layout) Bigarray.Array2.t ->
+  (int32,
+   Bigarray.int32_elt,
+   Bigarray.c_layout) Bigarray.Array2.t
+val simple_left:  (int32,
+                    Bigarray.int32_elt,
+                    Bigarray.c_layout) Bigarray.Array2.t ->
+  (int32,
+   Bigarray.int32_elt,
+   Bigarray.c_layout) Bigarray.Array2.t

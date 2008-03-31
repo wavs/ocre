@@ -21,6 +21,14 @@ let resize_of_x = ref 800
 let resize_of_y = ref 600
 let percent_res = ref 100
 let dev         = ref false
+let right       = ref false
+let left        = ref false
+
+let set_left() =
+  left := true
+
+let set_right() =
+  right := true
 
 let set_median ()=
   median := true
@@ -82,6 +90,12 @@ let speclist = [
   ("--median",
    Arg.Unit ( fun () -> set_median()),
    "noparameter This option is for median filter");
+  ("-right",
+   Arg.Unit ( fun () -> set_right()),
+   "noparameter This option is rotating right the image");
+  ("-left",
+   Arg.Unit ( fun () -> set_left()),
+   "noparameter This option is rotating left the image");
   ("-d",
    Arg.Set display,
    " allows to see your image being transformed");

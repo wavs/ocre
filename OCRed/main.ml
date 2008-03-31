@@ -16,33 +16,55 @@ Sdl.init [`VIDEO;`EVENTTHREAD;`TIMER];
           Sdlkey.enable_key_repeat ()
 
 let submain() =
-      if (!Argument.seuil) then
-        begin
-          init ();
-          Argument.seuil := false;
-                Seuil.main ();
-                Sdl.quit ()
-        end;
-      if (!Argument.rotate)then
-        begin
-          init ();
-          Argument.rotate := false;
-          Event.rotate ();
-          Sdl.quit ()
-        end;
-      if(!Argument.resize) ||
-        (!Argument.percent) then
-        begin
-          init ();
-          Event.action ();
-          Sdl.quit ()
-        end;
-      if(!Argument.median) then
-        begin
-          init ();
-          Digit.main ();
-          Sdl.quit();
-        end
+  if (!Argument.right) then
+    begin
+      init ();
+      Argument.right := false;
+      Sdlvideo.save_BMP
+        (Transforme.matrix_to_surf(Rotation.simple_right
+                                 (Transforme.surf_to_matrix
+                                 !Surface.image)))
+        !Path.output;
+      Sdl.quit ()
+    end;
+  if (!Argument.left) then
+    begin
+      init ();
+      Argument.left := false;
+     ( Sdlvideo.save_BMP
+        (Transforme.matrix_to_surf(Rotation.simple_left
+                                 (Transforme.surf_to_matrix
+                                 !Surface.image))))
+        !Path.output;
+      Sdl.quit ()
+    end;
+  if (!Argument.seuil) then
+    begin
+      init ();
+      Argument.seuil := false;
+      Seuil.main ();
+      Sdl.quit ()
+    end;
+  if (!Argument.rotate)then
+    begin
+      init ();
+      Argument.rotate := false;
+      Event.rotate ();
+      Sdl.quit ()
+    end;
+  if(!Argument.resize) ||
+    (!Argument.percent) then
+      begin
+        init ();
+        Event.action ();
+        Sdl.quit ()
+      end;
+  if(!Argument.median) then
+    begin
+      init ();
+      Digit.main ();
+      Sdl.quit();
+    end
 
 
 let main () =
