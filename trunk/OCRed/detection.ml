@@ -59,61 +59,63 @@ let proj_and_average tableau =
 
 (*subfunction for take_coef ... thanks to the "norme" *)
 
-(* return the value of the box i in the table x *)
-let get x i   = Bigarray.Array1.get x i
-
-vv(* return the length of the table x *)
-let dim x     = Bigarray.Array1.dim x
-
 (* wrapper of base functions for manipulating int string float *)
 let foi x = float_of_int x
 let iof x = int_of_float x
+let ito32 x = Int32.of_int x
+let io32 x = Int32.to_int x
 let soi x = string_of_int x
 let sof x = string_of_float x
 
+(* return the value of the box i in the table x ; Int32*)
+let get x i   = Bigarray.Array1.get x i
+
+(* return the length of the table x *)
+let dim x     = Bigarray.Array1.dim x
+
 (* refresh the sum of the coef director*)
 let refresh_coefs tab i j nbr_coefs sum_coefs =
-  let a = foi(i) in
-  let b = foi(j) in
-  let fa = foi(get tab i) in
-  let fb = foi(get tab j) in
+  let a = foi(!i) in
+  let b = foi(!j) in
+  let fa = foi(io32(get tab !i)) in
+  let fb = foi(io32(get tab !j)) in
   let current_coef = (fb -. fa) /. (b -. a) in
     sum_coefs := !sum_coefs +. current_coef;
     nbr_coefs := !nbr_coefs + 1
 
 (* send to the future of your world -_avoid the bounds_-*)
 let til_not_bound tab bound pos =
-  let i = ref (get tab !pos) in
-    while (!i = bound) && (!pos <= dim tab)do
+  let i = ref (io32(get tab !pos)) in
+    while (!i = bound) && (!pos <= dim tab) do
       begin
         pos := !pos + 1;
-        i := get tab !pos;
+        i := io32(get tab !pos);
       end
     done
 
 (* send you where you're  upon the average *)
 let after_average tab pos =
-  let i = ref (get tab !pos) in
-    while (!i <= !average) do
+  let i = ref (io32(get tab !pos)) in
+    while (!i <= !average) && (!pos <= dim tab) do
       begin
         pos := !pos + 1;
-        i := get tab !pos;
+        i := io32(get tab !pos);
       end
     done
 
 (* send you where you're below the average *)
 let before_average tab pos =
-  let i = ref (get tab !pos) in
-    while (!i >= !average) do
+  let i = ref (io32(get tab !pos)) in
+    while (!i >= !average) && (!pos <= dim tab) do
       begin
         pos := !pos + 1;
-        i := get tab !pos;
+        i := io32(get tab !pos);
       end
     done
 
 (* we don't really know why, but we know we have to*)
 let check_position_start tab pos =
-  if ((get tab !pos) > !average) then
+  if (io32(get tab !pos) > !average) then
     before_average tab pos
   else
     after_average tab pos
@@ -122,7 +124,7 @@ let check_position_start tab pos =
 (* when you're bent on the righ, i is the current position j have to be
    initiated  before the call of the function*)
 let find_high_r tab i j boundup bounddown =
-  let gett i    = get tab i in
+  let gett i    = io32 (get tab i) in
   let tabi      = gett !i in
     while
       (gett (!j + 1 ) <> boundup) &&
@@ -137,7 +139,7 @@ let find_high_r tab i j boundup bounddown =
 (* when you're bent on the left, i is the current position j have to be
    initiated  before the call of the function*)
 let find_high_l tab i j boundup bounddown =
-  let gett i    = get tab i in
+  let gett i    = io32(get tab i) in
   let tabi      = gett !i in
     while
       (gett (!j + 1 ) <> boundup) &&
@@ -155,10 +157,10 @@ let bent_right tab i nbr_coefs sum_coefs filter_d filter_u =
   let len = dim tab in
     find_high_r tab i j 0 (len - 1);
     if (filter_d < (!j - !i)) && ((!j - !i) < filter_u ) then
-      refresh_coefs tab !i !j nbr_coefs sum_coefs;      (* it would be <= 209*)
+      refresh_coefs tab i j nbr_coefs sum_coefs;      (* it would be <= 209*)
     i := !j + 1;
     til_not_bound tab (len -1) i;
-    if (get tab !i < !average) then
+    if (io32(get tab !i) < !average) then
       after_average tab i
     else
       before_average tab i (* may have a probleme*)
@@ -169,10 +171,10 @@ let bent_left tab i nbr_coefs sum_coefs filter_d filter_u =
   let len = dim tab in
     find_high_l tab i j 0 (len - 1);
     if (filter_d < (!j - !i)) && ((!j - !i) < filter_u ) then
-      refresh_coefs tab !i !j nbr_coefs sum_coefs;      (* it would be <= 209*)
+      refresh_coefs tab i j nbr_coefs sum_coefs;      (* it would be <= 209*)
     i := !j + 1;
     til_not_bound tab (len -1) i;
-    if (get tab !i < !average) then
+    if (io32(get tab !i) < !average) then
       after_average tab i
     else
       before_average tab i (* may have a probleme*)
@@ -185,12 +187,32 @@ let detect_angle () =
   let bound = Bigarray.Array2.dim1 !Surface.reduce in
   (* algo principale*)
   let i = ref 0 in
-  til_not_bound !proj_h_table 0 i;
-  til_not_bound !proj_h_table bound i;
-  after_average !proj_h_table i;
-  before_average !proj_h_table i;
+    til_not_bound !proj_h_table 0 i;
+    til_not_bound !proj_h_table bound i;
+    after_average !proj_h_table i;
+    before_average !proj_h_table i;
   let j = ref (!i + 1) in
-    while (get !proj_h_table i)
+  let droite = ref false in
+  let somcoef = ref 0. in
+  let nbrscoef = ref 0 in
+  let gett x = io32(get !proj_h_table x) in
+    while (gett !i)  = (gett !j) do
+      j := !j + 1;
+    done;
+    if (gett !i) < (gett !j) then
+      droite := true;
+    if !droite then
+      begin
+        while (!i < ((dim !proj_h_table) - 1)) do
+          bent_right !proj_h_table i nbrscoef somcoef 3 200
+        done;
+      end
+    else
+      begin
+        while (!i < ((dim !proj_h_table) - 1)) do
+          bent_left !proj_h_table i nbrscoef somcoef 3 200
+        done;
+      end
 
 (* use to have a .csv file*)
 let histo_to_file file =
