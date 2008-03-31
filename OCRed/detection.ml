@@ -81,12 +81,14 @@ let refresh_coefs tab i j nbr_coefs sum_coefs =
   let fb = foi(io32(get tab !j)) in
   let current_coef = (fb -. fa) /. (b -. a) in
     sum_coefs := !sum_coefs +. current_coef;
+    print_string(sof(current_coef)^" "^
+                 soi(!nbr_coefs)^"coefs\n");
     nbr_coefs := !nbr_coefs + 1
 
 (* send to the future of your world -_avoid the bounds_-*)
 let til_not_bound tab bound pos =
   let i = ref (io32(get tab !pos)) in
-    while (!i = bound) && (!pos <= dim tab) do
+    while (!i = bound) && (!pos < ((dim tab))) do
       begin
         pos := !pos + 1;
         i := io32(get tab !pos);
@@ -96,10 +98,13 @@ let til_not_bound tab bound pos =
 (* send you where you're  upon the average *)
 let after_average tab pos =
   let i = ref (io32(get tab !pos)) in
-    while (!i <= !average) && (!pos < ((dim tab) -1)) do
+(*     print_string(soi(dim tab)^" avant boucle\n"); *)
+(*     print_string(soi(!pos)^" prout1_avant_bouclepos\n"); *)
+    while (!i <= !average) && ((!pos+1) < ((dim tab) -1)) do
       begin
         pos := !pos + 1;
-        i := io32(get tab !pos);
+(*         print_string(soi(!pos)^" prout1\n"); *)
+        i := io32(get tab 187);
       end
     done
 
@@ -155,13 +160,21 @@ let find_high_l tab i j boundup bounddown =
 let bent_right tab i nbr_coefs sum_coefs filter_d filter_u =
   let j = ref !i in
   let len = dim tab in
+    print_string("prout1\n");
     find_high_r tab i j 0 (len - 1);
+    print_string("prout2\n");
     if (filter_d < (!j - !i)) && ((!j - !i) < filter_u ) then
       refresh_coefs tab i j nbr_coefs sum_coefs;      (* it would be <= 209*)
     i := !j + 1;
+    print_string("prout3\n");
     til_not_bound tab (len -1) i;
+    print_string("prout4\n");
     if (io32(get tab !i) < !average) then
-      after_average tab i
+      begin
+        print_string("proutavant\n");
+        after_average tab i;
+        print_string("proutapres\n");
+      end
     else
       before_average tab i (* may have a probleme*)
 
@@ -204,7 +217,7 @@ let detect_angle () =
     if !droite then
       begin
         while (!i < ((dim !proj_h_table) - 1)) do
-          bent_right !proj_h_table i nbrscoef somcoef 3 200
+          bent_right !proj_h_table i nbrscoef somcoef 5 150;
         done;
       end
     else

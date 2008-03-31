@@ -288,10 +288,10 @@ let detect_percent surf =
   let surf = Transforme.surf_to_matrix surf in
   let width = Bigarray.Array2.dim1 surf in
     match width with
-      | x when (x < 800)  -> 40
-      | x when (x < 1200) -> 18
-      | x when (x < 2400) -> 8
-      | x when (x < 5200) -> 4
+      | x when (x < 800)  -> 30
+      | x when (x < 1200) -> 15
+      | x when (x < 2400) -> 6
+      | x when (x < 5200) -> 3
       | _ -> 100
 
 let resize_for_disco surf =
