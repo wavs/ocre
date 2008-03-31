@@ -28,7 +28,7 @@ void testInit()
   /* Initialization of the matrix */
   matrix = NULL;
   matrix = initializeEnv();
-  
+
   /* Print of the matrix */
   if (matrix != NULL && matrix->data != NULL)
     {
@@ -60,7 +60,7 @@ void testProjections()
   pic->vproj = NULL;
   if (pic->matrix != NULL && pic->matrix->data != NULL)
     {
-      print_matrix(pic->matrix); 
+      print_matrix(pic->matrix);
       /* Computation of projections */
       horizontal_projection(pic);
       vertical_projection(pic);
@@ -92,11 +92,11 @@ void testInitMarkMatrix()
 
   /* Initialization of the matrix */
   matrix = initMarkMatrix(10, 10);
-  
+
   /* Print of the matrix */
   printf("Mark matrix\n");
   if (matrix != NULL)
-    {      
+    {
       printf("-- Matrix display --\n");
       printf("  height: %d\n", 10);
       printf("  width: %d\n\n", 10);
@@ -123,7 +123,7 @@ void testCheckIfUnderLimits()
 {
   int xtest, ytest;
   int xlimit, ylimit;
-  
+
   /* Initialization of values */
   xtest = 100;
   ytest = 437;
@@ -229,7 +229,7 @@ void testQueue()
   t_queue **q;
   t_coordinate *coord1, *coord2, *coord3;
   t_coordinate *res1, *res2, *res3;
-  
+
   printf(" - Test Queue -\n");
   q = NULL;
   q = (t_queue **)wcalloc(1, sizeof(t_queue *));
@@ -239,21 +239,21 @@ void testQueue()
   coord1->y = 45;
   qEnqueue(q,coord1);
   printf(">> Element (1)\n x: %d\n y: %d\n\n", coord1->x, coord1->y);
-  
+
   /* Coordinates (2) */
   coord2 = wmalloc(sizeof(t_coordinate));
   coord2->x = 9085;
   coord2->y = 894;
   qEnqueue(q,coord2);
   printf(">> Element (2)\n x: %d\n y: %d\n\n", coord2->x, coord2->y);
-  
+
   /* Coordinates (3) */
   coord3 = wmalloc(sizeof(t_coordinate));
   coord3->x = 0;
   coord3->y = 56;
   qEnqueue(q,coord3);
   printf(">> Element (3)\n x: %d\n y: %d\n\n", coord3->x, coord3->y);
-  
+
   res1 = qDequeue(q);
   if (res1 != NULL)
     printf("Element (1) >>\n x: %d\n y: %d\n\n", res1->x, res1->y);
@@ -263,7 +263,7 @@ void testQueue()
   res3 = qDequeue(q);
   if (res3 != NULL)
     printf("Element (3) >>\n x: %d\n y: %d\n\n", res3->x, res3->y);
-  
+
   /* Free memory */
   qDelete(q);
   wfree(res1);
@@ -349,7 +349,7 @@ void testCC()
       cc_list = NULL;
       cc_list = findCC(matrix);
       print_listCC(cc_list);
-      
+
       /* Free memory */
       /*free_listCC(cc_list);*/
       for (i=0; i < matrix->nbrows; i++)

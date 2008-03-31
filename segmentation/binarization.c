@@ -48,7 +48,7 @@ t_binary_image *bitmap_to_binaryimage(SDL_Surface *image,
     pic->matrix->data[i] = (int *)wcalloc(image->w, sizeof(int));
   SDL_LockSurface(image);
   for (i=0; i < image->h; ++i)
-    for (j=0; j < image->w; ++j) 
+    for (j=0; j < image->w; ++j)
       {
 	if (getpixel(image,j,i) == black)
 	    pic->matrix->data[i][j] = 1;
