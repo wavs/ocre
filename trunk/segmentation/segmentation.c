@@ -314,9 +314,9 @@ t_block_list *makeBlocks(t_cc_list *cc_list)
  *
  * @param cc_list Linked list of connected components
  */
-void checkIfCharacter(t_cc_list *cc_list)
+void checkIfCharacter(t_cc_list *cc_list, int height, int width)
 {
-  int nbpixtot, height, width;
+  int nbpixtot, h, w;
   float seuil = 1.6;
   t_cc_elt* tmp;
   tmp = wmalloc(sizeof(t_cc_elt));
@@ -326,9 +326,11 @@ void checkIfCharacter(t_cc_list *cc_list)
     {
       width = tmp->coord.xmax - tmp->coord.xmin;
       height = tmp->coord.ymax - tmp->coord.ymin;
-      nbpixtot = height * width;
+      nbpixtot = h * w;
       if ((tmp->nbpix < seuil*nbpixtot)
-          && (width < 2*height))
+          && (w < 2.5*h)
+          && (w < 0.1*width)
+          && (h < 0.1*height))
         {
           tmp->chr = 1;
         }
