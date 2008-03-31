@@ -30,6 +30,7 @@ let main() =
           "Options :\n"^ 
             "?/help  : Options\n"^
             "init    : Initialise le reseau\n"^
+            "activ   : Propage les entrees vers les sorties\n"^
             "train   : Entraine le reseau\n"^
             "run     : Calcule les sorties pour la donnée voulue\n"^
             "disp_c  : affiche les infos des connexions\n"^
@@ -55,6 +56,8 @@ let main() =
          | e            -> print_string "n doit etre superieur a zero\n$");
               p#init())
      | "train"  -> (p#train(); 
+                    print_string "\n$")
+     | "activ"  -> (p#activation(); 
                     print_string "\n$")
      | "run"    -> (print_string "Indice de la donnee a reconnaitre?\ni = " ;
                     let i = ref 0 in
