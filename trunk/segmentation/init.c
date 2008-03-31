@@ -18,6 +18,7 @@
 /**
  * This function initializes SDL lib. and create a window if
  * display option is activate.
+ *
  * @param screen SDL surface destination.
  * @param display Integer if >0 then display is activated.
  */
@@ -27,10 +28,10 @@ void InitSDL()
   if ( SDL_Init(SDL_INIT_VIDEO) < 0 )
     {
       /* Logs the error */
-      fprintf(stderr, "SDL Initialization error: %s\n",SDL_GetError());
+      fprintf(stderr, " > SDL Initialization error: %s <\n",
+	      SDL_GetError());
       /* End of the program */
       exit(EXIT_FAILURE);
     }
-  printf("SDL initialized.\n");
   atexit(SDL_Quit);
 }

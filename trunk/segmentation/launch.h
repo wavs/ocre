@@ -4,9 +4,9 @@
  * - website: http://huge.ocre.free.fr/
  * - svn repository: http://code.google.com/p/ocre
  *
- * About this folder: /extraction
+ * About this folder: /segmentation
  *   OCRec is the character extraction part of OCRe.
- * About this file: /extraction/launch.h
+ * About this file: /segmentation/launch.h
  *   This is the header of "launch.c".
  */
 
@@ -16,6 +16,7 @@
 /**
  * This function starts the extraction process without
  * the display option.
+ *
  * @param infos Informations about the launch process.
  */
 void launchProgramWithoutDisplay(t_launch_infos *infos);

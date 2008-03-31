@@ -26,8 +26,8 @@
  */
 struct s_matrix
 {
-  unsigned int nbrows;
-  unsigned int nbcols;
+  int nbrows;
+  int nbcols;
   int **data;
 };
 
@@ -100,6 +100,8 @@ typedef struct s_result_extraction t_result_extraction;
  */
 struct s_launch_infos
 {
+  int verbose;
+  int textfile;
   char *inFile;
   char *outFile;
 };

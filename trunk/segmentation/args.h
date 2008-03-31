@@ -16,8 +16,11 @@
 /**
  * This function checks arguements and returns filenames of
  * I/O files and options which are activate.
+ *
  * @param argc Number of arguements.
  * @param argv Array of strings passed in arguements.
+ *
+ * @return Informations about arguements
  */
 t_launch_infos *apply_args(int argc, char *argv[]);
 

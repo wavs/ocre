@@ -32,28 +32,27 @@ void processAll(t_launch_infos *infos)
   t_binary_image *pic;
   SDL_Surface *image;
   t_cc_list *cc_list;
-
   pic = NULL;
   image = NULL;
   image = SDL_LoadBMP(infos->inFile);
   if (image != NULL)
-    { printf("Image %s loaded.\n", infos->inFile);
+    { printf("\n >> Image %s loaded.\n", infos->inFile);
       pic = bitmap_to_binaryimage(image,infos->inFile);
       if (pic != NULL)
-	{ printf("Binarization done.\n");
+	{ printf(" >> Binarization done.\n");
 	  cc_list = findCC(pic->matrix);
 	  if (cc_list != NULL)
 	    {
 	      checkIfCharacter(cc_list, pic->height, pic->width);
-	      /*print_listCC(cc_list);*/
-	      printf("\nExtraction of connected components done.\n");
+	      if (infos->verbose)
+		print_listCC(cc_list);
+	      printf(" >> Extraction of characters done.\n");
 
 	      traceCC(image, cc_list);
 	      if (SDL_SaveBMP(image, infos->outFile) < 0)
-		fprintf(stderr,"SDL BMP saving error");
+		fprintf(stderr," > SDL BMP saving error <\n");
 	      else
-		printf("Image %s saved.\n", infos->outFile);
-
+		printf(" >> Image %s saved.\n\n", infos->outFile);
 	      /* free_listCC(cc_list) */
 	      free_pic(pic);
 	    }
@@ -62,7 +61,7 @@ void processAll(t_launch_infos *infos)
     }
   else
     {
-      fprintf(stderr, "SDL BMP Loader error\n");
+      fprintf(stderr, " > SDL BMP Loader error <\n");
       wfree(infos);
       exit(EXIT_FAILURE);
     }

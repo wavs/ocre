@@ -16,11 +16,12 @@
 
 /**
  * This function frees the structure of binary image.
+ *
  * @param pic Binary image.
  */
 void free_pic(t_binary_image *pic)
 {
-  unsigned int i;
+  int i;
 
   if (pic != NULL)
     {

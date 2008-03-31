@@ -32,88 +32,49 @@
  *
  * @return Number of black boxes
  */
-void crossCC(int y, int x, t_cc_elt *elt, t_matrix *matrix, char **mark)
+void crossCC(int y,
+	     int x,
+	     t_cc_elt *elt,
+	     t_matrix *matrix,
+	     char **mark)
 {
-  int i, j, kmin, kmax, pmin, pmax, first;
-  int pix_count;
-  unsigned int xtmp, ytmp;
-  t_coordinate *coord, *res;
-  t_cc_coordinate *minmax;
-  t_queue **q;
-
-  /* Initialization */
+  int i, j, kmin, kmax, pmin, pmax, first; int pix_count;
+  int xtmp, ytmp; t_coordinate *coord, *res;
+  t_cc_coordinate *minmax; t_queue **q;
   pix_count = 1;
   q = NULL;
   q = (t_queue **)wcalloc(1, sizeof(t_queue *));
-  xtmp = x;
-  ytmp = y;
+  xtmp = x; ytmp = y;
   minmax = wcalloc(1, sizeof(t_cc_coordinate));
-  minmax->xmin = x;
-  minmax->xmax = x;
-  minmax->ymin = y;
-  minmax->ymax = y;
-  first = 1;
-
-  /* Route of the connected component */
+  minmax->xmin = x; minmax->xmax = x;
+  minmax->ymin = y; minmax->ymax = y; first = 1;
   do
-    {
-      /* xtmp, ytmp = defiler (i,j) */
-      if (!first)
-	{
-	  res = qDequeue(q);
+    { if (!first)
+	{ res = qDequeue(q);
 	  if (res != NULL)
-	    {
-	      xtmp = res->x;
-	      ytmp = res->y;
-	    }
-	  /*if (*q == NULL)
-	    printf("La file est vide\n");*/
-	}
-      
-      /*printf("x: %d   y: %d\n",xtmp,ytmp);
-	printf("je repasse la \n"); */
+	    { xtmp = res->x;
+	      ytmp = res->y; } }
       kmin = ytmp-1;
-      if (kmin < 0)
-	kmin = 0;
+      if (kmin < 0) kmin = 0;
       kmax = ytmp+1;
-      if (kmax >= matrix->nbrows)
-	kmax = matrix->nbrows - 1;
+      if (kmax >= matrix->nbrows) kmax = matrix->nbrows - 1;
       for (i=kmin; i <= kmax; i++)
-	{
-	  pmin = xtmp-1;
-	  if (pmin < 0)
-	    pmin = 0;
+	{ pmin = xtmp-1;
+	  if (pmin < 0) pmin = 0;
 	  pmax = xtmp+1;
-	  if (pmax >= matrix->nbcols)
-	    pmax = matrix->nbcols - 1;
+	  if (pmax >= matrix->nbcols) pmax = matrix->nbcols - 1;
 	  for (j=pmin; j <= pmax; j++)
-	    {
-	     
-	      /* printf("\n >> Test de la case (%d,%d)\n", j, i); */
-	      if ((matrix->data[i][j] == 1) && (mark[i][j] == 'o'))
-		{
-		  coord = wmalloc(sizeof(t_coordinate));
+	    { if ((matrix->data[i][j] == 1) && (mark[i][j] == 'o'))
+		{ coord = wmalloc(sizeof(t_coordinate));
 		  coord->x = j;
 		  coord->y = i;
-		  /*if (*q == NULL)
-		    printf("Cest ici que la file est vide avant.\n");*/
 		  qEnqueue(q, coord);
-		  /*if (*q == NULL)
-		  printf("Cest ici que la file est vide apres.\n");*/
 		  mark[i][j] = 'x';
 		  updateMinMax(minmax, j, i);
-		  pix_count++;
-		}
-	    }
-	}
-      first = 0;
-      /*wfree(res);*/
-    }
+		  pix_count++; } } }
+      first = 0; }
   while (*q != NULL);
-  elt->coord = *minmax;
-  elt->nbpix = pix_count;
-  qDelete(q);
-  wfree(q);
+  elt->coord = *minmax; elt->nbpix = pix_count; qDelete(q); wfree(q);
 }
 
 /**
@@ -144,16 +105,7 @@ t_cc_list *makeCC(int i,
   /* Route of the connected component */
   crossCC(i, j, elt, matrix, mark);
 
-  /* DEBUG */
-  /*printf("\n\n >> CC <<\n");
-  printf(" id: %d\n",elt->id);
-  printf(" chr: %d\n",elt->chr);
-  printf(" nbpix: %d\n",elt->nbpix);
-  printf(" (x,y)min: (%d,%d)\n",elt->coord.xmin,elt->coord.ymin);
-  printf(" (x,y)max: (%d,%d)\n\n",elt->coord.xmax,elt->coord.ymax);
-  */
   /* Update of the linked list */
-
   return(addListCC(elt, cc_list));
 
 }
@@ -171,7 +123,7 @@ t_cc_list *makeCC(int i,
 t_cc_list *findCC(t_matrix *matrix)
 {
   char **mark;
-  unsigned int i, j ;
+  int i, j ;
   int cc_count;
   t_cc_list *ret,*cc_list;
 
@@ -192,18 +144,6 @@ t_cc_list *findCC(t_matrix *matrix)
 	    ret = makeCC(i, j, cc_count, matrix, mark, ret);
 	  }
 	mark[i][j] = 'x';
-	
-	/* DEBUG
-	printf("\n\n");
-	for (k=0; k < matrix->nbrows; k++)
-	  {
-	    printf("\n");
-	    for(o=0; o < matrix->nbcols; o++)
-	      printf(" %c",mark[k][o]);
-	  }
-	printf("\n\n");
-	 DEBUG */
-
       }
 
   /* Free memory */

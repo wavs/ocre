@@ -23,7 +23,7 @@
  */
 t_matrix *initializeEnv()
 {
-  unsigned int i, j;
+  int i, j;
   t_matrix *ret;
 
   ret = wmalloc(sizeof(t_matrix));

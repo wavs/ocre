@@ -16,6 +16,7 @@
 /**
  * This function initializes SDL lib. and create a window if
  * display option is activate.
+ *
  * @param screen SDL surface destination.
  * @param display Integer if >0 then display is activated.
  */

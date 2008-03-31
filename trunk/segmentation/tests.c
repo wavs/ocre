@@ -22,7 +22,7 @@
 
 void testInit()
 {
-  unsigned int i;
+  int i;
   t_matrix *matrix;
 
   /* Initialization of the matrix */
@@ -88,7 +88,7 @@ void testProjections()
 void testInitMarkMatrix()
 {
   char **matrix;
-  unsigned int i, j;
+  int i, j;
 
   /* Initialization of the matrix */
   matrix = initMarkMatrix(10, 10);
@@ -332,7 +332,7 @@ void testUpdateMinMax()
 
 void testCC()
 {
-  unsigned int i;
+  int i;
   t_matrix *matrix;
   t_cc_list *cc_list;
 

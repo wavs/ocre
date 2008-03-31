@@ -21,7 +21,7 @@
  */
 void horizontal_projection(t_binary_image *pic)
 {
-  unsigned int i,j;
+  int i,j;
 
   pic->hproj = (int *)wcalloc(pic->matrix->nbrows, sizeof(int));
   for (i=0; i < pic->matrix->nbrows; ++i)
@@ -42,7 +42,7 @@ void horizontal_projection(t_binary_image *pic)
  */
 void vertical_projection(t_binary_image *pic)
 {
-  unsigned int i,j;
+  int i,j;
 
   pic->vproj = (int*)wcalloc(pic->matrix->nbcols, sizeof(int));
   for (i=0; i < pic->matrix->nbcols; ++i)
