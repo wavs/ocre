@@ -132,6 +132,7 @@ let find_high_r tab i j boundup bounddown =
   let gett i    = io32 (get tab i) in
   let tabi      = gett !i in
     while
+      (*je plante la*)
       (gett (!j + 1 ) <> (boundup -1 )) &&
       (gett (!j + 1 ) <> (bounddown)) &&
       (gett (!j + 1 ) > tabi)
