@@ -52,7 +52,6 @@ let is_in_rect x y width height =
 
 let resize surf x y =
   let (width,height,pitch) = Surface.dim surf in
-(*     print_string ("height: "^(string_of_int height)^"\n"^"width: "^(string_of_int width)^"\n"); *)
   let gamma = float_of_int(width) /. float_of_int(x) in
   let beta = float_of_int(height) /. float_of_int(y) in
   let my_output = Transforme.bigarray2 x y in
@@ -77,7 +76,6 @@ let resize surf x y =
                 (j)
                 (i)
               (Int32.of_int(255));
-           (*  print_string ("a: "^(string_of_int a)^"\n"^"b:  "^(string_of_int b)^"\n\n"); *)
       done;
     done;
    Transforme.matrix_to_surf my_output
@@ -119,6 +117,34 @@ try
 with
   | Projection_error -> print_string ("Maybe we have a wrong table")
 
+let som i tab monte descendre count =
+  let gett i   = Bigarray.Array1.get tab i in
+  let dim x     = Bigarray.Array1.dim x in
+  while (!i < (dim tab)) do
+    begin
+      if(!descendre) then
+        begin
+          while (!i < ((dim tab) - 1))
+            && ((gett !i) >= (gett (!i + 1))) do
+              i       := !i + 1
+          done;
+          monte       := true;
+          descendre   := false;
+        end
+      else
+        begin
+          while (!i < ((dim tab) - 1))
+            && ((get tab !i) >= (get tab (!i + 1))) do
+              i       := !i + 1
+          done;
+          monte       := false;
+          descendre   := true;
+          count       := !count + 1;
+        end;
+      i := !i + 1
+    end
+  done;
+
 let sommet_of_h tab =
   let i         = ref 0 in
   let count     = ref 0 in
@@ -144,31 +170,7 @@ let sommet_of_h tab =
         count           := 1;
       end;
     i := !i + 1;
-    while (!i < (dim tab)) do
-      begin
-        if(!descendre) then
-          begin
-            while (!i < ((dim tab) - 1))
-              && ((get tab !i) >= (get tab (!i + 1))) do
-                i       := !i + 1
-            done;
-            monte       := true;
-            descendre   := false;
-          end
-        else
-          begin
-            while (!i < ((dim tab) - 1))
-              && ((get tab !i) >= (get tab (!i + 1))) do
-                i       := !i + 1
-            done;
-            monte       := false;
-            descendre   := true;
-            count       := !count + 1;
-          end;
-        i := !i + 1
-      end
-    done;
-    print_string((soi !count)^" une fois j'ai fait une projection"^"\n");
+    som i tab monte descendre count;
     !count
 
 let histo_to_file file =
@@ -201,44 +203,38 @@ let resize_percent_unit surf percent =
     raise Percentage_too_high;
   let p = foi(percent)/.(100.0) in
   let pinv = (100.0)/.foi(percent) in
-(*     print_string ("this is percentage: "^sof(p)^"\n"); *)
-    let (width,height,pitch) = Surface.dim surf in
-(*       print_string ("this is height: "^soi(height)^"\n"); *)
-(*         print_string ("this is width: "^soi(width)^"\n"); *)
-        let x = roundf(p*.(foi width)) in
-        let y = roundf(p*.(foi height)) in
-(*           print_string ("this is newheight: "^soi(y)^"\n"); *)
-(*           print_string ("this is newwidth: "^soi(x)^"\n"); *)
-          let my_output = Transforme.bigarray2 (x) (y) in
-            let my_input = Transforme.surf_to_matrix surf in
-              for i=0 to (x - 1) do
-                for j=0 to (y - 1) do
-                  let (a,b) = inverse_resize (i) (j) (pinv) (pinv) in
-                    try
-                      Bigarray.Array2.set
-                      my_output
-                        (i)
-                        (j)
-                        (Bigarray.Array2.get
-                           my_input
-                           ( a)
-                           ( b));
-                    with
-                      | Invalid_argument(str) ->
-                          print_string
-                            (str^
-                             " visiblement pour les  valeurs a et  b:\n "^
-                             soi(a)^
-                             " et "^
-                             soi(b)^
-                             "\n")
-                done;
-            done;
-              Surface.reduce := my_output;
-              (* Transforme.matrix_to_surf my_output; *)
-with
-  | Percentage_too_high -> print_string ("image non-altere percentage too high\n")
-(*       surf *)
+  let (width,height,pitch) = Surface.dim surf in
+  let x = roundf(p*.(foi width)) in
+  let y = roundf(p*.(foi height)) in
+  let my_output = Transforme.bigarray2 (x) (y) in
+  let my_input = Transforme.surf_to_matrix surf in
+    for i=0 to (x - 1) do
+      for j=0 to (y - 1) do
+        let (a,b) = inverse_resize (i) (j) (pinv) (pinv) in
+          try
+            Bigarray.Array2.set
+              my_output
+              (i)
+              (j)
+              (Bigarray.Array2.get
+                 my_input
+                 ( a)
+                 ( b));
+          with
+            | Invalid_argument(str) ->
+                print_string
+                  (str^
+                     " visiblement pour les  valeurs a et  b:\n "^
+                     soi(a)^
+                     " et "^
+                     soi(b)^
+                     "\n")
+      done;
+    done;
+    Surface.reduce := my_output;
+  with
+    | Percentage_too_high -> print_string (
+        "image non-altere percentage too high\n")
 
 
 let resize_percent surf percent =
@@ -268,8 +264,7 @@ let resize_percent surf percent =
                     with
                       | Invalid_argument(str) ->
                           print_string
-                            (str^
-                             " visiblement pour les"^
+                            (str^" visiblement pour les"^
                              " valeurs a et  b:\n "^
                              soi(a)^
                              " et "^
@@ -288,15 +283,97 @@ let detect_percent surf =
   let surf = Transforme.surf_to_matrix surf in
   let width = Bigarray.Array2.dim1 surf in
     match width with
-      | x when (x < 800)  -> 20
-      | x when (x < 1200) -> 12
-      | x when (x < 2400) -> 7
-      | x when (x < 5200) -> 4
+      | x when (x < 800)  -> 24
+      | x when (x < 1200) -> 15
+      | x when (x < 2400) -> 8
+      | x when (x < 5200) -> 5
       | _ -> 100
 
 let resize_for_disco surf =
   let perc = detect_percent surf in
     resize_percent_unit surf perc
+
+
+let fundroite current_sommet next_sommet angle bool prev_angle=
+  let pas             = ref ~-.0.1       in
+  let prev_sommet     = ref 0           in
+    while (!pas <> ~-.0.01) do
+      begin
+        while (!current_sommet < !next_sommet ) do
+          begin
+            print_string(string_of_float(!angle)^"\n");
+            angle := !angle +. !pas;
+            print_string(string_of_float(!angle)^"\n");
+            prev_sommet := !current_sommet;
+            current_sommet := !next_sommet;
+            Surface.rotated :=
+              Rotation.optimized3
+                !Surface.reduce
+                (Rotation.degreef_to_rad (!angle +. !pas));
+            projection_h !Surface.rotated;
+            next_sommet       := sommet_of_h !proj_h_table;
+          end
+        done;
+        prev_angle := !prev_angle +. !angle;
+        angle := 0.;
+        if !bool then
+          begin
+            bool := false;
+            pas  := !pas  /. 5.;
+          end
+        else
+          begin
+            bool := true;
+            pas  := !pas  /. 2.;
+          end;
+        Surface.rotated :=
+          Rotation.optimized3
+            !Surface.reduce
+            (Rotation.degreef_to_rad (!angle +. !pas));
+        projection_h !Surface.rotated;
+        next_sommet       := sommet_of_h !proj_h_table;
+      end;
+    done
+
+
+let fungauche current_sommet next_sommet angle bool prev_angle =
+  let pas               = ref 1.        in
+  let prev_sommet       = ref 0         in
+    while (!pas <> 0.01) do
+      begin
+        while (!current_sommet < !next_sommet ) do
+          begin
+            angle := !angle +. !pas;
+            prev_sommet := !current_sommet;
+            current_sommet := !next_sommet;
+            Surface.rotated :=
+              Rotation.optimized3
+                !Surface.reduce
+                (Rotation.degreef_to_rad (!angle +. !pas));
+            projection_h !Surface.rotated;
+            next_sommet       := sommet_of_h !proj_h_table;
+          end
+        done;
+        prev_angle := !prev_angle +. !angle;
+        angle := 0.;
+        if !bool then
+          begin
+            bool := false;
+            pas  := !pas  /. 5.;
+          end
+        else
+          begin
+            bool := true;
+            pas  := !pas  /. 2.;
+          end;
+        Surface.rotated :=
+          Rotation.optimized3
+            !Surface.reduce
+            (Rotation.degreef_to_rad (!angle +. !pas));
+        projection_h !Surface.rotated;
+        next_sommet       := sommet_of_h !proj_h_table;
+      end;
+    done
 
 let discover_angle surf =
   print_string("avant la boucle infinii je m'aime \n");
@@ -335,89 +412,8 @@ let discover_angle surf =
       end;
     print_string("un peu avant la boucle infinii je m'aime \n");
     if(!droite)then
-      begin
-        let pas             = ref ~-.0.1       in
-        let prev_sommet     = ref 0           in
-          while (!pas <> ~-.0.01) do
-            begin
-                while (!current_sommet < !next_sommet ) do
-                  begin
-                    print_string(string_of_float(!angle)^"\n");
-                    angle := !angle +. !pas;
-                    print_string(string_of_float(!angle)^"\n");
-                    prev_sommet := !current_sommet;
-                    current_sommet := !next_sommet;
-                    Surface.rotated :=
-                      Rotation.optimized3
-                        !Surface.reduce
-                        (Rotation.degreef_to_rad (!angle +. !pas));
-                    projection_h !Surface.rotated;
-                    next_sommet       := sommet_of_h !proj_h_table;
-                  end
-                done;
-              print_string(string_of_int(!current_sommet)^"cs\n");
-              print_string(string_of_int(!next_sommet)^"ns\n");
-              prev_angle := !prev_angle +. !angle;
-              angle := 0.;
-              print_string("pas avant:"^string_of_float(!pas)^"\n");
-              if !bool then
-                  begin
-                    bool := false;
-                    pas  := !pas  /. 5.;
-                  end
-                else
-                  begin
-                    bool := true;
-                    pas  := !pas  /. 2.;
-                  end;
-              print_string("pas apres:"^string_of_float(!pas)^"\n");
-              Surface.rotated :=
-                Rotation.optimized3
-                  !Surface.reduce
-                  (Rotation.degreef_to_rad (!angle +. !pas));
-              projection_h !Surface.rotated;
-                next_sommet       := sommet_of_h !proj_h_table;
-            end;
-          done;
-      end
+      fundroite current_sommet next_sommet angle bool prev_angle;
     else
-      begin
-        let pas               = ref 1.        in
-          let prev_sommet       = ref 0         in
-            while (!pas <> 0.01) do
-              begin
-                while (!current_sommet < !next_sommet ) do
-                  begin
-                    angle := !angle +. !pas;
-                    prev_sommet := !current_sommet;
-                    current_sommet := !next_sommet;
-                    Surface.rotated :=
-                      Rotation.optimized3
-                        !Surface.reduce
-                        (Rotation.degreef_to_rad (!angle +. !pas));
-                    projection_h !Surface.rotated;
-                    next_sommet       := sommet_of_h !proj_h_table;
-                  end
-                done;
-                prev_angle := !prev_angle +. !angle;
-                angle := 0.;
-                if !bool then
-                  begin
-                    bool := false;
-                    pas  := !pas  /. 5.;
-                  end
-                else
-                  begin
-                    bool := true;
-                    pas  := !pas  /. 2.;
-                  end;
-                Surface.rotated :=
-                  Rotation.optimized3
-                    !Surface.reduce
-                    (Rotation.degreef_to_rad (!angle +. !pas));
-                projection_h !Surface.rotated;
-                next_sommet       := sommet_of_h !proj_h_table;
-              end;
-            done;
+      fungauche current_sommet next_sommet angle bool prev_angle;
       end;
     !prev_angle

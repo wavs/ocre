@@ -148,16 +148,11 @@ let hard_of_surf surf angle =
  *)
 let optimized surf =
   let (height,width,pitch) = Surface.dim surf in
-    print_string ("this is height: "^soi(height)^"\n");
-    print_string ("this is width: "^soi(width)^"\n");
-    print_string ("this is angle: "^sof(!angle)^"\n");
   let a         = foi(width) in
   let b         = foi(height) in
   let alpha     = abs(!angle) in
   let la        = (cos(alpha)*.b -. sin(alpha)*.a) /. (cos(2.*.(alpha))) in
   let lo        = (cos(alpha)*.a -. sin(alpha)*.b) /. (cos(2.*.(alpha))) in
-      print_string ("this is heightout: "^sof(lo)^"\n");
-      print_string ("this is widthout: "^sof(la)^"\n");
       let la        = mean(la)  in
       let lo        = mean(lo)  in
   let cx        = height/2 in
@@ -168,8 +163,6 @@ let optimized surf =
   let my_input  = Transforme.surf_to_matrix surf in
   let widthout = Bigarray.Array2.dim1 my_output in
   let heightout = Bigarray.Array2.dim2 my_output in
-    print_string ("this is heightout matrix: "^soi(heightout)^"\n");
-    print_string ("this is widthout matrix: "^soi(widthout)^"\n");
     for i=0 to (lo -1) do
       for j=0 to (la -1) do
         let (x,y) = inverse_int (i - cx) (j - cy) !angle in

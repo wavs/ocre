@@ -79,17 +79,19 @@ let refresh_coefs tab i j nbr_coefs sum_coefs filter_d filter_u =
   let b = foi(!j) in
   let fa = foi(io32(get tab !i)) in
   let fb = foi(io32(get tab !j)) in
-    if ((b -. a)<> (0.)) && ((fb -. fa)<> (0.)) then
+    if ((b -. a) <> (0.)) && ((fb -. fa)<> (0.)) then
       begin
+        print_string(sof(b -. a)^" b -a\n");
+        print_string(sof(fb -. fa)^" fb -fa\n");
         let current_coef = (fb -. fa) /. (b -. a) in
-          if ( 15. < abs_float(current_coef)) &&
+          if ( 10. < abs_float(current_coef)) &&
             (abs_float(current_coef) < 200. ) then
               begin
                 sum_coefs := !sum_coefs +. current_coef;
                 print_string(sof(current_coef)^" "^
                                soi(!nbr_coefs)^"coefs\n");
                 nbr_coefs := !nbr_coefs + 1;
-    end
+              end
       end
 
 
@@ -231,25 +233,26 @@ let detect_angle () =
     if !droite then
       begin
         while (!i < ((dim !proj_h_table) - 1)) do
-          print_string(soi(!i)^" ceci est le i \n");
           bent_right !proj_h_table i nbrscoef somcoef 4. 60.;
         done;
       end
     else
       begin
-        print_string(soi((dim !proj_h_table) - 1)^"dimtab\n");
+(*         print_string(soi((dim !proj_h_table) - 1)^"dimtab\n"); *)
         while (!i < ((dim !proj_h_table) - 1)) do
           bent_left !proj_h_table i nbrscoef somcoef 4. 60.;
         done;
       end;
     let pente = (!somcoef /. foi(!nbrscoef)) in
-      print_string(sof(pente)^" ceci est ma pente\n");
+(*       print_string(sof(!somcoef)^" ceci est ma somcoef\n"); *)
+(*       print_string(soi(!nbrscoef)^" ceci est mon nbrcoef\n"); *)
+(*       print_string(sof(pente)^" ceci est ma pente\n"); *)
       let alpha = ref 0. in
         if (pente < 0.) then
           alpha := ~-.(90. +. (atan(pente)*.(180./.(3.14159265))))
         else
           alpha := (90. -. (atan(pente)*.(180./.(3.14159265))));
-        print_string(sof(!alpha)^" ceci est mon angle\n");
+(*         print_string(sof(!alpha)^" ceci est mon angle\n"); *)
         Surface.image := Rotation.optimized2 !Surface.image
           (!alpha*.(3.14159265/.180.))
 

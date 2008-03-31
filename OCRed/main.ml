@@ -15,7 +15,7 @@ Sdl.init [`VIDEO;`EVENTTHREAD;`TIMER];
           Sdlkey.enable_unicode true;
           Sdlkey.enable_key_repeat ()
 
-let submain() =
+let turnit() =
   if (!Argument.right) then
     begin
       init ();
@@ -37,7 +37,11 @@ let submain() =
                                  !Surface.image))))
         !Path.output;
       Sdl.quit ()
-    end;
+    end
+
+
+let submain() =
+  turnit();
   if (!Argument.seuil) then
     begin
       init ();
