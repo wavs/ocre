@@ -243,6 +243,7 @@ t_block_elt *create_block(int id, t_cc_list *cclist,
 t_block_list *makeBlocks(t_cc_list *cc_list)
 {
   int id = 0;
+  int hchar, wchar, disty, hmoy, seuil_hmoy, nbcc;
   t_block_list *blocklist, *headlist;
   t_block_elt *block;
   t_cc_list *tmplist;
@@ -253,33 +254,51 @@ t_block_list *makeBlocks(t_cc_list *cc_list)
   block = wmalloc(sizeof(t_block_elt));
   tmplist = wmalloc(sizeof(t_cc_list));
   tmp = wmalloc(sizeof(t_cc_elt));
-	
-	blocklist->elt = block;	
-	headlist = blocklist;
-	tmp = cc_list->head;
+  blocklist->elt = block;
+  headlist = blocklist;
+  tmp = cc_list->head;
 
   while (tmp != NULL)
     {
       if (tmp->chr == 0)
         {
+          nbcc++;
           tmplist->head = tmp;
           tmplist->tail = tmp;
-          block = create_block(id, tmplist, 1,
+          block = create_block(id, tmplist, nbcc,
                                tmp->coord.xmin, tmp->coord.xmax,
                                tmp->coord.ymin, tmp->coord.ymax, 2);
-        	
-				}
-			else
-				{
-					
-				}
-			tmp = tmp->next;
-			blocklist = blocklist->next;
-			blocklist->elt = block;
+        }
+      else
+        {
+          do
+            {
+              tmplist->head = tmp; /* /!\ CAS NEXT = NULL! */
+              hchar = tmp->coord.xmax - tmp->coord.xmin;
+              wchar = tmp->coord.ymax - tmp->coord.ymin;
+              disty = tmp->next->coord.ymin - tmp->coord.ymax;
+              hmoy = ( hchar + (tmp->next->coord.xmax
+                                - tmp->next->coord.xmin))/2;
+              seuil_hmoy = 0.2*hchar;
+              nbcc++;
+              tmp = tmp->next;
+            }
+          while (((hmoy < seuil_hmoy) /* diff de hauteur entre 2 lettres  */
+                  || ( (hmoy > hchar*0.8) && (hmoy < hchar*1.2) )) /* diff de hauteur entre 2 lignes */
+                 && (disty < (wchar/2))); /* distance entre 2 lettres */
+          tmplist->head = tmp;
+          block = create_block (id, tmplist, nbcc,
+                                tmplist->head->coord.xmin,
+                                tmplist->head->coord.xmax,
+                                tmplist->head->coord.ymin,
+                                tmplist->head->coord.ymax, 1);
+        }
+      tmp = tmp->next;
+      blocklist = blocklist->next;
+      blocklist->elt = block;
       id++;
+      nbcc = 1;
     }
-
-
   return(headlist);
 }
 
@@ -300,11 +319,11 @@ void checkIfCharacter(t_cc_list *cc_list)
 
   while (tmp != NULL)
     {
-			width = tmp->coord.xmax - tmp->coord.xmin;
-			height = tmp->coord.ymax - tmp->coord.ymin;
+      width = tmp->coord.xmax - tmp->coord.xmin;
+      height = tmp->coord.ymax - tmp->coord.ymin;
       nbpixtot = height * width;
-      if ((tmp->nbpix < seuil*nbpixtot) 
-				&& (width < 2*height))
+      if ((tmp->nbpix < seuil*nbpixtot)
+          && (width < 2*height))
         {
           tmp->chr = 1;
         }
