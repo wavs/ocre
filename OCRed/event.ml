@@ -19,7 +19,8 @@ let dev () =
   try
     (*Le seuil est super long checkout*)
     Seuil.seuillage !Surface.image;
-    Interpolation.resize_for_disco !Surface.image 30;
+    Interpolation.resize_for_disco !Surface.image
+      !Argument.percent_res;
    (*  Surface.image := Transforme.matrix_to_surf !Surface.reduce; *)
 (*     Detection.proj_and_average !Surface.reduce; *)
 (*     print_string(string_of_int(!Detection.average)^"\n"); *)
@@ -33,13 +34,13 @@ let dev () =
     (*                    "\n"); *)
 (*     let i = (Interpolation.discover_angle !Surface.image) in *)
     Surface.image := Transforme.matrix_to_surf !Surface.reduce;
-    Rotation.angle := Rotation.degreef_to_rad (1.2);
-    Surface.image := (Rotation.optimized2
-                          !Surface.image
-                          !Rotation.angle);
-    Surface.reduce := Transforme.surf_to_matrix !Surface.image;
+(*     Rotation.angle := Rotation.degreef_to_rad (1.2); *)
+(*     Surface.image := (Rotation.optimized2 *)
+(*                           !Surface.image *)
+(*                           !Rotation.angle); *)
+(*     Surface.reduce := Transforme.surf_to_matrix !Surface.image; *)
     Detection.proj_and_average !Surface.reduce;
-    print_string(string_of_int(!Detection.average)^"\n");
+(*     print_string(string_of_int(!Detection.average)^"\n"); *)
       if (!Path.output <> "") then
         begin
           (* print_string(!Path.output); *)

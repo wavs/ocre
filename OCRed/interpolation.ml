@@ -201,19 +201,15 @@ let resize_percent_unit surf percent =
     raise Percentage_too_high;
   let p = foi(percent)/.(100.0) in
   let pinv = (100.0)/.foi(percent) in
-    print_string ("this is percentage: "^sof(p)^"\n");
+(*     print_string ("this is percentage: "^sof(p)^"\n"); *)
     let (width,height,pitch) = Surface.dim surf in
-      print_string ("this is height: "^soi(height)^"\n");
-        print_string ("this is width: "^soi(width)^"\n");
+(*       print_string ("this is height: "^soi(height)^"\n"); *)
+(*         print_string ("this is width: "^soi(width)^"\n"); *)
         let x = roundf(p*.(foi width)) in
         let y = roundf(p*.(foi height)) in
-          print_string ("this is newheight: "^soi(y)^"\n");
-          print_string ("this is newwidth: "^soi(x)^"\n");
+(*           print_string ("this is newheight: "^soi(y)^"\n"); *)
+(*           print_string ("this is newwidth: "^soi(x)^"\n"); *)
           let my_output = Transforme.bigarray2 (x) (y) in
-          let outwidth = Bigarray.Array2.dim1 my_output in
-          let outheight = Bigarray.Array2.dim2 my_output in
-            print_string ("this is outheight: "^soi(outheight)^"\n");
-            print_string ("this is outwidthw: "^soi(outwidth)^"\n");
             let my_input = Transforme.surf_to_matrix surf in
               for i=0 to (x - 1) do
                 for j=0 to (y - 1) do
@@ -251,19 +247,10 @@ let resize_percent surf percent =
     raise Percentage_too_high;
   let p = foi(percent)/.(100.0) in
   let pinv = (100.0)/.foi(percent) in
-    print_string ("this is percentage: "^sof(p)^"\n");
     let (width,height,pitch) = Surface.dim surf in
-      print_string ("this is height: "^soi(height)^"\n");
-        print_string ("this is width: "^soi(width)^"\n");
         let x = roundf(p*.(foi width)) in
         let y = roundf(p*.(foi height)) in
-          print_string ("this is newheight: "^soi(y)^"\n");
-          print_string ("this is newwidth: "^soi(x)^"\n");
           let my_output = Transforme.bigarray2 (x) (y) in
-          let outwidth = Bigarray.Array2.dim1 my_output in
-          let outheight = Bigarray.Array2.dim2 my_output in
-            print_string ("this is outheight: "^soi(outheight)^"\n");
-            print_string ("this is outwidth: "^soi(outwidth)^"\n");
             let my_input = Transforme.surf_to_matrix surf in
               for i=0 to (x - 1) do
                 for j=0 to (y - 1) do
@@ -297,7 +284,11 @@ with
       ("image non-altere percentage too high\n");
       surf
 
+(* let detect_percent surf = *)
+  
+
 let resize_for_disco surf perc =
+(*   let perc = detect_percent surf in *)
   resize_percent_unit surf perc
 
 let discover_angle surf =
