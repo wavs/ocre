@@ -16,8 +16,7 @@ exception Quit_input
 
 let dev () =
  try
-   let f = Detection.detect_angle () in
-     print_string(string_of_float(f));
+   Detection.detect_angle ();
    if (!Path.output <> "") then
      begin
        Sdlvideo.save_BMP !Surface.image !Path.output;

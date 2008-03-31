@@ -74,16 +74,24 @@ let get x i   = Bigarray.Array1.get x i
 let dim x     = Bigarray.Array1.dim x
 
 (* refresh the sum of the coef director*)
-let refresh_coefs tab i j nbr_coefs sum_coefs =
+let refresh_coefs tab i j nbr_coefs sum_coefs filter_d filter_u =
   let a = foi(!i) in
   let b = foi(!j) in
   let fa = foi(io32(get tab !i)) in
   let fb = foi(io32(get tab !j)) in
-  let current_coef = (fb -. fa) /. (b -. a) in
-    sum_coefs := !sum_coefs +. current_coef;
-    print_string(sof(current_coef)^" "^
-                 soi(!nbr_coefs)^"coefs\n");
-    nbr_coefs := !nbr_coefs + 1
+    if ((b -. a)<> (0.)) && ((fb -. fa)<> (0.)) then
+      begin
+        let current_coef = (fb -. fa) /. (b -. a) in
+          if ( 15. < abs_float(current_coef)) &&
+            (abs_float(current_coef) < 200. ) then
+              begin
+                sum_coefs := !sum_coefs +. current_coef;
+                print_string(sof(current_coef)^" "^
+                               soi(!nbr_coefs)^"coefs\n");
+                nbr_coefs := !nbr_coefs + 1;
+    end
+      end
+
 
 (* send to the future of your world -_avoid the bounds_-*)
 let til_not_bound tab bound pos =
@@ -98,13 +106,10 @@ let til_not_bound tab bound pos =
 (* send you where you're  upon the average *)
 let after_average tab pos =
   let i = ref (io32(get tab !pos)) in
-(*     print_string(soi(dim tab)^" avant boucle\n"); *)
-(*     print_string(soi(!pos)^" prout1_avant_bouclepos\n"); *)
     while (!i <= !average) && ((!pos+1) < ((dim tab) -1)) do
       begin
         pos := !pos + 1;
-(*         print_string(soi(!pos)^" prout1\n"); *)
-        i := io32(get tab 187);
+        i := io32(get tab !pos);
       end
     done
 
@@ -133,9 +138,9 @@ let find_high_r tab i j boundup bounddown =
   let tabi      = gett !i in
     while
       (*je plante la*)
-      (gett (!j + 1 ) <> (boundup -1 )) &&
+      (gett (!j + 1 ) <> (boundup)) &&
       (gett (!j + 1 ) <> (bounddown)) &&
-      (gett (!j + 1 ) > tabi)
+      (gett (!j + 1 ) >= tabi)
     do
       begin
         j := !j + 1;
@@ -153,6 +158,7 @@ let find_high_l tab i j boundup bounddown =
       (gett (!j + 1 ) < tabi)
     do
       begin
+(*         print_string(soi(!j)^" ceci est mon j\n"); *)
         j := !j + 1;
       end
     done
@@ -161,31 +167,34 @@ let find_high_l tab i j boundup bounddown =
 let bent_right tab i nbr_coefs sum_coefs filter_d filter_u =
   let j = ref !i in
   let len = dim tab in
-    print_string("prout1\n");
     find_high_r tab i j 0 (len - 1);
-    print_string("prout2\n");
-    if (filter_d < (!j - !i)) && ((!j - !i) < filter_u ) then
-      refresh_coefs tab i j nbr_coefs sum_coefs;      (* it would be <= 209*)
+    (* print_string("PROUTafterfind\n"); *)
+    refresh_coefs tab i j nbr_coefs sum_coefs filter_d filter_u;
+    (* it would be <= 209*)
     i := !j + 1;
-    print_string("prout3\n");
+    (* print_string("PROUTbeforetil\n"); *)
     til_not_bound tab (len -1) i;
-    print_string("prout4\n");
+    (* print_string("PROUTaftertil\n"); *)
     if (io32(get tab !i) < !average) then
       begin
-        print_string("proutavant\n");
+    (*     print_string("PROUT1\n"); *)
         after_average tab i;
-        print_string("proutapres\n");
+    (*     print_string("PROUT2\n"); *)
       end
     else
-      before_average tab i (* may have a probleme*)
+      begin
+    (*     print_string("PROUT3\n"); *)
+        before_average tab i; (* may have a probleme*)
+    (*     print_string("PROUT4\n"); *)
+      end
 
 (* filter_d et _u ar equivalent to filter down and up*)
 let bent_left tab i nbr_coefs sum_coefs filter_d filter_u =
   let j = ref !i in
   let len = dim tab in
     find_high_l tab i j 0 (len - 1);
-    if (filter_d < (!j - !i)) && ((!j - !i) < filter_u ) then
-      refresh_coefs tab i j nbr_coefs sum_coefs;      (* it would be <= 209*)
+    (* it would be <= 209*)
+    refresh_coefs tab i j nbr_coefs sum_coefs filter_d filter_u;
     i := !j + 1;
     til_not_bound tab (len -1) i;
     if (io32(get tab !i) < !average) then
@@ -199,17 +208,18 @@ let detect_angle () =
   Interpolation.resize_for_disco !Surface.image;
   proj_and_average !Surface.reduce;
   let bound = Bigarray.Array2.dim1 !Surface.reduce in
-  (* algo principale*)
+    (* algo principale*)
   let i = ref 0 in
     til_not_bound !proj_h_table 0 i;
     til_not_bound !proj_h_table bound i;
     after_average !proj_h_table i;
     before_average !proj_h_table i;
-  let j = ref (!i + 1) in
-  let droite = ref false in
-  let somcoef = ref 0. in
-  let nbrscoef = ref 0 in
-  let gett x = io32(get !proj_h_table x) in
+    (*     check_position_start !proj_h_table i; *)
+    let j = ref (!i + 1) in
+    let droite = ref false in
+    let somcoef = ref 0. in
+    let nbrscoef = ref 0 in
+    let gett x = io32(get !proj_h_table x) in
     while (gett !i)  = (gett !j) do
       j := !j + 1;
     done;
@@ -218,16 +228,27 @@ let detect_angle () =
     if !droite then
       begin
         while (!i < ((dim !proj_h_table) - 1)) do
-          bent_right !proj_h_table i nbrscoef somcoef 5 150;
+          bent_right !proj_h_table i nbrscoef somcoef 4. 60.;
         done;
       end
     else
       begin
+        print_string(soi((dim !proj_h_table) - 1)^"dimtab\n");
         while (!i < ((dim !proj_h_table) - 1)) do
-          bent_left !proj_h_table i nbrscoef somcoef 3 200
+(*           print_string(soi(!i)^" ceci est le i \n"); *)
+          bent_left !proj_h_table i nbrscoef somcoef 4. 60.;
         done;
       end;
-    (!somcoef /. foi(!nbrscoef))
+    let pente = (!somcoef /. foi(!nbrscoef)) in
+      print_string(sof(pente)^" ceci est ma pente\n");
+      let alpha = ref 0. in
+        if (pente < 0.) then
+          alpha := 90. +. (atan(pente)*.(180./.(3.14159265)))
+        else
+          alpha := 90. -. (atan(pente)*.(180./.(3.14159265)));
+        print_string(sof(!alpha)^" ceci est mon angle\n");
+        Surface.image := Rotation.optimized2 !Surface.image
+          ~-.(!alpha*.(3.14159265/.180.))
 
 (* use to have a .csv file*)
 let histo_to_file file =
