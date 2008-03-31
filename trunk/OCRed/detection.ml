@@ -96,7 +96,7 @@ let til_not_bound tab bound pos =
 (* send you where you're  upon the average *)
 let after_average tab pos =
   let i = ref (io32(get tab !pos)) in
-    while (!i <= !average) && (!pos <= dim tab) do
+    while (!i <= !average) && (!pos < ((dim tab) -1)) do
       begin
         pos := !pos + 1;
         i := io32(get tab !pos);
@@ -106,7 +106,7 @@ let after_average tab pos =
 (* send you where you're below the average *)
 let before_average tab pos =
   let i = ref (io32(get tab !pos)) in
-    while (!i >= !average) && (!pos <= dim tab) do
+    while (!i >= !average) && (!pos < ((dim tab) -1)) do
       begin
         pos := !pos + 1;
         i := io32(get tab !pos);
@@ -127,8 +127,8 @@ let find_high_r tab i j boundup bounddown =
   let gett i    = io32 (get tab i) in
   let tabi      = gett !i in
     while
-      (gett (!j + 1 ) <> boundup) &&
-      (gett (!j + 1 ) <> bounddown) &&
+      (gett (!j + 1 ) <> (boundup -1 )) &&
+      (gett (!j + 1 ) <> (bounddown)) &&
       (gett (!j + 1 ) > tabi)
     do
       begin
@@ -212,7 +212,8 @@ let detect_angle () =
         while (!i < ((dim !proj_h_table) - 1)) do
           bent_left !proj_h_table i nbrscoef somcoef 3 200
         done;
-      end
+      end;
+    (!somcoef /. foi(!nbrscoef))
 
 (* use to have a .csv file*)
 let histo_to_file file =
