@@ -222,6 +222,7 @@ t_block_elt *create_block(int id, t_cc_list *cclist,
 
   block->id = id;
   block->cclist = cclist;
+	block->nbcc = nbcc;
   block->posx = xmin;
   block->posy = ymin;
   block->height = ymax - ymin;
@@ -242,16 +243,21 @@ t_block_elt *create_block(int id, t_cc_list *cclist,
 t_block_list *makeBlocks(t_cc_list *cc_list)
 {
   int id = 0;
-  t_block_list *blocklist;
-  t_block_elt *block, *head;
+  t_block_list *blocklist, *headlist;
+  t_block_elt *block;
   t_cc_list *tmplist;
   t_cc_elt *tmp;
+
   blocklist = wmalloc(sizeof(t_block_list));
+  headlist = wmalloc(sizeof(t_block_list));
   block = wmalloc(sizeof(t_block_elt));
-  head = block;
   tmplist = wmalloc(sizeof(t_cc_list));
   tmp = wmalloc(sizeof(t_cc_elt));
-  tmp = cc_list->head;
+	
+	blocklist->elt = block;	
+	headlist = blocklist;
+	tmp = cc_list->head;
+
   while (tmp != NULL)
     {
       if (tmp->chr == 0)
@@ -261,12 +267,20 @@ t_block_list *makeBlocks(t_cc_list *cc_list)
           block = create_block(id, tmplist, 1,
                                tmp->coord.xmin, tmp->coord.xmax,
                                tmp->coord.ymin, tmp->coord.ymax, 2);
-        }
+        	
+				}
+			else
+				{
+					
+				}
+			tmp = tmp->next;
+			blocklist = blocklist->next;
+			blocklist->elt = block;
       id++;
     }
 
 
-  return(NULL);
+  return(headlist);
 }
 
 
@@ -278,7 +292,7 @@ t_block_list *makeBlocks(t_cc_list *cc_list)
  */
 void checkIfCharacter(t_cc_list *cc_list)
 {
-  int nbpixtot;
+  int nbpixtot, height, width;
   float seuil = 1.6;
   t_cc_elt* tmp;
   tmp = wmalloc(sizeof(t_cc_elt));
@@ -286,9 +300,11 @@ void checkIfCharacter(t_cc_list *cc_list)
 
   while (tmp != NULL)
     {
-      nbpixtot = (tmp->coord.xmax - tmp->coord.xmin)
-        * (tmp->coord.ymax - tmp->coord.ymin);
-      if (tmp->nbpix < seuil*nbpixtot)
+			width = tmp->coord.xmax - tmp->coord.xmin;
+			height = tmp->coord.ymax - tmp->coord.ymin;
+      nbpixtot = height * width;
+      if ((tmp->nbpix < seuil*nbpixtot) 
+				&& (width < 2*height))
         {
           tmp->chr = 1;
         }
