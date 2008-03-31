@@ -136,10 +136,12 @@ let check_position_start tab pos =
 let find_high_r tab i j boundup bounddown =
   let gett i    = io32 (get tab i) in
   let tabi      = gett !i in
+(*       print_string(soi(boundup)^" ceci est le boundup \n"); *)
     while
+(*       print_string(soi(!j)^" ceci est le i \n"); *)
       (*je plante la*)
-      (gett (!j + 1 ) <> (boundup)) &&
-      (gett (!j + 1 ) <> (bounddown)) &&
+      ((!j + 1 ) < (boundup)) &&
+      ((!j + 1 ) > (bounddown)) &&
       (gett (!j + 1 ) >= tabi)
     do
       begin
@@ -153,8 +155,8 @@ let find_high_l tab i j boundup bounddown =
   let gett i    = io32(get tab i) in
   let tabi      = gett !i in
     while
-      (gett (!j + 1 ) <> boundup) &&
-      (gett (!j + 1 ) <> bounddown) &&
+      ((!j + 1 ) < boundup) &&
+      ((!j + 1 ) > bounddown) &&
       (gett (!j + 1 ) < tabi)
     do
       begin
@@ -167,32 +169,33 @@ let find_high_l tab i j boundup bounddown =
 let bent_right tab i nbr_coefs sum_coefs filter_d filter_u =
   let j = ref !i in
   let len = dim tab in
-    find_high_r tab i j 0 (len - 1);
-    (* print_string("PROUTafterfind\n"); *)
+(*     print_string(soi(len)^" this is len PROUTbeforeafind\n"); *)
+    find_high_r tab i j (len - 1) 0;
+(*     print_string("PROUTafterfind\n"); *)
     refresh_coefs tab i j nbr_coefs sum_coefs filter_d filter_u;
     (* it would be <= 209*)
     i := !j + 1;
-    (* print_string("PROUTbeforetil\n"); *)
+(*     print_string("PROUTbeforetil\n"); *)
     til_not_bound tab (len -1) i;
-    (* print_string("PROUTaftertil\n"); *)
+(*     print_string("PROUTaftertil\n"); *)
     if (io32(get tab !i) < !average) then
       begin
-    (*     print_string("PROUT1\n"); *)
+(*         print_string("PROUT1\n"); *)
         after_average tab i;
-    (*     print_string("PROUT2\n"); *)
+(*         print_string("PROUT2\n"); *)
       end
     else
       begin
-    (*     print_string("PROUT3\n"); *)
+(*         print_string("PROUT3\n"); *)
         before_average tab i; (* may have a probleme*)
-    (*     print_string("PROUT4\n"); *)
+(*         print_string("PROUT4\n"); *)
       end
 
 (* filter_d et _u ar equivalent to filter down and up*)
 let bent_left tab i nbr_coefs sum_coefs filter_d filter_u =
   let j = ref !i in
   let len = dim tab in
-    find_high_l tab i j 0 (len - 1);
+    find_high_l tab i j (len - 1) 0;
     (* it would be <= 209*)
     refresh_coefs tab i j nbr_coefs sum_coefs filter_d filter_u;
     i := !j + 1;
@@ -228,6 +231,7 @@ let detect_angle () =
     if !droite then
       begin
         while (!i < ((dim !proj_h_table) - 1)) do
+          print_string(soi(!i)^" ceci est le i \n");
           bent_right !proj_h_table i nbrscoef somcoef 4. 60.;
         done;
       end
@@ -235,7 +239,6 @@ let detect_angle () =
       begin
         print_string(soi((dim !proj_h_table) - 1)^"dimtab\n");
         while (!i < ((dim !proj_h_table) - 1)) do
-(*           print_string(soi(!i)^" ceci est le i \n"); *)
           bent_left !proj_h_table i nbrscoef somcoef 4. 60.;
         done;
       end;
@@ -243,12 +246,12 @@ let detect_angle () =
       print_string(sof(pente)^" ceci est ma pente\n");
       let alpha = ref 0. in
         if (pente < 0.) then
-          alpha := 90. +. (atan(pente)*.(180./.(3.14159265)))
+          alpha := ~-.(90. +. (atan(pente)*.(180./.(3.14159265))))
         else
-          alpha := 90. -. (atan(pente)*.(180./.(3.14159265)));
+          alpha := (90. -. (atan(pente)*.(180./.(3.14159265))));
         print_string(sof(!alpha)^" ceci est mon angle\n");
         Surface.image := Rotation.optimized2 !Surface.image
-          ~-.(!alpha*.(3.14159265/.180.))
+          (!alpha*.(3.14159265/.180.))
 
 (* use to have a .csv file*)
 let histo_to_file file =
