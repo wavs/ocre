@@ -89,8 +89,7 @@ let til_not_bound tab bound pos =
         pos := !pos + 1;
         i := get tab !pos;
       end
-    done;
-    !pos
+    done
 
 (* send you where you're  upon the average *)
 let after_average tab pos =
@@ -100,8 +99,7 @@ let after_average tab pos =
         pos := !pos + 1;
         i := get tab !pos;
       end
-    done;
-    !pos
+    done
 
 (* send you where you're below the average *)
 let before_average tab pos =
@@ -111,8 +109,7 @@ let before_average tab pos =
         pos := !pos + 1;
         i := get tab !pos;
       end
-    done;
-    !pos
+    done
 
 (* we don't really know why, but we know we have to*)
 let check_position_start tab pos =
@@ -122,28 +119,26 @@ let check_position_start tab pos =
     after_average tab pos
 
 
-(* when you're bent on the righ, i is the current position j is the *)
-(*    next value *)
-let bent_right tab i j boundup bounddown =
+(* when you're bent on the righ, i is the current position j have to be
+   initiated  before the call of the function*)
+let find_high_r tab i j boundup bounddown =
   let gett i    = get tab i in
-  let tabi      = gett i in
-  let tabj      = ref (gett !j) in
+  let tabi      = gett !i in
     while
-      (tabj <> boundup) &&
-      (tabj <> bounddown) &&
+      (gett (!j + 1 ) <> boundup) &&
+      (gett (!j + 1 ) <> bounddown) &&
       (gett (!j + 1 ) > tabi)
     do
       begin
         j := !j + 1;
-        tabj := gett !j;
       end
     done
 
-(* when you're bent on the left, i is the current position j is the *)
-(*    next value *)
-let bent_left tab i j boundup bounddown =
+(* when you're bent on the left, i is the current position j have to be
+   initiated  before the call of the function*)
+let find_high_l tab i j boundup bounddown =
   let gett i    = get tab i in
-  let tabi      = gett i in
+  let tabi      = gett !i in
     while
       (gett (!j + 1 ) <> boundup) &&
       (gett (!j + 1 ) <> bounddown) &&
@@ -154,70 +149,40 @@ let bent_left tab i j boundup bounddown =
       end
     done
 
-
-
-(* let  take_coef () = *)
-(*   let dim = Bigarray.Array1.dim !proj_h_table in *)
-(*    let i         = ref 0 in *)
-(*     while (!i <!average) do *)
-(*       begin *)
-
-(*        end *)
-(*     done; *)
-  (*
-      let sommet_of_h tab =
-  let i         = ref 0 in
-  let count     = ref 0 in
-  let monte     = ref false in
-  let descendre = ref false in
-  let get x i   = Bigarray.Array1.get x i in
-  let dim x     = Bigarray.Array1.dim x in
-    while ((!i + 1) <= (dim tab -1)) &&
-      ((get tab !i) = (get tab (!i + 1))) do
-      i := !i + 1
-    done;
-    if ((!i + 1) <= (dim tab -1)) &&
-      ((get tab !i) < (get tab (!i+1))) then
-      begin
-        monte           := true;
-        descendre       := false;
-        count           := 0;
-      end
+(* filter_d et _u ar equivalent to filter down and up*)
+let bent_right tab i nbr_coefs sum_coefs filter_d filter_u =
+  let j = ref !i in
+  let len = dim tab in
+    find_high_r tab i j 0 (len - 1);
+    if (filter_d < (!j - !i)) && ((!j - !i) < filter_u ) then
+      refresh_coefs tab !i !j nbr_coefs sum_coefs;      (* it would be <= 209*)
+    i := !j + 1;
+    til_not_bound tab (len -1) i;
+    if (get tab !i < !average) then
+      after_average tab i
     else
-      begin
-        monte           := false;
-        descendre       := true;
-        count           := 1;
-      end;
-    i := !i + 1;
-    while (!i < (dim tab)) do
-      begin
-        if(!descendre) then
-          begin
-            while (!i < ((dim tab) - 1))
-              && ((get tab !i) >= (get tab (!i + 1))) do
-                i       := !i + 1
-            done;
-            monte       := true;
-            descendre   := false;
-          end
-        else
-          begin
-            while (!i < ((dim tab) - 1))
-              && ((get tab !i) >= (get tab (!i + 1))) do
-                i       := !i + 1
-            done;
-            monte       := false;
-            descendre   := true;
-            count       := !count + 1;
-          end;
-        i := !i + 1
-      end
-    done;
-    print_string((soi !count)^" une fois j'ai fait une projection"^"\n");
-    !count
-    *)
+      before_average tab i (* may have a probleme*)
 
+(* filter_d et _u ar equivalent to filter down and up*)
+let bent_left tab i nbr_coefs sum_coefs filter_d filter_u =
+  let j = ref !i in
+  let len = dim tab in
+    find_high_l tab i j 0 (len - 1);
+    if (filter_d < (!j - !i)) && ((!j - !i) < filter_u ) then
+      refresh_coefs tab !i !j nbr_coefs sum_coefs;      (* it would be <= 209*)
+    i := !j + 1;
+    til_not_bound tab (len -1) i;
+    if (get tab !i < !average) then
+      after_average tab i
+    else
+      before_average tab i (* may have a probleme*)
+
+(* let detect_angle () = *)
+(*   Seuil.seuillage  !Surface.image; *)
+(*   proj_and_average !Surface.reduce; *)
+  
+
+(* use to have a .csv file*)
 let histo_to_file file =
   let chan = (open_out file) in
     for i = 0 to ((Bigarray.Array1.dim !proj_h_table) -1) do
