@@ -62,7 +62,7 @@ let proj_and_average tableau =
 (* return the value of the box i in the table x *)
 let get x i   = Bigarray.Array1.get x i
 
-(* return the length of the table x *)
+vv(* return the length of the table x *)
 let dim x     = Bigarray.Array1.dim x
 
 (* wrapper of base functions for manipulating int string float *)
@@ -84,7 +84,7 @@ let refresh_coefs tab i j nbr_coefs sum_coefs =
 (* send to the future of your world -_avoid the bounds_-*)
 let til_not_bound tab bound pos =
   let i = ref (get tab !pos) in
-    while (!i = bound) do
+    while (!i = bound) && (!pos <= dim tab)do
       begin
         pos := !pos + 1;
         i := get tab !pos;
@@ -177,10 +177,20 @@ let bent_left tab i nbr_coefs sum_coefs filter_d filter_u =
     else
       before_average tab i (* may have a probleme*)
 
-(* let detect_angle () = *)
-(*   Seuil.seuillage  !Surface.image; *)
-(*   proj_and_average !Surface.reduce; *)
-  
+(* thank you captain obvious *)
+let detect_angle () =
+  Seuil.seuillage  !Surface.image;
+  Interpolation.resize_for_disco !Surface.image;
+  proj_and_average !Surface.reduce;
+  let bound = Bigarray.Array2.dim1 !Surface.reduce in
+  (* algo principale*)
+  let i = ref 0 in
+  til_not_bound !proj_h_table 0 i;
+  til_not_bound !proj_h_table bound i;
+  after_average !proj_h_table i;
+  before_average !proj_h_table i;
+  let j = ref (!i + 1) in
+    while (get !proj_h_table i)
 
 (* use to have a .csv file*)
 let histo_to_file file =

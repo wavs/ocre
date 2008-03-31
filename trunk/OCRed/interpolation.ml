@@ -284,16 +284,23 @@ with
       ("image non-altere percentage too high\n");
       surf
 
-(* let detect_percent surf = *)
-  
+let detect_percent surf =
+  let surf = Transforme.surf_to_matrix surf in
+  let width = Bigarray.Array2.dim1 surf in
+    match width with
+      | x when (x < 800)  -> 40
+      | x when (x < 1200) -> 18
+      | x when (x < 2400) -> 8
+      | x when (x < 5200) -> 4
+      | _ -> 100
 
-let resize_for_disco surf perc =
-(*   let perc = detect_percent surf in *)
-  resize_percent_unit surf perc
+let resize_for_disco surf =
+  let perc = detect_percent surf in
+    resize_percent_unit surf perc
 
 let discover_angle surf =
   print_string("avant la boucle infinii je m'aime \n");
-  resize_for_disco surf 10;
+  resize_for_disco surf ;
   let prev_angle        = ref 0.        in
   let angle             = ref 0.        in
   let bool              = ref false      in

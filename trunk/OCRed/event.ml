@@ -19,8 +19,7 @@ let dev () =
   try
     (*Le seuil est super long checkout*)
     Seuil.seuillage !Surface.image;
-    Interpolation.resize_for_disco !Surface.image
-      !Argument.percent_res;
+    Interpolation.resize_for_disco !Surface.image;
    (*  Surface.image := Transforme.matrix_to_surf !Surface.reduce; *)
 (*     Detection.proj_and_average !Surface.reduce; *)
 (*     print_string(string_of_int(!Detection.average)^"\n"); *)
