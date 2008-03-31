@@ -11,6 +11,7 @@
 *)
 val display             : bool ref
 val seuil               : bool ref
+val median              : bool ref
 val rotate              : bool ref
 val resize              : bool ref
 val percent             : bool ref

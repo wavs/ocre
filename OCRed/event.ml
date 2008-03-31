@@ -56,6 +56,7 @@ let action () =
 try
   if (!Argument.resize) then
     begin
+      Argument.resize := false;
       Surface.image := (Interpolation.resize
                           !Surface.image
                           !Argument.resize_of_x
@@ -72,9 +73,10 @@ try
 
   if (!Argument.percent) then
     begin
-            Surface.image := (Interpolation.resize_percent
-                                !Surface.image
-                                !Argument.percent_res);
+      Argument.percent := false;
+      Surface.image := (Interpolation.resize_percent
+                          !Surface.image
+                          !Argument.percent_res);
       if (!Path.output <> "") then
               begin
                 Sdlvideo.save_BMP !Surface.image !Path.output;

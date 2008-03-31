@@ -16,10 +16,14 @@ let seuil       = ref false
 let rotate      = ref false
 let resize      = ref false
 let percent     = ref false
+let median      = ref false
 let resize_of_x = ref 800
 let resize_of_y = ref 600
 let percent_res = ref 100
 let dev         = ref false
+
+let set_median ()=
+  median := true
 
 let set_dev () =
   dev := true
@@ -74,7 +78,10 @@ let speclist = [
    "float Angle in degree");
   ("-dev",
    Arg.Unit ( fun () -> set_dev()),
-   "noparameter This option is ");
+   "noparameter This option is for detecting the angle");
+  ("--median",
+   Arg.Unit ( fun () -> set_median()),
+   "noparameter This option is for median filter");
   ("-d",
    Arg.Set display,
    " allows to see your image being transformed");
