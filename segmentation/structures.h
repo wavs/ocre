@@ -100,7 +100,6 @@ typedef struct s_result_extraction t_result_extraction;
  */
 struct s_launch_infos
 {
-  int display;
   char *inFile;
   char *outFile;
 };

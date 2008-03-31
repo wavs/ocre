@@ -13,8 +13,6 @@
 #ifndef TESTS_H
 #define TESTS_H
 
-#endif /* TESTS_H */
-
 #include "structures.h"
 
 void testInit();
@@ -34,3 +32,5 @@ void testQueue();
 void testUpdateMinMax();
 
 void testCC();
+
+#endif /* TESTS_H */

@@ -11,8 +11,11 @@
  */
 
 #include <stdlib.h>
+#include "structures.h"
 #include "main.h"
-#include "tests.h"
+#include "args.h"
+#include "launch.h"
+#include "wrappers.h"
 
 /**
  * This is the main function.
@@ -22,18 +25,12 @@
  *
  * @return Integer 0 if succeed, -1 if error
  */
-int main()
+int main(int argc, char *argv[])
 {
-  /* testInit();
-    testProjections();
-    testInitMarkMatrix();
-    testCheckIfUnderLimits();
-    testIsBmp();
-    testAddListCC();
-    testQueue();
-    testUpdateMinMax();
-  */
-  testCC();
+  t_launch_infos *infos;
 
-  return(EXIT_SUCCESS);
+  infos = apply_args(argc,argv);
+  launchProgramWithoutDisplay(infos);
+  wfree(infos);
+  return (EXIT_SUCCESS);
 }

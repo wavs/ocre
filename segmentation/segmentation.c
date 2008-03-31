@@ -143,17 +143,14 @@ t_cc_list *makeCC(int i,
   crossCC(i, j, elt, matrix, mark);
 
   /* DEBUG */
-  printf("\n\n >> CC <<\n");
+  /*printf("\n\n >> CC <<\n");
   printf(" id: %d\n",elt->id);
   printf(" chr: %d\n",elt->chr);
   printf(" nbpix: %d\n",elt->nbpix);
   printf(" (x,y)min: (%d,%d)\n",elt->coord.xmin,elt->coord.ymin);
   printf(" (x,y)max: (%d,%d)\n\n",elt->coord.xmax,elt->coord.ymax);
-
+  */
   /* Update of the linked list */
-
-  if (cc_list == NULL)
-    printf("IOPapres");
 
   return(addListCC(elt, cc_list));
 
@@ -191,8 +188,6 @@ t_cc_list *findCC(t_matrix *matrix)
 	    mark[i][j] = 'x';
 	    cc_count++;
 	    ret = makeCC(i, j, cc_count, matrix, mark, ret);
-	    if (ret == NULL)
-	      printf("DEBUG: il est a NULL");
 	  }
 	mark[i][j] = 'x';
 	
@@ -213,9 +208,6 @@ t_cc_list *findCC(t_matrix *matrix)
   for (i=0; i < matrix->nbrows; i++)
     free(mark[i]);
   free(mark);
-
-  if (ret == NULL)
-    printf("IOP");
 
   return(ret);
 }

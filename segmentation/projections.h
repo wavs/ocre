@@ -13,8 +13,6 @@
 #ifndef PROJECTIONS_H
 #define PROJECTIONS_H
 
-#endif /* PROJECTIONS_H */
-
 /**
  * This function computes the horizontal projection
  *  of a binary matrix.
@@ -30,3 +28,5 @@ void horizontal_projection(t_binary_image *pic);
  * @param pic Binary image
  */
 void vertical_projection(t_binary_image *pic);
+
+#endif /* PROJECTIONS_H */

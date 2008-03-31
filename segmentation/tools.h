@@ -13,8 +13,6 @@
 #ifndef TOOLS_H
 #define TOOLS_H
 
-#endif /* TOOLS_H */
-
 /**
  * This functions initiates a matrix;
  *
@@ -106,3 +104,5 @@ void qDelete(t_queue **p_queue);
  * @return Data stored in the first element of the queue
  */
 t_coordinate *qQeek(t_queue *p_queue);
+
+#endif /* TOOLS_H */

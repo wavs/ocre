@@ -14,8 +14,6 @@
 #ifndef SEGMENTATION_H
 #define SEGMENTATION_H
 
-#endif /* SEGMENTATION_H */
-
 
 /**
  * This function crosses a connected component
@@ -93,3 +91,5 @@ t_cc_list *findCC(t_matrix *matrix);
  * @param limit Margins of the input image.
  */
 /*void traceBlocks(t_block_list *block_list, t_limit *limit);*/
+
+#endif /* SEGMENTATION_H */
