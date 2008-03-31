@@ -180,6 +180,7 @@ t_cc_list *findCC(t_matrix *matrix)
   mark = initMarkMatrix(matrix->nbrows, matrix->nbcols);
   cc_count = 0;
   cc_list = NULL;
+  ret = NULL;
 
   for (i=0; i < matrix->nbrows; ++i)
     for(j=0; j < matrix->nbcols; ++j)
