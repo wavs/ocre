@@ -65,7 +65,7 @@ t_cc_list *findCC(t_matrix *matrix);
  * 
  * @return Linked list of blocks
  */
-/*t_block_list *makeBlocks(t_cc_list *cc_list);*/
+t_block_list *makeBlocks(t_cc_list *cc_list);
 
 /**
  * This function checks if the connected components
@@ -73,7 +73,7 @@ t_cc_list *findCC(t_matrix *matrix);
  *
  * @param cc_list Linked list of connected components
  */
-/*void checkIfCharacter(t_cc_list *cc_list);*/
+void checkIfCharacter(t_cc_list *cc_list);
 
 /**
  * This function detects the type of blocks
@@ -82,6 +82,15 @@ t_cc_list *findCC(t_matrix *matrix);
  * @param block_list Linked list of blocks
  */
 /*void detectTypeOfBlocks(t_block_list *block_list);*/
+
+/**
+ * This function traces all the CC with boxes
+ * in an output image.
+ *
+ * @param block_list Linked list of blocks
+ * @param limit Margins of the input image.
+ */
+void traceCC(t_cc_list *cc_list, t_limit *limit);
 
 /**
  * This function traces all the blocks with boxes

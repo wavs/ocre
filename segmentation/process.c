@@ -54,7 +54,7 @@ void processAll(t_launch_infos *infos)
 	      else
 		printf("Image %s saved.\n", infos->outFile);
 	      */
-
+	      /* free_listCC(cc_list) */
 	      free_pic(pic);
 	    }
 	}
