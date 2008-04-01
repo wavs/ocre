@@ -1,8 +1,8 @@
 %---DOCUMENT-------------------------------------------------------------------
 
-\documentclass[a4paper,10pt]{report} 
-\usepackage[french]{babel} 
-\usepackage[T1]{fontenc} 
+\documentclass[a4paper,10pt]{report}
+\usepackage[french]{babel}
+\usepackage[T1]{fontenc}
 
 %---PACKAGES-------------------------------------------------------------------
 
@@ -21,7 +21,7 @@
 
 \ifx\pdfoutput\undefined
    \pdffalse
-\else 
+\else
    \ifnum\pdfoutput=0
       \pdffalse
    \else
@@ -49,7 +49,7 @@ urlcolor = black, 						% Couleur des liens externes
 pdfborder = {0 0 0} 					% Style de bordure : ici, rien
 ]{hyperref}
 
-\hypersetup{ 									
+\hypersetup{
 pdfauthor = {\textsc{Huge Software}\\ Thomas A\"it-Taleb, Dimitri Georgoulis, Pierre Guilbert et Alexandre Testu}, 							% Auteurs
 pdftitle = {Rapport de soutenance}, 								% Titre du document
 pdfsubject = {Deuxi\`eme Soutenance}, 							% Sujet
@@ -112,8 +112,8 @@ plainpages = false}
 
 \section{Interface Utilisateur} % (fold)
 \label{sec:interface_utilisateur}
-Lors de la premi\`ere soutenance, nous pouvions ouvrir une image (\'enorme, hein?). C'est \`a peu pr\`es tout. 
-Beaucoup de choses ont chang\'e depuis le mois de F\'evrier. 
+Lors de la premi\`ere soutenance, nous pouvions ouvrir une image (\'enorme, hein?). C'est \`a peu pr\`es tout.
+Beaucoup de choses ont chang\'e depuis le mois de F\'evrier.
 Les modifications apport\'ees sont relatives au texte. Nous pouvons d\'esormais \'editer du texte, ainsi que l'enregistrer. Soyons franc: la gestion du texte sous Gtk, c'est pas de la tarte. On utilise un widget de type GtkTextView qui nous sert \`a afficher le texte. Pour l'\'editer, on utilise un GtkTextBuffer, qui utilise des GtkTextIter associ\'es \`a des GtkTextMarks. Bref, c'est un merdier sans nom.
 Les GtkTextIter servent \`a se rep\'erer dans le GtkTextBuffer (qui est un buffer, thank you captain Obvious!). Un GtkTextIter est un endroit du texte. On l'utilise par exemple pour r\'ecup\'erer une cha\^ine de caract\`eres:
 	\begin{verbatim}
@@ -124,10 +124,6 @@ Les GtkTextIter servent \`a se rep\'erer dans le GtkTextBuffer (qui est un buffe
 
 
 % chapter ce_qu_on_a_fait (end)
-
-
-
-
 
 
 
