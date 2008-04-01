@@ -1,0 +1,152 @@
+%---DOCUMENT-------------------------------------------------------------------
+
+\documentclass[a4paper,10pt]{report} 
+\usepackage[french]{babel} 
+\usepackage[T1]{fontenc} 
+
+%---PACKAGES-------------------------------------------------------------------
+
+\usepackage{makeidx} \makeindex
+\usepackage[Rejne]{fncychap}				% Lenny, Conny ,Bjarne, Rejne, Glenn, Sonny
+\usepackage{fancyhdr}
+\usepackage{eurosym}
+\usepackage{lastpage}
+\usepackage{a4wide}
+\usepackage[french]{minitoc}
+\usepackage[hmargin=1cm,vmargin=2cm]{geometry}
+
+%---SORTIES--------------------------------------------------------------------
+
+\newif\ifpdf
+
+\ifx\pdfoutput\undefined
+   \pdffalse
+\else 
+   \ifnum\pdfoutput=0
+      \pdffalse
+   \else
+      \pdfoutput=1 \pdftrue
+   \fi
+\fi
+
+
+%---PDF------------------------------------------------------------------------
+
+\ifpdf
+\usepackage[pdftex]{graphicx, color}
+\graphicspath{{images/}}
+\DeclareGraphicsExtensions{.jpg,.png}
+\pdfcompresslevel=9
+
+\usepackage[pdftex, 					% Paramétrage de la navigation
+bookmarks = true, 						% Signets
+bookmarksnumbered = true, 		% Signets numérotés
+pdfpagemode = None, 					% None, UseThumbs, UseOutlines, Fullscreen
+pdfstartview = FitH, 					% FitH, FitV, FitR, FitB, FitBH, FitBV, Fit
+pdfpagelayout = OneColumn, 		% SinglePage, OneColumn, TwoColumnLeft, TwoColumnRight
+colorlinks = false, 					% Liens en couleur
+urlcolor = black, 						% Couleur des liens externes
+pdfborder = {0 0 0} 					% Style de bordure : ici, rien
+]{hyperref}
+
+\hypersetup{ 									
+pdfauthor = {\textsc{Huge Software}\\ Thoms A\"it-Taleb, Dimitri Gerogoulis, Pierre Guilbert et Alexandre Testu}, 							% Auteurs
+pdftitle = {Rapport de soutenance}, 								% Titre du document
+pdfsubject = {Deuxi\`eme Soutenance}, 							% Sujet
+pdfkeywords = {}, 						% Mots-clefs
+pdfcreator = {}, 							% Logiciel qui a crée le document
+pdfproducer = {} 							% Société avec produit le logiciel
+plainpages = false}
+\usepackage{pdfpages}
+
+%---DVI------------------------------------------------------------------------
+
+\else
+\usepackage{graphicx}
+\graphicspath{{eps/}}
+\newcommand{\url}[1]{\emph{#1}}
+\newcommand{\href}[2]{\emph{#2}[1]}
+\fi
+
+%---EN-TETE-ET-PIED-DE-PAGE----------------------------------------------------
+
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\footrulewidth}{0.5pt}
+\pagestyle{fancy}
+
+%\lhead{}
+%\chead{}
+%\rhead{}
+%\lfoot{}
+%\cfoot{}
+%\rfoot{}
+
+%---PAGE-DE-GARDE--------------------------------------------------------------
+
+\title{\textsc{Rapport de Soutenance} \\ Deuxi\`eme Soutenance}
+\author{\textsc{Huge Software}\\ \\ Thoms A\"it-Taleb \\ Dimitri Gerogoulis \\ Pierre Guilbert \\ Alexandre Testu}
+\date{}
+
+%---COLOR---------------------------------------------------------------------
+
+%\pagecolor{}
+% \color{}
+
+%---DEBUT-DU-DOCUMENT----------------------------------------------------------
+
+\begin{document}
+\dominitoc
+\maketitle
+\tableofcontents \pagebreak
+\thispagestyle{fancy}
+
+\chapter{Introduction} % (fold)
+\label{cha:introduction}
+
+
+
+% chapter introduction (end)
+
+\chapter{Ce qu'on a fait} % (fold)
+\label{cha:ce_qu_on_a_fait}
+
+\section{Interface Utilisateur} % (fold)
+\label{sec:interface_utilisateur}
+Lors de la premi\`ere soutenance, nous pouvions ouvrir une image (\'enorme, hein?). C'est \`a peu pr\`es tout. 
+Beaucoup de choses ont chang\'e depuis le mois de F\'evrier. 
+Les modifications apport\'ees sont relatives au texte. Nous pouvons d\'esormais \'editer du texte, ainsi que l'enregistrer. Soyons franc: la gestion du texte sous Gtk, c'est pas de la tarte. On utilise un widget de type GtkTextView qui nous sert \`a afficher le texte. Pour l'\'editer, on utilise un GtkTextBuffer, qui utilise des GtkTextIter associ\'es \`a des GtkTextMarks. Bref, c'est un merdier sans nom.
+Les GtkTextIter servent \`a se rep\'erer dans le GtkTextBuffer (qui est un buffer, thank you captain Obvious!). Un GtkTextIter est un endroit du texte. On l'utilise par exemple pour r\'ecup\'erer une cha\^ine de caract\`eres:
+	\begin{verbatim}
+		
+	\end{verbatim}
+% section interface_utilisateur (end)
+
+
+
+% chapter ce_qu_on_a_fait (end)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{document}
+
+%---FIN-DE-DOCUMENT------------------------------------------------------------
