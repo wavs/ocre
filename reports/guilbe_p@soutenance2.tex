@@ -203,6 +203,22 @@ Remarque, il est int\'eressant de voir qu'une image r\'eduite comporte
 moins de bruit, qui fausserait l'avanc\'ee de l'algo de reconnaissance
 des plages nulles.
 
+\subsection{ Ce qu'il nous reste \`a faire}
+\subsubsection{ D\'etection d'angle}
+Notre d\'etection de l'angle de rotation d'un texte dans une image est
+encore assez impr\'ecise ; cela est principalement d\^u \`a l'utilisation
+de l'arctangente qui devient tr\`es sensible aux extrema. Nous pensons
+donc r\'eutiliser la technique de la multiple rotation, qui semble en
+th\'eorie plus pr\'ecise. Les r\'esultats seront expos\'es \`a la
+prochaine soutenance.
+\subsubsection{ Optimisation des filtres}
+Le gros probl\`eme de la rotation est la perte d'information, en effet
+cette transformation a en sortie des nombres \`a virgule flottante,
+ce qui ne correspond pas vraiment aux nombres entiers d\'efinissant la
+grille d'une image dans le cas de pixels carr\'es. Une multitude de
+filtres existent, mais le plus rapide et le plus adapt\'e dans le cas de la
+rotation serait un filtre bicubique.
+
 %% OCRed qu'est-ce que c'est pourquoi c'est faire.
 
 %% = l'executable
