@@ -1,9 +1,11 @@
+%%debut chapitre sur le programme ocred
 \chapter{ OCRed qu'est-ce que c'est ? }
  OCRed est n\'e des mots Ocre et digital, qui rappellons le encore une fois
  signifie ``Optical Character Recognition enhanced'' pour l'un et
  num\'erique pour l'autre. La partie du projet portant sur le
  pr\'etraitement de l'image devant \^etre faite en ocaml, OCRed est
  totalement r\'ealis\'e dans ce langage.
+
 \section{ Visualisation de l'image grace a l'executable }
  La cr\'eation du logiciel de traitement de l'image nous a men\'e, au
  d\'ebut du projet \'a vouloir visualiser directement, c'est \'a dire
@@ -14,6 +16,7 @@
  de l'image.
 %% mettre image de la fenetre sdl
 %% visualisation.jpg
+
 \section{ Utilisation de l'executable }
  L'executable en ligne de commande admet un certain nombre d'arguments,
  certain ne pouvant evidemment donner lieu \'a un quelconque r\'esultat
@@ -78,15 +81,64 @@ de type jpeg,bmp,png au moins.
  informations, il se peut que vous puissiez trouver des informations
  plus ou moins utiles dans les sources du projet, au niveau du fichier
  README.
+%%fin chapitre sur le programme ocred
 
+
+%%debut chapitre detection de l'angle
 \chapter{ La d\'etection de l'angle }
+ La d\'etection de l'angle \'etait \'a faire pour la prem\'ere
+ soutenance, malheureusement par un manque de temps certain elle ne fut
+ pas pr\'ete \'a temps. Nous arrivons \'a la deuxi\'eme soutenance avec
+ deux types de d\'etection de l'angle de rotation du texte d'ume image.
+ Ce qui a pour but de redresser l'image, afin d'avoir une segmentation
+ \'a peur pr\'es correct.
 
 \section{ Des principes assez diff\'erents}
+ La d\'etection de l'angle de rotation d'un texte dans une image est un
+ probl\'eme assez complexe. En effet une image contenant du texte n'est
+ pas compos\'e de composante continues, il est donc plus difficile d'isoler
+ les caract\'eristiques des \'el\`ements. Deux principes majeur nous
+ sont apparu. Tout d'abord l'on \'etudie les caract\'eristiques d'une
+ image pour chaque angle, l'on isole ensuite le bon angle, ce
+ processus est long, d'autre part il est encore assez impr\'ecis.
+ L'autre principe \'etait de d\'etecter la pente d'une ligne de caract\`ere.
 \subsection{ La multiple rotation }
+ Dans cet algorithme, l'on reduit la taille de l'image pour gagner en
+ temps d'execution, le redimensionnement est calcul\'e en fonction de la
+ taille d'origine de l'image, on suppose avoir du format A4 \'a chaque
+ fois.
+
+ Comme vous pouvez le voir sur ces images il est \'evident qu'il y'a une
+ net diff\'erence entre des images avec un texte mal orient\'e. Ces
+ images repr\'esente la projection horizontale des pixels noirs d'une image.
+%% histogramme5degree.jpg
+%% sur cette image l'on peut voir un histogramme d'une image avec un
+ %% texte ayant subit une rotation de 5 degr\'e
+
+
+%% rotation1deghisto.jpg
+%% sur cette image l'on peut voir un histogramme d'une image avec un
+ %% texte ayant subit une rotation de 1 degr\'e
+
+
+%% histogramme_bon.jpg
+%% sur cette image l'on peut voir un histogramme d'une image avec un
+%% texte n'ayant pas subit de rotation.
+
 \subsection{ Detection de la pente }
+On detecte la pente d'une ligne de texte, pour cela l'on parcour l'imagepour
+chaque ligne de pixels jusqu'a ce que l'on tombe sur un pixel noir.
+% mettre l'image histo_pente.jpg
+
 \section{ Optimisations des algorithmes }
 \subsection{ Reduction de l'image }
+
+%% reduceimage20percent75dpit.jpg
+
 \subsection{ Quels limites et comment les surpasser ? }
+
+
+%% chapter other problemes
 \chapter{ Probl\'emes li\'ees au traitement de l'image }
 \section{ Rotation de l'image}
 \section{ Filtres diminuant la perte d'information}
