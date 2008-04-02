@@ -13,6 +13,7 @@
  La fenetre est r\'eali\'ee avec OcamlSDL, tout comme le pr\'etraitement
  de l'image.
 %% mettre image de la fenetre sdl
+%% visualisation.jpg
 \section{ Utilisation de l'executable }
  L'executable en ligne de commande admet un certain nombre d'arguments,
  certain ne pouvant evidemment donner lieu \'a un quelconque r\'esultat
@@ -57,9 +58,29 @@ de type jpeg,bmp,png au moins.
  Vous pouvez passez un angle en pr\'ecision r\'eel, ou enti\'ere. Pour
  cela passez respectivement l'angle avec l'argument ``-af'' et ``-a''.
  Rappelons que l'angle passez en parametres et en degr\'e et non en
- radian.
-\subsection{ right }
+ radian. Vous pouvez aussi tourner l'image de 90 degr\'e dans le sens
+ direct ou indirect, gr\'ace \'a l'option ``-right'' et ``-left''.
+\subsection{ Redimensionnement }
+ Le redimensionnement peut s'effectuer en pourcentage de l'image avec
+ l'option ``--resizepercent'' qui prend en param\'etre un pourcentage
+ entier. L'on peut aussi redimensionner l'image en valeur absolue
+ --c'est \'a dire en sp\'ecifiant des valeurs de hauteurs et de largeurs
+ arbitraire--. Alexandre Testu avait besoin d'un petit redimensionnement
+ rien que pour lui, c'est pour cela que l'option ``--resize-auto''
+ existe.
+\subsection{ detection d'angle}
+ Il existe un argument magique ``-dev'' qui a juste besoin d'avoir une
+ image qui n'est pas bien droite en param\'etre. Il retourne directement
+ l'image dans le bon sens, et en noir et blanc.
+\subsection{ Help me if you can! }
+ L'option ``-help'' est aussi pr\'esente afin d'accompagner
+ l'utilisateur dans sa d\'ecouverte du programme. Pour tout autre
+ informations, il se peut que vous puissiez trouver des informations
+ plus ou moins utiles dans les sources du projet, au niveau du fichier
+ README.
+
 \chapter{ La d\'etection de l'angle }
+
 \section{ Des principes assez diff\'erents}
 \subsection{ La multiple rotation }
 \subsection{ Detection de la pente }
