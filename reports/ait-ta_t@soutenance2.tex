@@ -1,7 +1,9 @@
 \chapter{Analyse de l'image et extraction des caractères (Thomas)}
+
+\section{Feedback}
 Lors de la première soutenance, nous vous avions présenté un algorithme
 de détection des lignes. Celui-ci avait pour but d'extraire les lignes
-de caractères d'àprès une image parfaite, à savoir une image prétraitée.
+de caractères d'après une image parfaite, à savoir une image prétraitée.
 
 Malgré un fonctionnement correct sur des images simples, cette
 algorithme ne prenait pas en compte les lettrines, ni les colonnes de
@@ -20,7 +22,7 @@ pouvoir envisager par la suite une détection efficace des lignes et des
 caractères. C'est pourquoi l'algorithme a été totallement remanié pour
 constituer ainsi une approche montante de l'extraction des éléments.
 
-\section{Principe}
+\section{Principe algorithmique}
 L'algorithme développé pour cette soutenance est basé sur le principe de
 la segmentation par régions (region-based segmentation). 
 Il consiste à regrouper des pixels semblables dans le but de créer des
@@ -80,7 +82,7 @@ La structure s_block_elt représente comme son nom l'indique les blocs et
 ses caractéristiques qui sont constituées de son identifiant, le nombre
 de composantes connexes englobées dans le bloc, les données permettant
 de le situer spatialement dans la matrice binaire (représentant
-l'image) et son type.
+l'image) et son type
 
 Afin de mieux organiser notre code, sa compréhension et son débuggage,
 noua avons décomposé le problème de la segmentation en plusieurs
@@ -125,8 +127,8 @@ void crossCC(t_cc_elt *elt,
 \end{lstlisting}
 
 Cette fonction est utilisée pour déterminer l'ensemble de l'étendue
-composante connexe. Elle permet alors de mettre à jour le nombre de
-pixels la composant ainsi que ses coordonnées minimum et maximum qui
+d'une composante connexe. Elle permet alors de mettre à jour le nombre
+de pixels la composant ainsi que ses coordonnées minimum et maximum qui
 permettront par la suite de retrouver la matrice correspondant à un
 caractère.
 Cette fonction est un point clé de la segmentation dans la mesure où
@@ -190,13 +192,13 @@ Usage: seg -i inputfile -o output file
     -i file: path of your input file
     -o file: path of your output file
     -v     : verbose
-    --help : display the help
+    -help : display the help
 \end{verbatim}
 
 Les arguments \verb!-i [File] -o [File]! sont obligatoires et permettent
 de spécifier une image bitmap d'entrée et le nom du fichier de sortie.
 Le programme est également muni de deux options. Tout d'abord,
-\verb!--help! fait référence à une aide sucscinte. Enfin, l'option
+\verb!-help! fait référence à une aide sucscinte. Enfin, l'option
 \verb!-v! permet d'activer le mode verbose qui affiche la liste des
 composantes connexes extraites ainsi que leurs caractéristiques.
 
