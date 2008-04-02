@@ -1,16 +1,64 @@
 \chapter{ OCRed qu'est-ce que c'est ? }
  OCRed est n\'e des mots Ocre et digital, qui rappellons le encore une fois
- signifie \" Optical Character Recognition enhanced \" pour l'un et
+ signifie ``Optical Character Recognition enhanced'' pour l'un et
  num\'erique pour l'autre. La partie du projet portant sur le
  pr\'etraitement de l'image devant \^etre faite en ocaml, OCRed est
  totalement r\'ealis\'e dans ce langage.
 \section{ Visualisation de l'image grace a l'executable }
- La cr\'eation du logiciel de traitement de l'image nous a men\'e au
+ La cr\'eation du logiciel de traitement de l'image nous a men\'e, au
  d\'ebut du projet \'a vouloir visualiser directement, c'est \'a dire
  sans logiciel tiers, l'action de notre travail.
  La visualisation des images trait\'ees permet notre ind\'ependances
- au niveau de l'utilisation du logiciel.
+ au niveau de l'utilisation du logiciel, ce qui est un confort certain.
+ La fenetre est r\'eali\'ee avec OcamlSDL, tout comme le pr\'etraitement
+ de l'image.
+%% mettre image de la fenetre sdl
 \section{ Utilisation de l'executable }
+ L'executable en ligne de commande admet un certain nombre d'arguments,
+ certain ne pouvant evidemment donner lieu \'a un quelconque r\'esultat
+ sans la sp\'ecification d'une image d'entr\'ee.
+\subsection{ Sp\'ecifier une image d'entr\'ee }
+ Il est plus logique, pour un logiciel de traitement d'image, d'avoir
+ une image \'a traiter. Vous devez pour cela utilisez l'argument ``-i''
+ suivi du chemin d'une image de type jpeg,bmp,png au moins.
+\subsection{ Sp\'ecifier une image de sortie }
+ Vous n'\'etes pas oblig\'e de pr\'eciser le chemin de l'image de sorties
+ mais cela permet une certaine flexibilit\'ee. Dans le cas o\'u vous
+ n'indiquez pas la sortie, OCRed se debrouille pour sortir une image
+ avec un nom assez \'evident, d\'ependant du traitement. Par exemple
+ rotatation.bmp ou encore tresholded.bmp, les images se trouveront l\'a
+ o\'u vous avez execut\'e votre programme. Pour specifier un chemin de
+ sortie veuillez utiliser l'argument ``-o'' suivi du chemin d'une image
+de type jpeg,bmp,png au moins.
+\subsection{ La visualisation de l'imaage }
+ Gr\'ace \'a OcamlSDL, nous pouvons visualiser notre image, il faut pour
+ cela specifier une image d'entr\'ee, et passer l'argument ``-d'' en
+ parametre. Les d\'esavantage de l'utilisation de cette interface sont
+ assez subtiles, par exemple vous ne pouvez ni zoomer ni dezoomer, ni
+ vous deplacer sur l'image. Toutefois il y'a des avantages, vous pouvez
+ visualiser directement les modifications appliqu\'ees \'a votre
+ image. En appuyant sur F2 vous faites tourner l'image de l'angle que
+ vous avez passer en param\'etre --voir plus loin--. En appuyant sur F3
+ vous appliquez le seuil, que vous pouvez sp\'ecifier en ligne de
+ commande. En appuyant sur F4, vous appliquez le filtre m\'edian. Nous
+ tenons \'a vous rappeller que le seuil ne marche que sur les couleurs.
+ Pour quitter il suffit d'appuyer sur F1, la petit croix en haut \'a
+ droite ne marche pas.
+\subsection{ Le seuil }
+ Permet le passage d'une image en noir et blanc, pour avoir un minimum
+ de pertes d'informations vous devez specifiez un seuil viable. Par
+ d\'efaut le seuil et \'a 200, ce qui est suffisant pour un contraste
+ normal de l'image. Vous devrez l'augmenter si il est trop faible et le
+ baisser dans le cas contraire. Passer l'argument ``-s'' en
+ parametre si vous voulez changez la valeur par d\'efaut. Pour
+ l'anecdote ``-s'' viendrez de seuil, mais nous n'en sommes pas vraiment
+ sur.
+\subsection{ Rotation }
+ Vous pouvez passez un angle en pr\'ecision r\'eel, ou enti\'ere. Pour
+ cela passez respectivement l'angle avec l'argument ``-af'' et ``-a''.
+ Rappelons que l'angle passez en parametres et en degr\'e et non en
+ radian.
+\subsection{ right }
 \chapter{ La d\'etection de l'angle }
 \section{ Des principes assez diff\'erents}
 \subsection{ La multiple rotation }
