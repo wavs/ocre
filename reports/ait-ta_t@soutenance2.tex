@@ -1,3 +1,214 @@
-\label{sec:Analyse de l'image et extraction des caractères (Thomas)}
+\chapter{Analyse de l'image et extraction des caractères (Thomas)}
+Lors de la première soutenance, nous vous avions présenté un algorithme
+de détection des lignes. Celui-ci avait pour but d'extraire les lignes
+de caractères d'àprès une image parfaite, à savoir une image prétraitée.
 
-% section analyse_de_l_image_et_extraction_des_caracteres (end)
+Malgré un fonctionnement correct sur des images simples, cette
+algorithme ne prenait pas en compte les lettrines, ni les colonnes de
+texte par exemple. En effet utilisant la méthode des projections
+horizontales, après analyse de l'histogramme obtenu, on pouvait
+distinguer convenablement les pics représentant les lignes ainsi que les
+creux pour les interlignes. Cependant, cette histogramme ne nous
+fournissait aucune information significative en ce qui concerne les
+lettrines et les colonnes multiples.
+
+Notre idée de départ pour cette soutenance était d'étendre cette méthode
+en projetant verticalement pour chaque ligne extraite afin d'obtenir
+chacun des caractères. Cependant, nous nous sommes rendus compte que
+débuter par une détection des blocs serait une meilleure solution pour
+pouvoir envisager par la suite une détection efficace des lignes et des
+caractères. C'est pourquoi l'algorithme a été totallement remanié pour
+constituer ainsi une approche montante de l'extraction des éléments.
+
+\section{Principe}
+L'algorithme développé pour cette soutenance est basé sur le principe de
+la segmentation par régions (region-based segmentation). 
+Il consiste à regrouper des pixels semblables dans le but de créer des
+zones homogènes: les régions. Pour ce type de
+segmentation, on distingue deux principes: la décomposition/fusion
+(split/merge) et la croissance de régions (growing-region). Nous avons
+choisi la méthode de croissance de régions qui nous paraissait plus
+adaptée au type d'images à traiter. Elle se décompose en deux étapes
+principales:
+
+  \begin{unemerate}
+    \item Trouver les points de départ de nos régions.
+    \item Faire grossir nos régions par agglomération des pixels
+    voisins.
+  \end{enumerate}
+
+Le principe général est de trouver l'ensemble des blocs de pixels noirs
+contigus, que nous appelerons par la suite composantes connexes, et de
+les regrouper ensuite en blocs, représentant alors les
+lignes et les paragraphes.
+Notre algorithme se basera essentiellement sur les deux types d'éléments
+principaux que sont les composantes connexes (nos points de départ) et
+les blocs (nos régions). Ces deux types sont représentés par des
+structures définies comme ceci:
+
+\begin{lstlisting}
+struct s_cc_elt
+{
+ int id;
+ int nbpix;
+ struct s_cc_coordinate coord;
+ short int chr; /* if >0 then cc is a character */
+ struct s_cc_elt *next;
+};
+
+struct s_block_elt
+{
+ int id;
+ struct s_cc_list *cclist;
+ int nbcc;
+ int posx; /* Upper left hand corner x coordinate */
+ int posy; /* Upper left hand corner y coordinate */
+ int height;
+ int width;
+ int type; /* UNKNOW (0), TEXT (1), IMAGE (2) */
+};
+\end{lstlisting}
+
+Notre structure s_cc_elt représente une composante connexe ainsi que
+ses caractéristiques telles que sa position dans l'image, le nombre de
+pixels qu'elle contient, son identifiant, un indicateur pour savoir si
+nous avons à faire à un caractère et bien entendu un lien vers l'élément
+suivant. En effet, notre algorithme utilise des listes chainées pour
+représenter l'ensemble des composantes connexes ainsi que celui des
+blocs.
+La structure s_block_elt représente comme son nom l'indique les blocs et
+ses caractéristiques qui sont constituées de son identifiant, le nombre
+de composantes connexes englobées dans le bloc, les données permettant
+de le situer spatialement dans la matrice binaire (représentant
+l'image) et son type.
+
+Afin de mieux organiser notre code, sa compréhension et son débuggage,
+noua avons décomposé le problème de la segmentation en plusieurs
+sous-problèmes. Ceci nous a donc amené à faire de même avec l'algorithme
+que nous avons préalablement découpé en plusieurs fonctions.
+
+\subsection{Détection des composantes connexes}
+Premièrement, notre fonction principale prend en paramètre une matrice
+binaire,représentant les pixels noirs & blanc d'une image prétraitée, et
+renvoie une liste de composantes connexes. Voici son prototype:
+
+\begin{lstlisting}
+t_cc_list *findCC(t_matrix *matrix);
+\end{lstlisting}
+
+Elle consiste à réaliser tout d'abord une matrice de marque afin
+d'éviter de parcourir plusieurs fois un pixel, puis elle parcoure notre
+matrice binaire à la recherche des pixels noirs (à savoir ici des 1).
+Dès qu'elle en a trouvé un, elle fait appel à la fonction de création de
+composante connexe dont voici le prototype simplifié:
+
+\begin{lstlisting}
+t_cc_list *makeCC(int cc_count,
+                  t_matrix *matrix,
+                  char **mark,
+                  t_cc_list *cc_list);
+\end{lstlisting}
+
+Cette fonction permet comme indiqué de créer un élément composante
+connexe. Elle prend en paramètre le numéro de la nouvelle composante
+connexe, la matrice binaire, la matrice de marque. Le paramètre cc_list
+est un paramètre résultat dans lequel on mettra à jour la liste des
+composante connexe. Cette fonction crée donc une composante connexe avec
+ses caractéristiques et met à jour la liste. Entre temps, elle fait
+appel à la fonction permettant de parcourir les pixels noirs constituant
+la composante connexe dont le prototype simplifié est:
+
+\begin{lstlisting}
+void crossCC(t_cc_elt *elt,
+             t_matrix *matrix,
+             char **mark);
+\end{lstlisting}
+
+Cette fonction est utilisée pour déterminer l'ensemble de l'étendue
+composante connexe. Elle permet alors de mettre à jour le nombre de
+pixels la composant ainsi que ses coordonnées minimum et maximum qui
+permettront par la suite de retrouver la matrice correspondant à un
+caractère.
+Cette fonction est un point clé de la segmentation dans la mesure où
+c'est elle qui est responsable de déterminer si oui ou non tel ou tel
+pixel doit être inséré dans la composante.
+Son principe se base sur un parcours de la matrice de voisinage du pixel
+courant à la recherche des pixels noirs. Dès que l'on en trouve un, on
+place dans une file. A la fin du parcours, on refait le traitement sur
+le pixel défilé tant que la file n'est pas vide.
+
+% SEG IMAGES
+
+\subsection{Analyse des composantes connexes}
+Une fois la liste des composantes connexes obtenues, il convient
+d'analyser chacune d'entre elles afin de voir si elles correspondent à
+un caractère ou non.
+
+\begin{lstlisting}
+void checkIfCharacter(t_cc_list *cc_list)
+\end{lstlisting}
+
+La fonction responsable de ce traitement (prototype simplifié ci-dessus)
+prend en paramètre la liste des composantes connexes et la met à jour.
+Elle effectue des mesures de seuil et détermine si une composante
+connexe est un caractère.
+
+% CARACTERES IMAGES
+
+
+\subsection{Création des blocs}
+Nous arrivons maintenant à la phase 2) de la segmentation par régions.
+Cette phase consiste à regrouper les composantes connexes ensemble afin
+de former des blocs qui correspondront aux lignes puis aux paragraphes.
+Le prototype de la fonction est le suivant:
+
+\begin{lstlisting}
+t_block_list *makeBlocks(t_cc_list *cc_list)
+\end{lstlisting}
+
+Cette fonction prend en paramètre la liste des composantes connexes et
+renvoie une liste de blocs. Nous avons commencé à implémenter cette
+fonction, cependant n'ayant pas encore réussi à arriver à un niveau
+convenable et fonctionnel, aucune présentation à ce sujet ne sera fait
+à la soutenance. On accuse donc un retard en ce qui concerne le
+regroupement par blocs.
+
+\section{Exécutable}
+Afin de concrétiser cette méthode de segmentation, nous avons développé
+un exécutable fonctionnel, nommé \verb!seg! permettant
+d'extraire les caractères d'une image d'entrée et d'enregister un
+fichier de sortie présentant la segmentation par caractères. Cette
+exécutable est utilisable avec plusieurs arguments dont voici la
+description:
+
+\begin{verbatim}
+Usage: seg -i inputfile -o output file
+ This program extracts the connected 
+ components of a bitmap image
+ It saves the extraction result in an ouput bitmap file
+ Arguements:
+    -i file: path of your input file
+    -o file: path of your output file
+    -v     : verbose
+    --help : display the help
+\end{verbatim}
+
+Les arguments \verb!-i [File] -o [File]! sont obligatoires et permettent
+de spécifier une image bitmap d'entrée et le nom du fichier de sortie.
+Le programme est également muni de deux options. Tout d'abord,
+\verb!--help! fait référence à une aide sucscinte. Enfin, l'option
+\verb!-v! permet d'activer le mode verbose qui affiche la liste des
+composantes connexes extraites ainsi que leurs caractéristiques.
+
+\section{Prochaîne soutenance}
+Pour la prochaîne soutenance, nous devons rattraper le retard accumulé
+sur la détection des blocs et pouvoir fournir une liste de blocs en
+bonne et dû forme. Liste qui nous permettra entre autres par la suite de
+reconnaître la structure de la page. Nous devrons trouver un format
+adéquate pour stocker ces informations de structures de pages, le xml
+serait une solution possible. Egalement, nous devrons interfacer la
+segmentation avec d'un côté le prétraitement et de l'autre côté le
+réseau de neurones. En ce qui concerne le côté interface
+segmentation/réseau de neurones, nous devrons standardiser les données
+pour l'entrée du réseau. Il semblerait qu'une vectorisation ou bien
+l'utilisation des chain codes (Freeman) soit une éventualité.
