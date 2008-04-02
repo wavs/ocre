@@ -115,7 +115,7 @@ plainpages = false}
 
 	\section{Enregistrement d'un fichier texte} % (fold)
 	\label{sec:enregistrement_d_un_fichier_texte}
-	
+
 Lors de la premi\`ere soutenance, nous pouvions ouvrir une image (\'enorme, hein?). C'est \`a peu pr\`es tout.
 Beaucoup de choses ont chang\'e depuis le mois de F\'evrier.
 Les modifications apport\'ees sont relatives au texte. Nous pouvons d\'esormais \'editer du texte, ainsi que l'enregistrer. Soyons franc: la gestion du texte sous Gtk, c'est pas de la tarte. On utilise un widget de type GtkTextView qui nous sert \`a afficher le texte. Pour l'\'editer, on utilise un GtkTextBuffer, qui utilise des GtkTextIter associ\'es \`a des GtkTextMarks. Bref, c'est un merdier sans nom.
@@ -128,22 +128,22 @@ Les GtkTextIter servent \`a se rep\'erer dans le GtkTextBuffer (qui est un buffe
 	\begin{lstlisting}
     /* text est le texte à enregistrer et filename le chemin du fichier */
   void save_as (char *text, char *filename)
-  {  
-    FILE *fp;                                
+  {
+    FILE *fp;
       /* on ouvre le fichier en mode écriture ("w")*/
-    fp = fopen(filename, "w"); 
-    if(!fp)                                
-        /* on renvoie un message d'erreur */  
+    fp = fopen(filename, "w");
+    if(!fp)
+        /* on renvoie un message d'erreur */
       fprintf(stderr, "Can't open file\n");
-    else       
-        /* on écrit "text" dans le fichier */                              
-      fprintf(fp, text); 
+    else
+        /* on écrit "text" dans le fichier */
+      fprintf(fp, text);
       /* on ferme le fichier */
-    fclose(fp);          
+    fclose(fp);
   }
 	\end{lstlisting}
 	% section enregistrement_d_un_fichier_texte (end)
-	
+
 	\section{Ortaugraffe} % (fold)
 	\label{sec:ortaugraffe}
 		L'utilisateur aura besoin d'un correcteur orthographique non seulement pour corriger les erreurs de notre OCR mais aussi pour \'editer son texte avant de l'enregistrer. Avant de me lancer dans la cr\'eation d'un syst\`eme de correction orthographique, je voyais d\'ej\`a le tableau: des biblioth\`eques compliqu\'ees, des centaines de fonctions qui font tout sauf ce qu'on veut, etc\ldots J'avais en effet fini par devenir tr\`es pessimiste vis-\'a-vis de Gtk. Je dois dire que j'\'etais bluff\'e. Une ligne. UNE ligne. On utilise la biblioth\`eque \verb!GtkSpell! pr\'esente sur les machines du PIE. Cette fameuse ligne, la voici dans tout sa splendeur:
@@ -154,9 +154,9 @@ Les GtkTextIter servent \`a se rep\'erer dans le GtkTextBuffer (qui est un buffe
 		\end{lstlisting}
 		\verb!view! est notre widget \verb!GtkTextView!, \verb!lang! est la langue, \verb!error! est un pointeur sur la localisation d'une erreur \'eventuelle (\verb!NULL! pour nous).\\
 		C'est gr\^ace \`a cette ligne magique que l'on obtient cette merveille:
-		
+
 		%%% SCREEN CORREC
-		
+
 	% section ortaugraffe (end)
 % chapter interface_utilisateur (end)
 
