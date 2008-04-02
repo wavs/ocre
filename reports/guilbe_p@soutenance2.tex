@@ -106,42 +106,103 @@ de type jpeg,bmp,png au moins.
  Dans cet algorithme, l'on reduit la taille de l'image pour gagner en
  temps d'ex\'ecution, le redimensionnement est calcul\'e en fonction de la
  taille d'origine de l'image, on suppose avoir du format A4 \`a chaque
- fois.
+ fois. On proc\'ede comme suit: On tourne de fa\c con dichotomique
+ l'image, c'est \'a dire en prenant des angles plus ou moins
+ grand. Jusqu'a trouv\'e un histogramme convenable. L'histogramme est
+ produit \'a partir de la projection de tout les pixels de l'image sur
+ l'axe des horizontales.
+
+Preuve exp\'erimentale produite \'a partir d' une image multifonte,
+multicouleur, mulicolonne:
 
  Comme vous pouvez le voir sur ces images, il est \'evident qu'il y'a une
- nette diff\'erence entre des images avec un texte mal orient\'e. Ces
- images repr\'esentent la projection horizontale des pixels noirs d'une image.
+ nette diff\'erence entre des images avec un texte mal orient\'e et normal.
+
 %% histogramme5degree.jpg
-%% sur cette image on peut voir un histogramme d'une image avec un
- %% texte ayant subi une rotation de 5 degr\'es
+%% commentaire de l'image
+
+Sur cette image on peut voir un histogramme d'une image avec un
+texte ayant subi une rotation de 5 degr\'es. Il est clair que le nombre
+de zone ou l'histogramme atteint 0 en ordonn\'e est beaucoup plus faible
+que les autres images. Environ 8.
 
 
 %% rotation1deghisto.jpg
-%% sur cette image on peut voir un histogramme d'une image avec un
- %% texte ayant subi une rotation de 1 degr\'e
+%% commentaire de l'image
 
+Sur cette image on peut voir un histogramme d'une image avec un texte
+ayant subi une rotation de 1 degr\'e. Par rapport \'a l'image
+pr\'ec\'edente, on voit de fa\c con \'evidente que le nombre d'ordonn\'ees
+\'a z\'ero est bien plus grand avec un angle de un degr\'ee. Ici environ 18.
 
 %% histogramme_bon.jpg
-%% sur cette image on peut voir un histogramme d'une image avec un
-%% texte n'ayant pas subi de rotation.
+%% commentaire de l'image
+
+Sur cette image on peut voir un histogramme d'une image avec un texte
+n'ayant pas subi de rotation. Il est tr\'es net que le nombre
+d'ordonn\'ees \'a z\'ero est le plus \'elev\'e.
+
+Il est facile d'implementer un algo qui compte le nombre de bandes
+proche de z\'ero, il s'av\'ere que nous avons voulu compter le nombre de
+sommets, ce qui est beaucoup moins pr\'ecis. La m\'ethode expos\'ee
+ci-dessus semble bien march\'e en th\'eorie.
 
 \subsection{ Detection de la pente }
 On d\'etecte la pente d'une ligne de texte ; pour cela on parcourt
 l'image pour chaque ligne de pixels jusqu'\`a ce que l'on tombe sur un
-pixel noir.
+pixel noir. Ceci permet d'avoir une certaine id\'ee de la pente d'une ligne
+de texte. La tangente de cette pente nous donne l'angle par rapport \'a
+la vertical. On la soustrait \'a 90 degr\'e si elle est positive, on
+l'ajoute sinon. On se retrouve avec un angle qui correspond avec un
+taux d'erreur proche du dixi\'eme de degr\'e d'angle.
+
 % mettre l'image histo_pente.jpg
+% commentaire image histo_pente
+
+Les extremums locaux de la courbe sont beaucoup moins \'elev\'es en
+termes de valeurs. Ce qui a pour cons\'equence, une pente peu \'elev\'ee et donc un angle tres \'elev\'e.
+
+% mettre l'image histo_pent_noangle.jpg
+% commentaire image histo_pent_noangle
+
+Les extremums locaux de la courbe sont beaucoup plus \'elev\'es en
+termes de valeurs que ceux de la courbe pr\'ec\'edente. Ce qui a pour
+cons\'equence, une pente tres \'elev\'ee et donc un angle tres faible.
+
+Le probl\'eme avec cette technique, et le manque de pr\'ecision autour
+de l'angle nul, et des bruit trop important produit par des lignes,
+tableaux, ou images impromptus.
+
+Nous avons pourtant retenus cette technique pour cette soutenance, car
+donnant lieu \'a des r\'esultat plus probant que la m\'ethode expos\'ee
+plus haut.
 
 \section{ Optimisations des algorithmes }
+ L'optimisation est un crit\'ere de confort pour l'utilisateur, mais
+ surtout un gage de qualit\'e.
 \subsection{ Reduction de l'image }
+ Afin de pouvoir augmenter la rapidit\'e des algorithmes de d\'etection
+ d'angle, nous r\'eduisons l'image de sorte qu'il y est le moins de
+ pertes d'information n\'ecessaire \'a cette derni\'ere. A titre
+ d'exemple une image au format A4 en 75 dpi, a une taille approximative
+ de 900 par 700. Les caract\`eres pr\'esent dans cette image ont une
+ taille en pixel d'\'a peu pr\'es 8 pixel. Il faut donc ne pas trop
+ r\'eduire l'image, environ 40 pourcent de la taille original. Au
+ contraire pour une image de plus haute d\'efinition, par exemple 600
+ dpi, Il est n\'ecessaire de r\'eduire l'image \'a au moins 5 pourcent
+ de la taille original. A titre d'exemple, la rotation d'une image
+ r\'eduite \'a 5 pourcent prend environ 0,05 seconde sur les machines du
+ pie, alors qu'elle prend plus de 30 seconde pour une image en 600 dpi.
 
 %% reduceimage20percent75dpit.jpg
+Une image reduite.
+
+Remarque, il est int\'erressant de voir qu'une image r\'eduite comporte
+moins de bruit, qui fausserai l'avanc\'ee de l'algo de reconnaissance
+des plages nulle.
 
 \subsection{ Quelless limites et comment les surpasser ? }
 
-
-%% chapter other problemes
-\chapter{ Probl\`emes li\'es au traitement de l'image }
-\section{ Rotation de l'image}
 \section{ Filtres diminuant la perte d'information}
 
 %% OCRed qu'est-ce que c'est pourquoi c'est faire.
