@@ -118,13 +118,13 @@ plainpages = false}
 
 Lors de la premi\`ere soutenance, nous pouvions ouvrir une image (\'enorme, hein?). C'est \`a peu pr\`es tout.
 Beaucoup de choses ont chang\'e depuis le mois de F\'evrier.
-Les modifications apport\'ees sont relatives au texte. Nous pouvons d\'esormais \'editer du texte, ainsi que l'enregistrer. Soyons franc: la gestion du texte sous Gtk, c'est pas de la tarte. On utilise un widget de type GtkTextView qui nous sert \`a afficher le texte. Pour l'\'editer, on utilise un GtkTextBuffer, qui utilise des GtkTextIter associ\'es \`a des GtkTextMarks. Bref, c'est un merdier sans nom.
+Les modifications apport\'ees sont relatives au texte. Nous pouvons d\'esormais \'editer du texte, ainsi que l'enregistrer. Soyons francs: la gestion du texte sous Gtk, c'est pas de la tarte. On utilise un widget de type GtkTextView qui nous sert \`a afficher le texte. Pour l'\'editer, on utilise un GtkTextBuffer, qui utilise des GtkTextIter associ\'es \`a des GtkTextMarks. Bref, c'est un merdier sans nom.
 Les GtkTextIter servent \`a se rep\'erer dans le GtkTextBuffer (qui est un buffer, thank you captain Obvious!). Un GtkTextIter est un endroit du texte. On l'utilise par exemple pour r\'ecup\'erer une cha\^ine de caract\`eres:
 	\begin{lstlisting}
      text = gtk_text_buffer_get_text(txtbuffer), &iStart, &iEnd, FALSE );
 	\end{lstlisting}
 	Ici, iStart et iEnd sont des pointeurs sur des GtkTextIter (ici le d\'ebut et la fin du buffer, encore une fois, thank you captain obvious!).
-	Il faut ensuite cr\'eer une procedure pour sauvegarder le texte r\'ecup\'er\'e. En C, on utilise le type \verb!FILE! de la biblioth\`eque \verb!stdio.h!. C'est assez simple pour ce qu'on fait ici. On ouvre un fichier puis on \'ecrit dedans, sans oublier une gestion d'erreur (ici pas forc\'ement tr\`es utile, mais il n'est jamais inutile de g\'erer les erreurs\ldots).
+	Il faut ensuite cr\'eer une proc\'edure pour sauvegarder le texte r\'ecup\'er\'e. En C, on utilise le type \verb!FILE! de la biblioth\`eque \verb!stdio.h!. C'est assez simple pour ce qu'on fait ici. On ouvre un fichier puis on \'ecrit dedans, sans oublier une gestion d'erreur (ici pas forc\'ement tr\`es utile, mais il n'est jamais inutile de g\'erer les erreurs\ldots).
 	\begin{lstlisting}
     /* text est le texte à enregistrer et filename le chemin du fichier */
   void save_as (char *text, char *filename)
@@ -167,7 +167,7 @@ Les GtkTextIter servent \`a se rep\'erer dans le GtkTextBuffer (qui est un buffe
 \label{sec:reseau_de_neurones}
 
 \subsection{Introduction} % (fold)
-\label{sec:introduction}
+\label{subsec:introduction}
 A l'issue de la premi\`ere soutenance, nos recherches sur les r\'eseaux
 neuronaux nous avaient men\'es vers l'\'elaboration d'un perceptron
 multicouches, celui-ci \'etant reconnu comme la star de la
@@ -199,7 +199,7 @@ comme le XOR
 % subsection introduction (end)
 
 \subsection{Structure et d\'efinitions} % (fold)
-\label{sec:structure_et_definitions}
+\label{subsec:structure_et_definitions}
 
 Voici ce \`a quoi ressemble la b\^ete :
 	 % Mettre cette photo ici ! http://www.becoz.org/these/memoirehtml/figures/ra-perceptron.png
@@ -253,7 +253,7 @@ par couche cach\'ee. On doit ensuite "entra\^iner" le r\'eseau...
 % subsection structure_et_definitions (end)
 
 \subsection{Formatage des donn\'ees} % (fold)
-\label{sec:formatage_des_donnees}
+\label{subsec:formatage_des_donnees}
 
 Pour que le r\'eseau reconnaisse, dans notre cas, si un caract\`ere est
 telle ou telle lettre, il faut affecter une valeur pr\'ecise à chacun de
@@ -284,7 +284,7 @@ stock\'ees dans un fichier.
 % subsection formatage_des_donnees (end)
 
 \subsection{Choix des param\`etres du r\'eseau} % (fold)
-\label{sec:choix_des_parametres_du_reseau}
+\label{subsec:choix_des_parametres_du_reseau}
 
 Une fois les donn\'ees format\'ees et stock\'ees dans un fichier, il
 faut choisir un certain nombre d'éléments clés du réseau.
@@ -308,10 +308,10 @@ Un certain nombres de param\`etres relatifs \`a l'apprentissage des
 donn\'ees par le r\'eseau doivent \'egalement \^etre fix\'es. Nous en
 ferons une br\`eve description dans la section "Entra\^inement du r\'eseau."
 
-% choix_des_parametres_du_reseau (end)
+% subsection choix_des_parametres_du_reseau (end)
 
 \subsection{Entra\^inement du r\'eseau} % (fold)
-\label{sec:entrainement_du_reseau}
+\label{subsec:entrainement_du_reseau}
 
 Cette partie est tr\`es probablement la plus int\'eressante de
 l'impl\'ementation du perceptron multicouches. C'est en effet ici que
@@ -385,7 +385,55 @@ utilisation, ce qui s'av\`ere \^etre plus qu'indispensable pour un ocr !
 
 
 
-% entrainement_du_reseau (end)
+% subsection entrainement_du_reseau (end)
+
+\subsection{Le banc de tests du perceptron} % (fold)
+\label{subsec:le_banc_de_tests_du_perceptron}
+
+Un petit shell a \'et\'e impl\'ement\'e afin de tester notre perceptron
+au fur et \`a mesure de sa cr\'eation. Il est lanc\'e par d\'efaut lors
+de l'ex\'ecution du programme "network" et propose diverses
+options. 
+%une grosse liste à puce please !
+**Trois fonctions d'affichage sont disponibles : 
+%une tite liste à puce s'il vous plaît !
+*disp_c : affiche l'\'etat des connexions neuronales et leur nombre
+*disp_n : affiche l'\'etat des neurones et leur nombre
+*disp_o : affiche les valeurs du vecteur de sorties (outputs)
+%fin de liste, merci !
+
+**On peut initialiser le r\'eseau avec la fonction init, qui demandera
+successivement de renseigner le nombre de couches cach\'ees d\'esir\'ees
+ainsi que le nombre de neurones par couche cach\'ee.
+
+**La fonction train entra\^ine le r\'eseau (pour l'instant assez mal, il
+faut l'admettre) 
+
+**La fonction active effectue une simple propagation des valeurs
+d'entr\'ee vers celles de sortie
+
+**La fonction run permet (Bertrand) quant \`a elle, de pr\'eciser l'indice de la donn\'ee
+que l'on souhaite tester (donn\'ee pr\'esente dans data.ml ; la donn\'ee
+par d\'efaut est celle correspondant au XOR, il suffit de swaper les
+noms de datatab et datatab2 dans data.ml pour acc\'eder au vecteur de
+donn\'ees de l'afficheur sept segments !)
+
+**Enfin une fonction load et une fonction save sont pr\'esentes pour une
+impl\'ementation future proche !
+
+%fin de grosse liste à puce danke schön !
+
+Ce shell de test sera am\'elior\'e et compl\'et\'e afin de rendre les
+tests de notre r\'eseau rapides et efficaces. Il n'est pas destin\'e \`a
+l'utilisateur final et c'est pourquoi nous avons pris quelques
+libert\'es quant \`a son nombre de ligne de code.
+On pourra bient\^ot pr\'eciser l'ensemble des param\`etres et
+coefficients du r\'eseau via le shell, ce qui nous permettra
+d'identifier clairement les options que nous t\^acherons,
+,\'eventuellement dans une autre vie, de linker \`a une interface graphique
+sp\'ecifique au r\'eseau qui sera enti\`erement param\'etrable et donc
+r\'eutilisable \`a part enti`ere pour d'autres projets.
+%subsection le_banc_de_tests_du_perceptron (end)
 
 % section reseau_de_neurones (end)
 
