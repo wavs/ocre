@@ -39,9 +39,9 @@
 \DeclareGraphicsExtensions{.jpg,.png}
 \pdfcompresslevel=9
 
-\usepackage[pdftex, 					% Param�trage de la navigation
+\usepackage[pdftex, 					% Paramétrage de la navigation
 bookmarks = true, 						% Signets
-bookmarksnumbered = true, 		% Signets num�rot�s
+bookmarksnumbered = true, 		% Signets numérotés
 pdfpagemode = None, 					% None, UseThumbs, UseOutlines, Fullscreen
 pdfstartview = FitH, 					% FitH, FitV, FitR, FitB, FitBH, FitBV, Fit
 pdfpagelayout = OneColumn, 		% SinglePage, OneColumn, TwoColumnLeft, TwoColumnRight
@@ -55,8 +55,8 @@ pdfauthor = {\textsc{Huge Software}\\ Thomas A\"it-Taleb, Dimitri Georgoulis, Pi
 pdftitle = {Rapport de soutenance}, 								% Titre du document
 pdfsubject = {Deuxi\`eme Soutenance}, 							% Sujet
 pdfkeywords = {}, 						% Mots-clefs
-pdfcreator = {}, 							% Logiciel qui a cr�e le document
-pdfproducer = {} 							% Soci�t� avec produit le logiciel
+pdfcreator = {}, 							% Logiciel qui a crée le document
+pdfproducer = {} 							% Société avec produit le logiciel
 plainpages = false}
 \usepackage{pdfpages}
 
@@ -126,17 +126,17 @@ Les GtkTextIter servent \`a se rep\'erer dans le GtkTextBuffer (qui est un buffe
 	Ici, iStart et iEnd sont des pointeurs sur des GtkTextIter (ici le d\'ebut et la fin du buffer, encore une fois, thank you captain obvious!).
 	Il faut ensuite cr\'eer une procedure pour sauvegarder le texte r\'ecup\'er\'e. En C, on utilise le type \verb!FILE! de la biblioth\`eque \verb!stdio.h!. C'est assez simple pour ce qu'on fait ici. On ouvre un fichier puis on \'ecrit dedans, sans oublier une gestion d'erreur (ici pas forc\'ement tr\`es utile, mais il n'est jamais inutile de g\'erer les erreurs\ldots).
 	\begin{lstlisting}
-    /* text est le texte � enregistrer et filename le chemin du fichier */
+    /* text est le texte à enregistrer et filename le chemin du fichier */
   void save_as (char *text, char *filename)
   {
     FILE *fp;
-      /* on ouvre le fichier en mode �criture ("w")*/
+      /* on ouvre le fichier en mode écriture ("w")*/
     fp = fopen(filename, "w");
     if(!fp)
         /* on renvoie un message d'erreur */
       fprintf(stderr, "Can't open file\n");
     else
-        /* on �crit "text" dans le fichier */
+        /* on écrit "text" dans le fichier */
       fprintf(fp, text);
       /* on ferme le fichier */
     fclose(fp);
@@ -159,6 +159,235 @@ Les GtkTextIter servent \`a se rep\'erer dans le GtkTextBuffer (qui est un buffe
 
 	% section ortaugraffe (end)
 % chapter interface_utilisateur (end)
+
+% j'ai utilisé des guillemets de ce type ", si ils ne sont pas valides
+% faudra penser à les corriger =)
+
+\section{Reseau de neurones} % (fold)
+\label{sec:reseau_de_neurones}
+
+\subsection{Introduction} % (fold)
+\label{sec:introduction}
+A l'issue de la premi\`ere soutenance, nos recherches sur les r\'eseaux
+neuronaux nous avaient men\'es vers l'\'elaboration d'un perceptron
+multicouches, celui-ci \'etant reconnu comme la star de la
+reconnaissance de caract\`eres.
+
+Le temps a pass\'e', \'ecrivait G\'erard de Narval, pensant \`a sa jeunesse
+et toutes ces belles ann\'ees d\'esormais r\'evolues... En ce qui
+concerne le r\'eseau de neurones, le temps a \'egalement pass\'e et
+notre perceptron multicouches commence \`a prendre de l'allure. Sa
+jeunesse n'\'etant pas encore r\'evolue, grand bien lui fasse, il a
+encore beaucoup \`a apprendre... Alors
+certes il ne reconna\^it pas encore grand chose, mais une premi\`ere
+\'ebauche de sa structure est pr\^ete et les premiers tests ont \'et\'e
+effectu\'es sur les donn\'ees d'un XOR et celles d'un afficheur sept
+segments. La phase d'apprentissage reste \`a mettre au point car la
+version actuelle ne donne pas les r\'esultats attendus. Mais ne parlons
+pas de malheur, et rentrons d\`es \`a pr\'esent dans le vif du sujet : what about
+multi-layer perceptron ?! 
+
+Nous d\'ecrirons ici le perceptron tel que nous l'avons abord\'e, c'est \`a
+dire \`a un stade encore exp\'erimental. Pour motiver sa conception,
+nous nous sommes plac\'es dans le cas o\`u notre r\'eseau devra
+reconna\^itre les caract\`eres provenant d'un afficheur sept
+segments. En effet, les donn\'ees d'un tel alphabet sont assez simples
+\`a formater sans pour autant atteindre le niveau de simplicit\'e d'une
+fonction logique de base comme le OR ou l\'eg\`erement plus avanc\'ee
+comme le XOR
+
+% subsection introduction (end)
+
+\subsection{Structure et d\'efinitions} % (fold)
+\label{sec:structure_et_definitions}
+
+Voici ce \`a quoi ressemble la b\^ete :
+	 % Mettre cette photo ici ! http://www.becoz.org/these/memoirehtml/figures/ra-perceptron.png
+         % avec la légende suivante : Perceptron \`a une couche cach\'ee
+
+%pour ce paragraphe j'aimerais une liste à puce à la place de mes étoiles
+%=)
+Un perceptron est un ensemble de neurones reli\'es par des connexions
+pond\'er\'ees. Ce n'est rien d'autre qu'un graphe non-orient\'e valu\'e
+en somme, du moins en apparence. On y rep\`ere trois ensembles
+particuliers de neurones que sont : 
+%debut de liste à puce
+*la couche d'entr\'ee : elle poss\`ede un certain nombre de neurones qui
+correspondent \`aux entr\'ees du r\'eseau. La mod\'elisation et le
+formatage des donn\'ees d'entr\'ee sont donc primordiaux si l'on veut
+\'eviter d'avoir un trop grand nombre de neurones, ce qui augmenterait
+le temps de la reconnaissance par la suite.
+
+*la ou les couches cach\'ee(s) : ce sont ces neurones qui permettront de
+reconna\^itre des donn\'ees. Le nombre de couches cach\'ees et de
+neurones par couche est \`a adapter selon le probl\`eme et en
+particulier selon la taille de l'\'echantillon de donn\'ees que l'on veut
+apprendre au r\'eseau.
+
+*la couche de sortie : ce sont ces neurones qui contiendront le
+r\'esultat de la reconnaissance. Il y en a, a priori, autant que
+d'\'elements \`a reconna\^itre, mais une seule sortie ensuite filtr\'ee
+par une table de hachage,par exemple, reste envisageable.
+%fin de liste a puce
+
+% Mettre cette photo ici !
+% http://www.grappa.univ-lille3.fr/polys/fouille/sortie008.gif
+% avec la légende suivante : Perceptron \`a une sortie
+
+La valeur d'un neurone est calcul\'ee \`a partir des valeurs de chacun
+des neurones de la couche pr\'ec\'edente.
+
+Les neurones artificiels ainsi \'evoqu\'es sont en fait tr\`es proches
+des neurones naturels au niveau de leur fonctionnement. C'est entre
+autres l'id\'ee d'int\'eractions avec une multitude d'autres neurones
+qui permet au r\'eseau de se constituer une "m\'emoire intelligente",
+apte \`a classifier ou reconnaĩtre des donn\'ees qu'il n'a encore
+"jamais" rencontr\'ees auparavant (du moins pas exactement sous la
+même forme) !
+
+Avant de pouvoir utiliser un perceptron multicouches, il faut avant tout se mettre d'accord sur le
+format de donn\'ees qu'il prendra en entr\'ee, puis effectuer un choix
+judicieux de son nombre de couches cach\'ees et de son nombre de neurones
+par couche cach\'ee. On doit ensuite "entra\^iner" le r\'eseau...
+
+% subsection structure_et_definitions (end)
+
+\subsection{Formatage des donn\'ees} % (fold)
+\label{sec:formatage_des_donnees}
+
+Pour que le r\'eseau reconnaisse, dans notre cas, si un caract\`ere est
+telle ou telle lettre, il faut affecter une valeur pr\'ecise à chacun de
+ses neurones d'entr\'e.
+Parmi les id\'ees qui nous sont venues, il y a l'extraction de
+caract\'eristiques des caract\`eres que l'on a isol\'e \`a partir du document
+scann\'e. Ainsi l'on pourrait envisager de vectoriser chaque caract\`ere
+afin d'en extraire des segments caract\'eristiques que l'on donnerait en
+entr\'ee au r\'eseau. On pourrait aussi imaginer effectuer une premi\`ere
+classification par crit\`ere de largeur, puis de hauteur, etc, en utilisant
+plusieurs r\'eseaux en s\'erie par exemple, jusqu'\`a d\'etermination totale du
+caract\`ere.
+
+La m\'ethode que nous avons retenue \`a ce jour est n\'eanmoins bien
+plus simpliste, et pas n\'ecessairement moins efficace : notre
+perceptron recevra directement la matrice de pixels associ\'ee au
+caract\`ere \`a reconna\^itre, apr\`es calibrage et centrage de chaque
+caract\`ere dans une matrice de taille fixe.
+Chaque neurone d'entr\'ee du r\'eseau recevra donc l'un des pixels de la
+matrice de caract\`ere (d'o\`u la n\'ecessit\'e de r\'eduire au maximum
+la taille et l'\'epaisseur de nos caract\`eres, afin de ne pas
+d\'epasser la centaine de neurones d'entr\'ee).
+Les donn\'ees d'apprentissage seront quant \`a elles pr\'esent\'ees sous
+forme de couples de vecteurs d'entr\'ees/sorties au r\'eseau et
+stock\'ees dans un fichier.
+
+
+% subsection formatage_des_donnees (end)
+
+\subsection{Choix des param\`etres du r\'eseau} % (fold)
+\label{sec:choix_des_parametres_du_reseau}
+
+Une fois les donn\'ees format\'ees et stock\'ees dans un fichier, il
+faut choisir un certain nombre d'éléments clés du réseau.
+
+Nous avons donc choisi d'affecter chaque pixel de la matrice du
+caract\`ere \`a reconna\^itre \`a un neurone d'entr\'ee.
+
+Dans le mod\`ele retenu actuellement, nous pr\'evoyons aussi d'affecter
+un neurone de sortie par caract\`ere \`a reconna\^itre. Le caract\`ere
+reconnu sera celui dont la valeur sera \`a un alors que les autres seront
+rest\'es \`a z\'ero.
+
+Pour ce qui est des couches cach\'ees, il est recommand\'e dans le cas
+de la reconnaissance de caract\`eres d'en prendre entre une et deux, et
+de choisir un nombre de neurones par couche du m\^eme ordre de grandeur
+que le nombre de neurones de la couche de sortie. Mais nous essayerons
+plusieurs configurations jusqu'\`a obtenir des r\'esultats
+performants.
+
+Un certain nombres de param\`etres relatifs \`a l'apprentissage des
+donn\'ees par le r\'eseau doivent \'egalement \^etre fix\'es. Nous en
+ferons une br\`eve description dans la section "Entra\^inement du r\'eseau."
+
+% choix_des_parametres_du_reseau (end)
+
+\subsection{Entra\^inement du r\'eseau} % (fold)
+\label{sec:entrainement_du_reseau}
+
+Cette partie est tr\`es probablement la plus int\'eressante de
+l'impl\'ementation du perceptron multicouches. C'est en effet ici que
+l'on doit mettre en oeuvre le fonctionnement du r\'eseau \`a proprement
+parler. Nous l'abordons ici succintement, car il est écrit que l'on doit
+se revoir une prochaine fois, et garder le meilleur pour la fin est,
+après tout, une bonne règle de vie. 
+
+Son principe est le suivant :
+
+Dans un premier temps, on affecte des petites valeurs \`a tous les poids
+des connexions neuronales (entre 0,5 et -0,5 dans notre cas).
+
+Ensuite, pour un nombre d'it\'erations donn\'e par exemple, ou bien tant
+que l'erreur totale du vecteur de sorties est supérieure à un seuil fixé, on effectue
+les \'etapes suivantes :
+
+On permute l'ordre des donn\'ees que l'on pr\'esente au r\'eseau, ceci
+d'uniformiser l'apprentissage, de sorte \`a ce qu'il n'apprenne pas \`a reconna\^itre toujours la m\^eme
+s\'equence de donn\'ees.
+
+On fournit ensuite un couple d'entr\'ees/sorties d\'esir\'ees au
+r\'eseau.
+
+Il faut maintenant propager vers l'avant les valeurs des neurones
+d'entr\'ee, de sorte \`a obtenir les valeurs de sortie.
+
+Pour cela on utilise une fonction de combinaison, ici une somme
+pond\'er\'ee sum, dans notre cas
+d\'efinie comme, pour chaque neurone ni, la somme des produits des valeurs
+des neurones nj qui pointent sur lui par les poids des connexions pij qui les
+lient au neurone courant :
+
+sum(ni) = somme sur j (pij(ni,nj)* valeur(nj))
+% une formule en LaTeX serait plus jolie ici
+
+%mettre ici la photot neuron.jpg que je t'ai envoyée
+%avec comme légende : calcul de la valeur d'un neurone
+
+Cette valeur est ensuite pass\'ee en param\`etre d'une fonction
+d'activation propre au perceptron, ici la fonction sigmo\¨ide f avec :  
+
+f(sum(ni)) = 1/(1+exp(-sum(ni))) 
+% une formule en LaTeX serait plus jolie ici
+
+On obtient ainsi une valeur exp\'erimentale pour chaque neurone de
+sortie que l'on va pouvoir confronter \`a la valeur th\'eorique fournie
+initialement.
+
+On calcule donc l'erreur e observ\'ee pour chaque neurone de sortie ni avec :
+
+e(ni) = (valeur théorique(ni) - valeur observée(ni))*(f'(sum(ni)))
+% une formule en LaTeX serait plus jolie ici
+
+On propage ensuite l'erreur vers les couches intérieures 
+
+Puis on modifie les poids de toutes les connexions du réseau.
+
+Ces deux derniers points s'effectuent au moyen de l'algorithme de
+r\'etropropagation du gradient, dont la structure est en fait
+mod\'elis\'ee ici. Cet algorithme et ses optimisations feront l'objet
+d'une explication soigneuse lors de la soutenance finale.
+
+
+Enfin, Il est pr\'evu pour la suite de mettre au point un syst\`eme de
+sauvegarde/charge des poids finaux des connexions afin de pouvoir
+sauvegarder les valeurs du r\'eseau entra\^iné et les charger
+directement une prochaine fois pour pouvoir utiliser ce dernier
+imm\'ediatement sans avoir besoin d'effectuer l'apprentissage \`a chaque
+utilisation, ce qui s'av\`ere \^etre plus qu'indispensable pour un ocr !
+
+
+
+% entrainement_du_reseau (end)
+
+% section reseau_de_neurones (end)
 
 
 \end{document}
