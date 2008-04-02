@@ -1,7 +1,7 @@
 %%debut chapitre sur le programme ocred
 \chapter{ OCRed qu'est-ce que c'est ? }
  OCRed est n\'e des mots Ocre et digital, qui rappellons le encore une fois
- signifie ``Optical Character Recognition enhanced'' pour l'un et
+ signifient ``Optical Character Recognition enhanced'' pour l'un et
  num\'erique pour l'autre. La partie du projet portant sur le
  pr\'etraitement de l'image devant \^etre faite en ocaml, OCRed est
  totalement r\'ealis\'e dans ce langage.
@@ -10,75 +10,75 @@
  La cr\'eation du logiciel de traitement de l'image nous a men\'e, au
  d\'ebut du projet \'a vouloir visualiser directement, c'est \'a dire
  sans logiciel tiers, l'action de notre travail.
- La visualisation des images trait\'ees permet notre ind\'ependances
+ La visualisation des images trait\'ees permet notre ind\'ependance
  au niveau de l'utilisation du logiciel, ce qui est un confort certain.
- La fenetre est r\'eali\'ee avec OcamlSDL, tout comme le pr\'etraitement
+ La fen\^etre est r\'ealis\'ee avec OcamlSDL, tout comme le pr\'etraitement
  de l'image.
 %% mettre image de la fenetre sdl
 %% visualisation.jpg
 
-\section{ Utilisation de l'executable }
- L'executable en ligne de commande admet un certain nombre d'arguments,
- certain ne pouvant evidemment donner lieu \'a un quelconque r\'esultat
+\section{ Utilisation de l'\'executable }
+ L'ex\'ecutable en ligne de commande admet un certain nombre d'arguments,
+ certains ne pouvant \'evidemment donner lieu \`a un quelconque r\'esultat
  sans la sp\'ecification d'une image d'entr\'ee.
 \subsection{ Sp\'ecifier une image d'entr\'ee }
  Il est plus logique, pour un logiciel de traitement d'image, d'avoir
- une image \'a traiter. Vous devez pour cela utilisez l'argument ``-i''
+ une image \`a traiter. Vous devez pour cela utiliser l'argument ``-i''
  suivi du chemin d'une image de type jpeg,bmp,png au moins.
 \subsection{ Sp\'ecifier une image de sortie }
- Vous n'\'etes pas oblig\'e de pr\'eciser le chemin de l'image de sorties
- mais cela permet une certaine flexibilit\'ee. Dans le cas o\'u vous
+ Vous n'\^etes pas oblig\'e de pr\'eciser le chemin de l'image de sortie
+ mais cela permet une certaine flexibilit\'e. Dans le cas o\`u vous
  n'indiquez pas la sortie, OCRed se debrouille pour sortir une image
  avec un nom assez \'evident, d\'ependant du traitement. Par exemple
- rotatation.bmp ou encore tresholded.bmp, les images se trouveront l\'a
- o\'u vous avez execut\'e votre programme. Pour specifier un chemin de
- sortie veuillez utiliser l'argument ``-o'' suivi du chemin d'une image
+ rotatation.bmp ou encore tresholded.bmp, les images se trouveront l\`a
+ o\`u vous avez ex\'ecut\'e votre programme. Pour sp\'ecifier un chemin de
+ sortie, veuillez utiliser l'argument ``-o'' suivi du chemin d'une image
 de type jpeg,bmp,png au moins.
-\subsection{ La visualisation de l'imaage }
- Gr\'ace \'a OcamlSDL, nous pouvons visualiser notre image, il faut pour
- cela specifier une image d'entr\'ee, et passer l'argument ``-d'' en
- parametre. Les d\'esavantage de l'utilisation de cette interface sont
- assez subtiles, par exemple vous ne pouvez ni zoomer ni dezoomer, ni
- vous deplacer sur l'image. Toutefois il y'a des avantages, vous pouvez
- visualiser directement les modifications appliqu\'ees \'a votre
+\subsection{ La visualisation de l'image }
+ Gr\^ace \`a OcamlSDL, nous pouvons visualiser notre image, il faut pour
+ cela sp\'ecifier une image d'entr\'ee, et passer l'argument ``-d'' en
+ param\`etre. Les d\'esavantages de l'utilisation de cette interface sont
+ assez subtils, par exemple vous ne pouvez ni zoomer ni d\'ezoomer, ni
+ vous d\'eplacer sur l'image. Toutefois il y'a (aussi) des avantages, vous pouvez
+ visualiser directement les modifications appliqu\'ees \`a votre
  image. En appuyant sur F2 vous faites tourner l'image de l'angle que
- vous avez passer en param\'etre --voir plus loin--. En appuyant sur F3
+ vous avez pass\'e en param\`etre --voir plus loin--. En appuyant sur F3
  vous appliquez le seuil, que vous pouvez sp\'ecifier en ligne de
  commande. En appuyant sur F4, vous appliquez le filtre m\'edian. Nous
- tenons \'a vous rappeller que le seuil ne marche que sur les couleurs.
- Pour quitter il suffit d'appuyer sur F1, la petit croix en haut \'a
+ tenons \`a vous rappeler que le seuil ne marche que sur les couleurs.
+ Pour quitter il suffit d'appuyer sur F1, la petite croix en haut \`a
  droite ne marche pas.
 \subsection{ Le seuil }
  Permet le passage d'une image en noir et blanc, pour avoir un minimum
- de pertes d'informations vous devez specifiez un seuil viable. Par
- d\'efaut le seuil et \'a 200, ce qui est suffisant pour un contraste
+ de pertes d'informations vous devez sp\'ecifier un seuil viable. Par
+ d\'efaut le seuil est \`a 200, ce qui est suffisant pour un contraste
  normal de l'image. Vous devrez l'augmenter si il est trop faible et le
  baisser dans le cas contraire. Passer l'argument ``-s'' en
- parametre si vous voulez changez la valeur par d\'efaut. Pour
- l'anecdote ``-s'' viendrez de seuil, mais nous n'en sommes pas vraiment
- sur.
+ param\`etre si vous voulez changer la valeur par d\'efaut. Pour
+ l'anecdote ``-s'' viendrait de seuil, mais nous n'en sommes pas vraiment
+ s\^urs.
 \subsection{ Rotation }
- Vous pouvez passez un angle en pr\'ecision r\'eel, ou enti\'ere. Pour
+ Vous pouvez passer un angle en pr\'ecision r\'eelle, ou enti\`ere. Pour
  cela passez respectivement l'angle avec l'argument ``-af'' et ``-a''.
- Rappelons que l'angle passez en parametres et en degr\'e et non en
- radian. Vous pouvez aussi tourner l'image de 90 degr\'e dans le sens
- direct ou indirect, gr\'ace \'a l'option ``-right'' et ``-left''.
+ Rappelons que l'angle pass\'e en param\`etre est en degr\'es et non en
+ radian. Vous pouvez aussi tourner l'image de 90 degr\'es dans le sens
+ direct ou indirect, gr\^ace aux options ``-right'' et ``-left''.
 \subsection{ Redimensionnement }
  Le redimensionnement peut s'effectuer en pourcentage de l'image avec
- l'option ``--resizepercent'' qui prend en param\'etre un pourcentage
+ l'option ``--resizepercent'' qui prend en param\`etre un pourcentage
  entier. L'on peut aussi redimensionner l'image en valeur absolue
- --c'est \'a dire en sp\'ecifiant des valeurs de hauteurs et de largeurs
- arbitraire--. Alexandre Testu avait besoin d'un petit redimensionnement
+ --c'est \`a dire en sp\'ecifiant des valeurs de hauteur et de largeur
+ arbitraires--. Alexandre Testu avait besoin d'un petit redimensionnement
  rien que pour lui, c'est pour cela que l'option ``--resize-auto''
  existe.
-\subsection{ detection d'angle}
+\subsection{ D\'etection d'angle}
  Il existe un argument magique ``-dev'' qui a juste besoin d'avoir une
- image qui n'est pas bien droite en param\'etre. Il retourne directement
+ image qui n'est pas bien droite en param\`etre. Il retourne directement
  l'image dans le bon sens, et en noir et blanc.
 \subsection{ Help me if you can! }
  L'option ``-help'' est aussi pr\'esente afin d'accompagner
  l'utilisateur dans sa d\'ecouverte du programme. Pour tout autre
- informations, il se peut que vous puissiez trouver des informations
+ interrogation, il se peut que vous puissiez trouver des informations
  plus ou moins utiles dans les sources du projet, au niveau du fichier
  README.
 %%fin chapitre sur le programme ocred
@@ -86,48 +86,49 @@ de type jpeg,bmp,png au moins.
 
 %%debut chapitre detection de l'angle
 \chapter{ La d\'etection de l'angle }
- La d\'etection de l'angle \'etait \'a faire pour la prem\'ere
- soutenance, malheureusement par un manque de temps certain elle ne fut
- pas pr\'ete \'a temps. Nous arrivons \'a la deuxi\'eme soutenance avec
- deux types de d\'etection de l'angle de rotation du texte d'ume image.
- Ce qui a pour but de redresser l'image, afin d'avoir une segmentation
- \'a peur pr\'es correct.
+ La d\'etection de l'angle \'etait \`a faire pour la premi\`ere
+ soutenance, malheureusement par un manque de temps certain elle ne f\^ut
+ pas pr\^ete \`a temps. Nous arrivons \`a la deuxi\`eme soutenance avec
+ deux types de d\'etection de l'angle de rotation du texte d'une image,
+ ce qui a pour but de redresser l'image, afin d'avoir une segmentation
+ \`a peu pr\`es correcte.
 
 \section{ Des principes assez diff\'erents}
  La d\'etection de l'angle de rotation d'un texte dans une image est un
- probl\'eme assez complexe. En effet une image contenant du texte n'est
- pas compos\'e de composante continues, il est donc plus difficile d'isoler
- les caract\'eristiques des \'el\`ements. Deux principes majeur nous
- sont apparu. Tout d'abord l'on \'etudie les caract\'eristiques d'une
- image pour chaque angle, l'on isole ensuite le bon angle, ce
- processus est long, d'autre part il est encore assez impr\'ecis.
- L'autre principe \'etait de d\'etecter la pente d'une ligne de caract\`ere.
+ probl\`eme assez complexe. En effet une image contenant du texte n'est
+ pas compos\'ee de composantes continues, il est donc plus difficile d'isoler
+ les caract\'eristiques des \'el\'ements. Deux principes majeurs nous
+ sont apparus. Tout d'abord l'on \'etudie les caract\'eristiques d'une
+ image pour chaque angle, on isole ensuite le bon angle ; ce
+ processus est long et d'autre part encore assez impr\'ecis.
+ L'autre principe \'etait de d\'etecter la pente d'une ligne de caract\`eres.
 \subsection{ La multiple rotation }
  Dans cet algorithme, l'on reduit la taille de l'image pour gagner en
- temps d'execution, le redimensionnement est calcul\'e en fonction de la
- taille d'origine de l'image, on suppose avoir du format A4 \'a chaque
+ temps d'ex\'ecution, le redimensionnement est calcul\'e en fonction de la
+ taille d'origine de l'image, on suppose avoir du format A4 \`a chaque
  fois.
 
- Comme vous pouvez le voir sur ces images il est \'evident qu'il y'a une
- net diff\'erence entre des images avec un texte mal orient\'e. Ces
- images repr\'esente la projection horizontale des pixels noirs d'une image.
+ Comme vous pouvez le voir sur ces images, il est \'evident qu'il y'a une
+ nette diff\'erence entre des images avec un texte mal orient\'e. Ces
+ images repr\'esentent la projection horizontale des pixels noirs d'une image.
 %% histogramme5degree.jpg
-%% sur cette image l'on peut voir un histogramme d'une image avec un
- %% texte ayant subit une rotation de 5 degr\'e
+%% sur cette image on peut voir un histogramme d'une image avec un
+ %% texte ayant subi une rotation de 5 degr\'es
 
 
 %% rotation1deghisto.jpg
-%% sur cette image l'on peut voir un histogramme d'une image avec un
- %% texte ayant subit une rotation de 1 degr\'e
+%% sur cette image on peut voir un histogramme d'une image avec un
+ %% texte ayant subi une rotation de 1 degr\'e
 
 
 %% histogramme_bon.jpg
-%% sur cette image l'on peut voir un histogramme d'une image avec un
-%% texte n'ayant pas subit de rotation.
+%% sur cette image on peut voir un histogramme d'une image avec un
+%% texte n'ayant pas subi de rotation.
 
 \subsection{ Detection de la pente }
-On detecte la pente d'une ligne de texte, pour cela l'on parcour l'imagepour
-chaque ligne de pixels jusqu'a ce que l'on tombe sur un pixel noir.
+On d\'etecte la pente d'une ligne de texte ; pour cela on parcourt
+l'image pour chaque ligne de pixels jusqu'\`a ce que l'on tombe sur un
+pixel noir.
 % mettre l'image histo_pente.jpg
 
 \section{ Optimisations des algorithmes }
@@ -135,11 +136,11 @@ chaque ligne de pixels jusqu'a ce que l'on tombe sur un pixel noir.
 
 %% reduceimage20percent75dpit.jpg
 
-\subsection{ Quels limites et comment les surpasser ? }
+\subsection{ Quelless limites et comment les surpasser ? }
 
 
 %% chapter other problemes
-\chapter{ Probl\'emes li\'ees au traitement de l'image }
+\chapter{ Probl\`emes li\'es au traitement de l'image }
 \section{ Rotation de l'image}
 \section{ Filtres diminuant la perte d'information}
 
