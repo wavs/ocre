@@ -13,7 +13,7 @@ object (self)
     print_int(treshold);
     print_newline()
 
-  val mutable eta = 0.1
+  val mutable eta = 10.
     (*avec 0 <= eta <= 1 le coef d'apprentissage*)
   method get_eta() = eta
   method set_eta eta0 = eta <- eta0
@@ -358,7 +358,7 @@ val mutable nb_n_by_l = 8
           self#activation(); 
           (*on calcule l'erreur des couches de sortie*)
           self#update_v_obs_out();
-          for x = 1 to Array.length neurons - 1 do
+          for x = 0 to Array.length neurons - 1 do
             let neuron = neurons.(i) in
             let t = ref 0 in
               if neuron#get_layer() = nb_layers then
@@ -394,10 +394,10 @@ val mutable nb_n_by_l = 8
                 
                     done
                 end;
-
-
-          (*ajuster les poids*)
-              self#adjust_weights()
+              (*mise a jour des poids*)
+              for s = 0 to Array.length connections do
+                connections.(s)#set_weight (eta *. connection.(s)#get_v1())
+              done;
           done
       done
     done;
