@@ -49,7 +49,7 @@ object (self)
     print_float(weight_sum);
     print_newline()
 
-  val mutable beta = 0.7
+  val mutable beta = 5.
     (*para de la fct d'activ ; prendre 0,5, 1 ou 5 par ex*)
   method get_beta() = beta;
   method set_beta beta0 = beta <- beta0;
