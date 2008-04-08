@@ -25,3 +25,4 @@ val projection_h        : (int32, Bigarray.int32_elt,
 val print_tabh          : unit -> unit
 val histo_to_file       : string -> unit
 val discover_angle      : Sdlvideo.surface -> float
+val temp_check_hollow   : unit -> unit

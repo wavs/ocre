@@ -16,14 +16,15 @@ exception Quit_input
 
 let dev () =
  try
-   Detection.detect_angle ();
-   if (!Path.output <> "") then
-     begin
-       Sdlvideo.save_BMP !Surface.image !Path.output;
-       Detection.histo_to_file (!Path.output^".csv");
-     end
-   else
-     Sdlvideo.save_BMP !Surface.image "../projection.bmp"
+   Interpolation.temp_check_hollow ();
+(*    Detection.detect_angle (); *)
+(*    if (!Path.output <> "") then *)
+(*      begin *)
+(*        Sdlvideo.save_BMP !Surface.image !Path.output; *)
+(*        Detection.histo_to_file (!Path.output^".csv"); *)
+(*      end *)
+(*    else *)
+(*      Sdlvideo.save_BMP !Surface.image "../projection.bmp" *)
  with
    | Sdlvideo.Video_exn s -> print_endline
        (s^ "--> you may have forgotten an option"^

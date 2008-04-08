@@ -115,8 +115,10 @@ try
       end
     done;
 with
-  | Projection_error -> print_string ("Maybe we have a wrong table")
+  | Not_found -> print_string ("Maybe we have a wrong table")
 
+
+(* function wich search for a mount*)
 let asom i tab monte descendre count =
   let gett i   = Bigarray.Array1.get tab i in
   let dim x     = Bigarray.Array1.dim x in
@@ -145,6 +147,7 @@ let asom i tab monte descendre count =
     end
   done
 
+(* function wich count the number of mount on the projtable*)
 let sommet_of_h tab =
   let i         = ref 0 in
   let count     = ref 0 in
@@ -294,6 +297,67 @@ let resize_for_disco surf =
     resize_percent_unit surf perc
 
 
+(*function which for 60 angle send to ouputfile.csv a projection of the
+  image rotated *)
+let temp_checkangle () =
+  Seuil.seuillage !Surface.image;
+  resize_for_disco !Surface.image;
+  let angle = ref ~-.15. in
+    while (!angle <> 15.5) do
+      begin
+        Surface.rotated :=
+          Rotation.optimized3
+            !Surface.reduce
+            !angle;
+        projection_h !Surface.rotated;
+        let surf = Transforme.matrix_to_surf !Surface.rotated in
+          Sdlvideo.save_BMP
+            surf
+            (!Path.output^sof(!angle)^".bmp");
+          histo_to_file (!Path.output^sof(!angle)^".csv");
+          angle := !angle +. 0.5;
+      end
+    done
+
+(* function which search for a mount*)
+let count_hollow tab count =
+  let gett i    = Bigarray.Array1.get tab i in
+  let dim x     = Bigarray.Array1.dim x in
+  let i         = ref 0 in
+  let i3        = Int32.of_int(3) in
+    while (!i < (dim tab)) do
+      begin
+        if ((gett !i) > i3) then
+          i := !i + 1
+        else
+          begin
+            count := !count + 1;
+            i := !i + 1;
+          end
+      end
+    done
+
+(*function which print_out numbers of hollow for each angles*)
+let temp_check_hollow () =
+  Seuil.seuillage !Surface.image;
+  resize_for_disco !Surface.image;
+  let count = ref 0 in
+  let angle = ref 1.45 in
+    while (!angle < 1.7) do
+      begin
+        Surface.rotated :=
+          Rotation.optimized3
+            !Surface.reduce
+            !angle;
+        projection_h !Surface.rotated;
+        count_hollow !proj_h_table count;
+        print_string(soi(!count)^" is the hollow for an angle of "^sof(!angle)^"\n");
+        count := 0;
+        angle := !angle +. 0.01;
+      end
+    done
+
+(* huge function  for dichotomie in search of the angle*)
 let fundroite current_sommet next_sommet angle bool prev_angle=
   let pas             = ref ~-.0.1       in
   let prev_sommet     = ref 0           in
