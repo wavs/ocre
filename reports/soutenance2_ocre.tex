@@ -2,6 +2,7 @@
 
 \documentclass[a4paper,10pt]{report}
 \usepackage[french]{babel}
+\usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{listings}
 
@@ -14,7 +15,7 @@
 \usepackage{lastpage}
 \usepackage{a4wide}
 \usepackage[french]{minitoc}
-\usepackage[hmargin=1cm,vmargin=2cm]{geometry}
+\usepackage[hmargin=3.5cm,vmargin=2cm]{geometry}
 
 %---SORTIES--------------------------------------------------------------------
 
@@ -36,7 +37,7 @@
 \ifpdf
 \usepackage[pdftex]{graphicx, color}
 \graphicspath{{images/}}
-\DeclareGraphicsExtensions{.jpg,.png}
+\DeclareGraphicsExtensions{.jpg,.png,.gif}
 \pdfcompresslevel=9
 
 \usepackage[pdftex, 					% Paramétrage de la navigation
@@ -95,6 +96,8 @@ plainpages = false}
 
 %---DEBUT-DU-DOCUMENT----------------------------------------------------------
 
+
+
 \begin{document}
 \lstset{language=C}
 \dominitoc
@@ -105,9 +108,530 @@ plainpages = false}
 \chapter{Introduction} % (fold)
 \label{cha:introduction}
 
+Ce rapport pr\'esente l'avancement du projet OCRe durant les six semaines qui ont suivies la premi\`re soutenance. Nous avons beaucoup de nouveaut\'es \`a vous montrer, du r\'eseau de neurones \`a l'interface graphique, sans oublier le pr\'etraitement de l'image ou encore la segmentation. M\^eme le site Web a eu sa dose de changements. Nous avons essay\'e de distribuer le travail de fa\c con \'egale entre les 4 membres du groupe. Il faut pourtant garder \`a l'esprit que nous avons tous \`a un moment ou \`a un autre aid\'e un autre membre, parce qu'apr\`es tout c'est l\`a tout l'int\'er\^et de travailler en groupe!
+
+Dimitri s'est consacr\'e au r\'eseau de neurones, tandis que Pierre a continu\'e son travail d\'ebut\'e lors de la premi\`ere soutenance sur le pr\'etraitement de l'image. Thomas, lui s'est occup\'e de la segmentation et Alexandre est toujours charg\'e de l'interface graphique et du site Web.
 
 
 % chapter introduction (end)
+
+\chapter{Analyse et extraction}
+\label{cha:analyse_et_extraction}
+Lors de la première soutenance, nous vous avions présenté un algorithme
+de détection des lignes. Celui-ci avait pour but d'extraire les lignes
+de caractères d'àprès une image parfaite, à savoir une image prétraitée.
+
+Malgré un fonctionnement correct sur des images simples, cette
+algorithme ne prenait pas en compte les lettrines, ni les colonnes de
+texte par exemple. En effet utilisant la méthode des projections
+horizontales, après analyse de l'histogramme obtenu, on pouvait
+distinguer convenablement les pics représentant les lignes ainsi que les
+creux pour les interlignes. Cependant, cette histogramme ne nous
+fournissait aucune information significative en ce qui concerne les
+lettrines et les colonnes multiples.
+
+Notre idée de départ pour cette soutenance était d'étendre cette méthode
+en projetant verticalement pour chaque ligne extraite afin d'obtenir
+chacun des caractères. Cependant, nous nous sommes rendus compte que
+débuter par une détection des blocs serait une meilleure solution pour
+pouvoir envisager par la suite une détection efficace des lignes et des
+caractères. C'est pourquoi l'algorithme a été totallement remanié pour
+constituer ainsi une approche montante de l'extraction des éléments.
+
+\section{Principe}
+L'algorithme développé pour cette soutenance est basé sur le principe de
+la segmentation par régions (region-based segmentation). 
+Il consiste à regrouper des pixels semblables dans le but de créer des
+zones homogènes: les régions. Pour ce type de
+segmentation, on distingue deux principes: la décomposition/fusion
+(split/merge) et la croissance de régions (growing-region). Nous avons
+choisi la méthode de croissance de régions qui nous paraissait plus
+adaptée au type d'images à traiter. Elle se décompose en deux étapes
+principales:
+
+  \begin{enumerate}
+    \item Trouver les points de départ de nos régions.
+    \item Faire grossir nos régions par agglomération des pixels
+    voisins.
+  \end{enumerate}
+
+Le principe général est de trouver l'ensemble des blocs de pixels noirs
+contigus, que nous appelerons par la suite composantes connexes, et de
+les regrouper ensuite en blocs, représentant alors les
+lignes et les paragraphes. \\
+Notre algorithme se basera essentiellement sur les deux types d'éléments
+principaux que sont les composantes connexes (nos points de départ) et
+les blocs (nos régions). Ces deux types sont représentés par des
+structures définies comme ceci:
+
+\begin{lstlisting}
+struct s_cc_elt
+{
+ int id;
+ int nbpix;
+ struct s_cc_coordinate coord;
+ short int chr; /* if >0 then cc is a character */
+ struct s_cc_elt *next;
+};
+
+struct s_block_elt
+{
+ int id;
+ struct s_cc_list *cclist;
+ int nbcc;
+ int posx; /* Upper left hand corner x coordinate */
+ int posy; /* Upper left hand corner y coordinate */
+ int height;
+ int width;
+ int type; /* UNKNOW (0), TEXT (1), IMAGE (2) */
+};
+\end{lstlisting}
+
+Notre structure \verb!s_cc_elt! représente une composante connexe ainsi que
+ses caractéristiques telles que sa position dans l'image, le nombre de
+pixels qu'elle contient, son identifiant, un indicateur pour savoir si
+nous avons à faire à un caractère et bien entendu un lien vers l'élément
+suivant. En effet, notre algorithme utilise des listes chainées pour
+représenter l'ensemble des composantes connexes ainsi que celui des
+blocs.
+La structure \verb!s_block_elt! représente comme son nom l'indique les blocs et
+ses caractéristiques qui sont constituées de son identifiant, le nombre
+de composantes connexes englobées dans le bloc, les données permettant
+de le situer spatialement dans la matrice binaire (représentant
+l'image) et son type.
+
+Afin de mieux organiser notre code, sa compréhension et son débuggage,
+noua avons décomposé le problème de la segmentation en plusieurs
+sous-problèmes. Ceci nous a donc amené à faire de même avec l'algorithme
+que nous avons préalablement découpé en plusieurs fonctions.
+
+\subsection{Détection des composantes connexes}
+Premièrement, notre fonction principale prend en paramètre une matrice
+binaire,représentant les pixels noirs et blancs d'une image prétraitée, et
+renvoie une liste de composantes connexes. Voici son prototype:
+
+\begin{lstlisting}
+t_cc_list *findCC(t_matrix *matrix);
+\end{lstlisting}
+
+Elle consiste à réaliser tout d'abord une matrice de marque afin
+d'éviter de parcourir plusieurs fois un pixel, puis elle parcoure notre
+matrice binaire à la recherche des pixels noirs (à savoir ici des 1).
+Dès qu'elle en a trouvé un, elle fait appel à la fonction de création de
+composante connexe dont voici le prototype simplifié:
+
+\begin{lstlisting}
+t_cc_list *makeCC(int cc_count,
+                  t_matrix *matrix,
+                  char **mark,
+                  t_cc_list *cc_list);
+\end{lstlisting}
+
+Cette fonction permet comme indiqué de créer un élément composante
+connexe. Elle prend en paramètre le numéro de la nouvelle composante
+connexe, la matrice binaire, la matrice de marque. Le paramètre \verb!cc_list!
+est un paramètre résultat dans lequel on mettra à jour la liste des
+composante connexe. Cette fonction crée donc une composante connexe avec
+ses caractéristiques et met à jour la liste. Entre temps, elle fait
+appel à la fonction permettant de parcourir les pixels noirs constituant
+la composante connexe dont le prototype simplifié est:
+
+\begin{lstlisting}
+void crossCC(t_cc_elt *elt,
+             t_matrix *matrix,
+             char **mark);
+\end{lstlisting}
+
+Cette fonction est utilisée pour déterminer l'ensemble de l'étendue
+composante connexe. Elle permet alors de mettre à jour le nombre de
+pixels la composant ainsi que ses coordonnées minimum et maximum qui
+permettront par la suite de retrouver la matrice correspondant à un
+caractère.
+Cette fonction est un point clé de la segmentation dans la mesure où
+c'est elle qui est responsable de déterminer si oui ou non tel ou tel
+pixel doit être inséré dans la composante.
+Son principe se base sur un parcours de la matrice de voisinage du pixel
+courant à la recherche des pixels noirs. Dès que l'on en trouve un, on
+place dans une file. A la fin du parcours, on refait le traitement sur
+le pixel défilé tant que la file n'est pas vide.
+
+% SEG IMAGES
+
+\subsection{Analyse des composantes connexes}
+Une fois la liste des composantes connexes obtenues, il convient
+d'analyser chacune d'entre elles afin de voir si elles correspondent à
+un caractère ou non.
+
+\begin{lstlisting}
+void checkIfCharacter(t_cc_list *cc_list)
+\end{lstlisting}
+
+La fonction responsable de ce traitement (prototype simplifié ci-dessus)
+prend en paramètre la liste des composantes connexes et la met à jour.
+Elle effectue des mesures de seuil et détermine si une composante
+connexe est un caractère.
+
+% CARACTERES IMAGES
+
+
+\subsection{Création des blocs}
+Nous arrivons maintenant à la phase 2) de la segmentation par régions.
+Cette phase consiste à regrouper les composantes connexes ensemble afin
+de former des blocs qui correspondront aux lignes puis aux paragraphes.
+Le prototype de la fonction est le suivant:
+
+\begin{lstlisting}
+t_block_list *makeBlocks(t_cc_list *cc_list)
+\end{lstlisting}
+
+Cette fonction prend en paramètre la liste des composantes connexes et
+renvoie une liste de blocs. Nous avons commencé à implémenter cette
+fonction, cependant n'ayant pas encore réussi à arriver à un niveau
+convenable et fonctionnel, aucune présentation à ce sujet ne sera fait
+à la soutenance. On accuse donc un retard en ce qui concerne le
+regroupement par blocs.
+
+\section{Exécutable}
+Afin de concrétiser cette méthode de segmentation, nous avons développé
+un exécutable fonctionnel, nommé \verb!seg! permettant
+d'extraire les caractères d'une image d'entrée et d'enregister un
+fichier de sortie présentant la segmentation par caractères. Cette
+exécutable est utilisable avec plusieurs arguments dont voici la
+description:
+
+\begin{verbatim}
+Usage: seg -i inputfile -o output file
+ This program extracts the connected 
+ components of a bitmap image
+ It saves the extraction result in an ouput bitmap file
+ Arguements:
+    -i file: path of your input file
+    -o file: path of your output file
+    -v     : verbose
+    --help : display the help
+\end{verbatim}
+
+Les arguments \verb!-i [File] -o [File]! sont obligatoires et permettent
+de spécifier une image bitmap d'entrée et le nom du fichier de sortie.
+Le programme est également muni de deux options. Tout d'abord,
+\verb!--help! fait référence à une aide sucscinte. Enfin, l'option
+\verb!-v! permet d'activer le mode verbose qui affiche la liste des
+composantes connexes extraites ainsi que leurs caractéristiques.
+
+\section{Prochaine soutenance}
+Pour la prochaîne soutenance, nous devons rattraper le retard accumulé
+sur la détection des blocs et pouvoir fournir une liste de blocs en
+bonne et dû forme. Liste qui nous permettra entre autres par la suite de
+reconnaître la structure de la page. Nous devrons trouver un format
+adéquate pour stocker ces informations de structures de pages, le xml
+serait une solution possible. Egalement, nous devrons interfacer la
+segmentation avec d'un côté le prétraitement et de l'autre côté le
+réseau de neurones. En ce qui concerne le côté interface
+segmentation/réseau de neurones, nous devrons standardiser les données
+pour l'entrée du réseau. Il semblerait qu'une vectorisation ou bien
+l'utilisation des chain codes (Freeman) soit une éventualité.
+
+
+
+
+
+
+
+
+
+
+%%debut chapitre sur le programme ocred
+\chapter{ OCRed, k\'ezako ? }
+ OCRed est n\'e des mots Ocre et digital, qui rappellons le encore une fois
+ signifient ``Optical Character Recognition enhanced'' pour l'un et
+ num\'erique pour l'autre. La partie du projet portant sur le
+ pr\'etraitement de l'image devant \^etre faite en ocaml, OCRed est
+ totalement r\'ealis\'e dans ce langage.
+
+\section{ Visualisation de l'image grace a l'executable }
+ La cr\'eation du logiciel de traitement de l'image nous a men\'e, au
+ d\'ebut du projet \'a vouloir visualiser directement, c'est \'a dire
+ sans logiciel tiers, l'action de notre travail.
+ La visualisation des images trait\'ees permet notre ind\'ependance
+ au niveau de l'utilisation du logiciel, ce qui est un confort certain.
+ La fen\^etre est r\'ealis\'ee avec OcamlSDL, tout comme le pr\'etraitement
+ de l'image.
+%% mettre image de la fenetre sdl
+
+\begin{center}
+	
+	\includegraphics[width=70mm]{visualisationimage.jpg}\\
+\end{center}
+
+\section{ Utilisation de l'\'executable }
+ L'ex\'ecutable en ligne de commande admet un certain nombre d'arguments,
+ certains ne pouvant \'evidemment donner lieu \`a un quelconque r\'esultat
+ sans la sp\'ecification d'une image d'entr\'ee.
+\subsection{ Sp\'ecifier une image d'entr\'ee }
+ Il est plus logique, pour un logiciel de traitement d'image, d'avoir
+ une image \`a traiter. Vous devez pour cela utiliser l'argument ``-i''
+ suivi du chemin d'une image de type jpeg,bmp,png au moins.
+\subsection{ Sp\'ecifier une image de sortie }
+ Vous n'\^etes pas oblig\'e de pr\'eciser le chemin de l'image de sortie
+ mais cela permet une certaine flexibilit\'e. Dans le cas o\`u vous
+ n'indiquez pas la sortie, OCRed se debrouille pour sortir une image
+ avec un nom assez \'evident, d\'ependant du traitement. Par exemple
+ rotatation.bmp ou encore tresholded.bmp, les images se trouveront l\`a
+ o\`u vous avez ex\'ecut\'e votre programme. Pour sp\'ecifier un chemin de
+ sortie, veuillez utiliser l'argument ``-o'' suivi du chemin d'une image
+de type jpeg,bmp,png au moins.
+\subsection{ La visualisation de l'image }
+ Gr\^ace \`a OcamlSDL, nous pouvons visualiser notre image, il faut pour
+ cela sp\'ecifier une image d'entr\'ee, et passer l'argument ``-d'' en
+ param\`etre. Les d\'esavantages de l'utilisation de cette interface sont
+ assez subtils, par exemple vous ne pouvez ni zoomer ni d\'ezoomer, ni
+ vous d\'eplacer sur l'image. Toutefois il y'a (aussi) des avantages, vous pouvez
+ visualiser directement les modifications appliqu\'ees \`a votre
+ image. En appuyant sur F2 vous faites tourner l'image de l'angle que
+ vous avez pass\'e en param\`etre --voir plus loin--. En appuyant sur F3
+ vous appliquez le seuil, que vous pouvez sp\'ecifier en ligne de
+ commande. En appuyant sur F4, vous appliquez le filtre m\'edian. Nous
+ tenons \`a vous rappeler que le seuil ne marche que sur les couleurs.
+ Pour quitter il suffit d'appuyer sur F1, la petite croix en haut \`a
+ droite ne marche pas.
+\subsection{ Le seuil }
+ Permet le passage d'une image en noir et blanc, pour avoir un minimum
+ de pertes d'informations vous devez sp\'ecifier un seuil viable. Par
+ d\'efaut le seuil est \`a 200, ce qui est suffisant pour un contraste
+ normal de l'image. Vous devrez l'augmenter si il est trop faible et le
+ baisser dans le cas contraire. Passer l'argument ``-s'' en
+ param\`etre si vous voulez changer la valeur par d\'efaut. Pour
+ l'anecdote ``-s'' viendrait de seuil, mais nous n'en sommes pas vraiment
+ s\^urs.
+\subsection{ Rotation }
+ Vous pouvez passer un angle en pr\'ecision r\'eelle, ou enti\`ere. Pour
+ cela passez respectivement l'angle avec l'argument ``-af'' et ``-a''.
+ Rappelons que l'angle pass\'e en param\`etre est en degr\'es et non en
+ radian. Vous pouvez aussi tourner l'image de 90 degr\'es dans le sens
+ direct ou indirect, gr\^ace aux options ``-right'' et ``-left''.
+\subsection{ Redimensionnement }
+ Le redimensionnement peut s'effectuer en pourcentage de l'image avec
+ l'option ``--resizepercent'' qui prend en param\`etre un pourcentage
+ entier. L'on peut aussi redimensionner l'image en valeur absolue
+ --c'est \`a dire en sp\'ecifiant des valeurs de hauteur et de largeur
+ arbitraires--. Alexandre Testu avait besoin d'un petit redimensionnement
+ rien que pour lui, c'est pour cela que l'option ``--resize-auto''
+ existe.
+\subsection{ D\'etection d'angle}
+ Il existe un argument magique ``-dev'' qui a juste besoin d'avoir une
+ image qui n'est pas bien droite en param\`etre. Il retourne directement
+ l'image dans le bon sens, et en noir et blanc.
+\subsection{ Help me if you can! }
+ L'option ``-help'' est aussi pr\'esente afin d'accompagner
+ l'utilisateur dans sa d\'ecouverte du programme. Pour tout autre
+ interrogation, il se peut que vous puissiez trouver des informations
+ plus ou moins utiles dans les sources du projet, au niveau du fichier
+ README.
+%%fin chapitre sur le programme ocred
+
+
+%%debut chapitre detection de l'angle
+\chapter{ La d\'etection de l'angle }
+ La d\'etection de l'angle \'etait \`a faire pour la premi\`ere
+ soutenance, malheureusement par un manque de temps certain elle ne f\^ut
+ pas pr\^ete \`a temps. Nous arrivons \`a la deuxi\`eme soutenance avec
+ deux types de d\'etection de l'angle de rotation du texte d'une image,
+ ce qui a pour but de redresser l'image, afin d'avoir une segmentation
+ \`a peu pr\`es correcte.
+
+\section{ Diff\'erentes approches}
+ La d\'etection de l'angle de rotation d'un texte dans une image est un
+ probl\`eme assez complexe. En effet une image contenant du texte n'est
+ pas compos\'ee de composantes continues, il est donc plus difficile d'isoler
+ les caract\'eristiques des \'el\'ements. Deux principes majeurs nous
+ sont apparus. Tout d'abord l'on \'etudie les caract\'eristiques d'une
+ image pour chaque angle, on isole ensuite le bon angle ; ce
+ processus est long et d'autre part encore assez impr\'ecis.
+ L'autre principe \'etait de d\'etecter la pente d'une ligne de caract\`eres.
+\subsection{ La multiple rotation }
+ Dans cet algorithme, l'on reduit la taille de l'image pour gagner en
+ temps d'ex\'ecution, le redimensionnement est calcul\'e en fonction de la
+ taille d'origine de l'image, on suppose avoir du format A4 \`a chaque
+ fois. On proc\`ede comme suit: On tourne de fa\c con dichotomique
+ l'image, c'est \`a dire en prenant des angles plus ou moins
+ grand. Jusqu'a trouv\'e un histogramme convenable. L'histogramme est
+ produit \`a partir de la projection de tout les pixels de l'image sur
+ l'axe des horizontales.
+
+Preuve exp\'erimentale produite \`a partir d' une image multifontes,
+multicouleurs, mulicolonnes:
+
+ Comme vous pouvez le voir sur ces images, il est \'evident qu'il y'a une
+ nette diff\'erence entre des images avec un texte mal orient\'e et un
+ texte orthonormal. (mais o\`u est l'orthonormalit\'e dans ce monde ?)
+
+%% histogramme5degree.jpg
+%% commentaire de l'image
+
+\begin{center}
+	
+	\includegraphics[width=120mm]{histogramme5degre.jpg}\\
+\end{center}
+
+
+Sur cette image on peut voir un histogramme d'une image avec un
+texte ayant subi une rotation de 5 degr\'es. Il est clair que le nombre
+de zone ou l'histogramme atteint 0 en ordonn\'ee est beaucoup plus faible
+que les autres images (environ 8).
+
+
+%% rotation1deghisto.jpg
+%% commentaire de l'image
+\begin{center}
+	
+	\includegraphics[width=120mm]{rotation1deghisto.jpg}\\
+\end{center}
+
+Sur cette image on peut voir un histogramme d'une image avec un texte
+ayant subi une rotation de 1 degr\'e. Par rapport \`a l'image
+pr\'ec\'edente, on voit de fa\c con \'evidente que le nombre d'ordonn\'ees
+\`a z\'ero est bien plus grand avec un angle de un degr\'e (ici environ 18).
+
+%% histogramme_bon.jpg
+%% commentaire de l'image
+
+\begin{center}
+	
+	\includegraphics[width=120mm]{histogramme_bon.jpg}\\
+\end{center}
+
+Sur cette image on peut voir un histogramme d'une image avec un texte
+n'ayant pas subi de rotation. Il est tr\'es net que le nombre
+d'ordonn\'ees \`a z\'ero est le plus \'elev\'e.
+
+Il est facile d'implementer un algo qui compte le nombre de bandes
+proche de z\'ero ; il s'av\`ere que nous avons voulu compter le nombre de
+sommets, ce qui est beaucoup moins pr\'ecis. La m\'ethode expos\'ee
+ci-dessus semble bien marcher en th\'eorie.
+
+\subsection{ Detection de la pente }
+On d\'etecte la pente d'une ligne de texte ; pour cela on parcourt
+l'image pour chaque ligne de pixels jusqu'\`a ce que l'on tombe sur un
+pixel noir. Ceci permet d'avoir une certaine id\'ee de la pente d'une ligne
+de texte. La tangente de cette pente nous donne l'angle par rapport \`a
+la verticale. On la soustrait \`a 90 degr\'es si elle est positive, on
+l'ajoute sinon. On se retrouve avec un angle qui correspond, avec un
+taux d'erreur proche du dixi\'eme de degr\'e d'angle.
+
+% mettre l'image histo_pente.jpg
+% commentaire image histo_pente
+
+\begin{center}
+	
+	\includegraphics[width=120mm]{histo_pente.jpg}\\
+\end{center}
+
+Les extrema locaux de la courbe sont beaucoup moins \'elev\'es en
+terme de valeurs. Ce qui a pour cons\'equence, une pente peu \'elev\'ee et donc un angle tr\`es \'elev\'e.
+
+% mettre l'image histo_pent_noangle.jpg
+% commentaire image histo_pent_noangle
+
+
+\begin{center}
+	
+	\includegraphics[width=120mm]{histo_pente_noangle.jpg}\\
+\end{center}
+
+Les extrema locaux de la courbe sont beaucoup plus \'elev\'es en
+terme de valeurs que ceux de la courbe pr\'ec\'edente. Ce qui a pour
+cons\'equence, une pente tres \'elev\'ee et donc un angle tr\'es faible.
+
+Le probl\`eme avec cette technique, et le manque de pr\'ecision autour
+de l'angle nul, et des bruits trop importants produits par des lignes,
+tableaux, ou images impromptus.
+
+Nous avons pourtant retenu cette technique pour cette soutenance, car
+donnant lieu \`a des r\'esultats plus probants que la m\'ethode expos\'ee
+plus haut.
+
+\section{ Optimisations  }
+ L'optimisation est un crit\`ere de confort pour l'utilisateur, mais
+ surtout un gage de qualit\'e.
+\subsection{ R\'eduction de l'image }
+ Afin de pouvoir augmenter la rapidit\'e des algorithmes de d\'etection
+ d'angle, nous r\'eduisons l'image de sorte qu'il y ait le moins de
+ pertes d'informations n\'ecessaires \`a cette derni\`ere. A titre
+ d'exemple une image au format A4 en 75 dpi, a une taille approximative
+ de 900 par 700. Les caract\`eres pr\'esents dans cette image ont une
+ taille en pixels d'\`a peu pr\`es 8 pixels. Il ne faut donc pas trop
+ r\'eduire l'image, environ 40 pourcents de la taille originale. Au
+ contraire pour une image de plus haute d\'efinition, par exemple 600
+ dpi, il est n\'ecessaire de r\'eduire l'image \`a au moins 5 pourcents
+ de la taille originale. Et comme dirait Junior, ``l'id\'ee c'est
+ que'' la rotation d'une image r\'eduite \`a 5 pourcents prend environ
+ 0,05 secondes sur les machines du PIE, alors qu'elle prend plus de 30
+ secondes pour une image en 600 dpi.
+
+%% reduceimage20percent75dpit.jpg
+\begin{center}
+	
+	\includegraphics[width=40mm]{reduceimage20percent75dpit.jpg}\\
+	\caption{\emph{Une image r\'eduite.}}
+\end{center}
+
+
+\begin{description}
+	\item[Remarque:] Il est int\'eressant de noter qu'une image r\'eduite comporte
+	moins de bruit, qui fausserait l'avanc\'ee de l'algo de reconnaissance
+	des plages nulles.
+\end{description}
+
+\subsection{ Ce qu'il nous reste \`a faire}
+\subsubsection{ D\'etection d'angle}
+Notre d\'etection de l'angle de rotation d'un texte dans une image est
+encore assez impr\'ecise ; cela est principalement d\^u \`a l'utilisation
+de l'arctangente qui devient tr\`es sensible aux extrema. Nous pensons
+donc r\'eutiliser la technique de la multiple rotation, qui semble en
+th\'eorie plus pr\'ecise. Les r\'esultats seront expos\'es \`a la
+prochaine soutenance.
+\subsubsection{ Optimisation des filtres}
+Le gros probl\`eme de la rotation est la perte d'information, en effet
+cette transformation a en sortie des nombres \`a virgule flottante,
+ce qui ne correspond pas vraiment aux nombres entiers d\'efinissant la
+grille d'une image dans le cas de pixels carr\'es. Une multitude de
+filtres existent, mais le plus rapide et le plus adapt\'e dans le cas de la
+rotation serait un filtre bicubique.
+
+%% OCRed qu'est-ce que c'est pourquoi c'est faire.
+
+%% = l'executable
+%% = la ligne de commande
+%%  les differentes options toussa
+
+
+%% La detection de l'angle de rotation
+%%  idees d'optimisation
+%%  redimensionnement de l'image
+%%  mettre des images
+%%  histogramme et traitement du signal
+%%  \mettre des images
+%%  multiple rotation
+%%  etudes de la pente.
+%%  mettre des images
+%% detection d'angle mettre des images avant apres
+
+%% La rotation d'une image, une idee qui ne marche pas
+
+%% Les idees qui n'ont pas vu le jour
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 \chapter{Interface Utilisateur} % (fold)
@@ -121,39 +645,47 @@ Beaucoup de choses ont chang\'e depuis le mois de F\'evrier.
 Les modifications apport\'ees sont relatives au texte. Nous pouvons d\'esormais \'editer du texte, ainsi que l'enregistrer. Soyons francs: la gestion du texte sous Gtk, c'est pas de la tarte. On utilise un widget de type GtkTextView qui nous sert \`a afficher le texte. Pour l'\'editer, on utilise un GtkTextBuffer, qui utilise des GtkTextIter associ\'es \`a des GtkTextMarks. Bref, c'est un merdier sans nom.
 Les GtkTextIter servent \`a se rep\'erer dans le GtkTextBuffer (qui est un buffer, thank you captain Obvious!). Un GtkTextIter est un endroit du texte. On l'utilise par exemple pour r\'ecup\'erer une cha\^ine de caract\`eres:
 	\begin{lstlisting}
-     text = gtk_text_buffer_get_text(txtbuffer), &iStart, &iEnd, FALSE );
+   text = gtk_text_buffer_get_text( GTK_TEXT_BUFFER(txtbuffer), 
+	                            &iStart, 
+	                            &iEnd, 
+	                            FALSE );
 	\end{lstlisting}
 	Ici, iStart et iEnd sont des pointeurs sur des GtkTextIter (ici le d\'ebut et la fin du buffer, encore une fois, thank you captain obvious!).
 	Il faut ensuite cr\'eer une proc\'edure pour sauvegarder le texte r\'ecup\'er\'e. En C, on utilise le type \verb!FILE! de la biblioth\`eque \verb!stdio.h!. C'est assez simple pour ce qu'on fait ici. On ouvre un fichier puis on \'ecrit dedans, sans oublier une gestion d'erreur (ici pas forc\'ement tr\`es utile, mais il n'est jamais inutile de g\'erer les erreurs\ldots).
 	\begin{lstlisting}
-    /* text est le texte à enregistrer et filename le chemin du fichier */
   void save_as (char *text, char *filename)
   {
     FILE *fp;
-      /* on ouvre le fichier en mode écriture ("w")*/
+      /* opens the file in writing mode ("w")*/
     fp = fopen(filename, "w");
     if(!fp)
-        /* on renvoie un message d'erreur */
+        /* sends an error message */
       fprintf(stderr, "Can't open file\n");
     else
-        /* on écrit "text" dans le fichier */
+        /* writes "text" in the file */
       fprintf(fp, text);
-      /* on ferme le fichier */
+      /* closes the file */
     fclose(fp);
   }
 	\end{lstlisting}
 	% section enregistrement_d_un_fichier_texte (end)
 
+	\begin{center}
+
+		\includegraphics[width=120mm]{gui.png}\\
+		\caption{\emph{Notre magnifique interface graphique}}\\
+	\end{center}
+
+
 	\section{Ortaugraffe} % (fold)
 	\label{sec:ortaugraffe}
-		L'utilisateur aura besoin d'un correcteur orthographique non seulement pour corriger les erreurs de notre OCR mais aussi pour \'editer son texte avant de l'enregistrer. Avant de me lancer dans la cr\'eation d'un syst\`eme de correction orthographique, je voyais d\'ej\`a le tableau: des biblioth\`eques compliqu\'ees, des centaines de fonctions qui font tout sauf ce qu'on veut, etc\ldots J'avais en effet fini par devenir tr\`es pessimiste vis-\'a-vis de Gtk. Je dois dire que j'\'etais bluff\'e. Une ligne. UNE ligne. On utilise la biblioth\`eque \verb!GtkSpell! pr\'esente sur les machines du PIE. Cette fameuse ligne, la voici dans tout sa splendeur:
+		L'utilisateur aura besoin d'un correcteur orthographique non seulement pour corriger les erreurs de notre OCR mais aussi pour \'editer son texte avant de l'enregistrer. Avant de me lancer dans la cr\'eation d'un syst\`eme de correction orthographique, je voyais d\'ej\`a le tableau: des biblioth\`eques compliqu\'ees, des centaines de fonctions qui font tout sauf ce qu'on veut, etc\ldots J'avais en effet fini par devenir tr\`es pessimiste vis-\'a-vis de Gtk. Je dois dire que j'ai \'et\'e bluff\'e. Une ligne. UNE ligne. On utilise la biblioth\`eque \verb!GtkSpell! pr\'esente sur les machines du PIE. Cette fameuse ligne, la voici dans tout sa splendeur:
 		\begin{lstlisting}
     gtkspell_new_attach (GtkTextView *view,
                          const gchar *lang,
                          GError **error);
 		\end{lstlisting}
-		\verb!view! est notre widget \verb!GtkTextView!, \verb!lang! est la langue, \verb!error! est un pointeur sur la localisation d'une erreur \'eventuelle (\verb!NULL! pour nous).\\
-		C'est gr\^ace \`a cette ligne magique que l'on obtient cette merveille:
+		\verb!view! est notre widget \verb!GtkTextView!, \verb!lang! est la langue, \verb!error! est un pointeur sur la localisation d'une erreur \'eventuelle (\verb!NULL! pour nous).
 
 		%%% SCREEN CORREC
 
@@ -163,10 +695,10 @@ Les GtkTextIter servent \`a se rep\'erer dans le GtkTextBuffer (qui est un buffe
 % j'ai utilisé des guillemets de ce type ", si ils ne sont pas valides
 % faudra penser à les corriger =)
 
-\section{Reseau de neurones} % (fold)
-\label{sec:reseau_de_neurones}
+\chapter{Reseau de neurones} % (fold)
+\label{cha:reseau_de_neurones}
 
-\subsection{Introduction} % (fold)
+\section{Introduction} % (fold)
 \label{subsec:introduction}
 A l'issue de la premi\`ere soutenance, nos recherches sur les r\'eseaux
 neuronaux nous avaient men\'es vers l'\'elaboration d'un perceptron
@@ -197,13 +729,16 @@ fonction logique de base comme le OR ou l\'eg\`erement plus avanc\'ee
 comme le XOR
 
 % subsection introduction (end)
-
-\subsection{Structure et d\'efinitions} % (fold)
+\pagebreak
+\section{Structure et d\'efinitions} % (fold)
 \label{subsec:structure_et_definitions}
 
 Voici ce \`a quoi ressemble la b\^ete :
-	 % Mettre cette photo ici ! http://www.becoz.org/these/memoirehtml/figures/ra-perceptron.png
-         % avec la légende suivante : Perceptron \`a une couche cach\'ee
+\begin{center}
+	
+	\includegraphics[width=120mm]{ra-perceptron.png}\\
+	\caption{\emph{Perceptron \`a une couche cach\'ee}}\\
+\end{center}
 
 %pour ce paragraphe j'aimerais une liste à puce à la place de mes étoiles
 %=)
@@ -231,7 +766,16 @@ par une table de hachage,par exemple, reste envisageable.
 %fin de liste a puce
 
 % Mettre cette photo ici !
-% http://www.grappa.univ-lille3.fr/polys/fouille/sortie008.gif
+
+\begin{center}
+	
+	\includegraphics[width=70mm]{sortie008.png}\\
+	\caption{\emph{Perceptron \`a une sortie}}\\
+\end{center}
+
+
+
+
 % avec la légende suivante : Perceptron \`a une sortie
 
 La valeur d'un neurone est calcul\'ee \`a partir des valeurs de chacun
@@ -240,19 +784,19 @@ des neurones de la couche pr\'ec\'edente.
 Les neurones artificiels ainsi \'evoqu\'es sont en fait tr\`es proches
 des neurones naturels au niveau de leur fonctionnement. C'est entre
 autres l'id\'ee d'int\'eractions avec une multitude d'autres neurones
-qui permet au r\'eseau de se constituer une "m\'emoire intelligente",
-apte \`a classifier ou reconnaĩtre des donn\'ees qu'il n'a encore
-"jamais" rencontr\'ees auparavant (du moins pas exactement sous la
+qui permet au r\'eseau de se constituer une ``m\'emoire intelligente'',
+apte \`a classifier ou reconna\^itre des donn\'ees qu'il n'a encore
+``jamais'' rencontr\'ees auparavant (du moins pas exactement sous la
 même forme) !
 
 Avant de pouvoir utiliser un perceptron multicouches, il faut avant tout se mettre d'accord sur le
 format de donn\'ees qu'il prendra en entr\'ee, puis effectuer un choix
 judicieux de son nombre de couches cach\'ees et de son nombre de neurones
-par couche cach\'ee. On doit ensuite "entra\^iner" le r\'eseau...
+par couche cach\'ee. On doit ensuite ``entra\^iner'' le r\'eseau\ldots
 
 % subsection structure_et_definitions (end)
 
-\subsection{Formatage des donn\'ees} % (fold)
+\section{Formatage des donn\'ees} % (fold)
 \label{subsec:formatage_des_donnees}
 
 Pour que le r\'eseau reconnaisse, dans notre cas, si un caract\`ere est
@@ -283,7 +827,7 @@ stock\'ees dans un fichier.
 
 % subsection formatage_des_donnees (end)
 
-\subsection{Choix des param\`etres du r\'eseau} % (fold)
+\section{Param\`etres du r\'eseau} % (fold)
 \label{subsec:choix_des_parametres_du_reseau}
 
 Une fois les donn\'ees format\'ees et stock\'ees dans un fichier, il
@@ -306,11 +850,11 @@ performants.
 
 Un certain nombres de param\`etres relatifs \`a l'apprentissage des
 donn\'ees par le r\'eseau doivent \'egalement \^etre fix\'es. Nous en
-ferons une br\`eve description dans la section "Entra\^inement du r\'eseau."
+ferons une br\`eve description dans la section ``Entra\^inement du r\'eseau.''
 
 % subsection choix_des_parametres_du_reseau (end)
 
-\subsection{Entra\^inement du r\'eseau} % (fold)
+\section{Entra\^inement du r\'eseau} % (fold)
 \label{subsec:entrainement_du_reseau}
 
 Cette partie est tr\`es probablement la plus int\'eressante de
@@ -345,17 +889,24 @@ d\'efinie comme, pour chaque neurone ni, la somme des produits des valeurs
 des neurones nj qui pointent sur lui par les poids des connexions pij qui les
 lient au neurone courant :
 
-sum(ni) = somme sur j (pij(ni,nj)* valeur(nj))
-% une formule en LaTeX serait plus jolie ici
+\[sum(ni) = somme\, sur\, j\, (pij(ni,nj)* valeur(nj))
+\]% une formule en LaTeX serait plus jolie ici
+\\
 
-%mettre ici la photot neuron.jpg que je t'ai envoyée
-%avec comme légende : calcul de la valeur d'un neurone
+\begin{center}
+	
+	\includegraphics[width=70mm]{neuron.jpg}\\
+	\caption{\emph{Calcul de la sortie d'un neurone}}\\
+\end{center}
+
+
+
 
 Cette valeur est ensuite pass\'ee en param\`etre d'une fonction
-d'activation propre au perceptron, ici la fonction sigmo\¨ide f avec :  
+d'activation propre au perceptron, ici la fonction sigmo\"ide f avec :  
 
-f(sum(ni)) = 1/(1+exp(-sum(ni))) 
-% une formule en LaTeX serait plus jolie ici
+\[f(sum(ni)) = 1/(1+exp(-sum(ni))) 
+\]% une formule en LaTeX serait plus jolie ici
 
 On obtient ainsi une valeur exp\'erimentale pour chaque neurone de
 sortie que l'on va pouvoir confronter \`a la valeur th\'eorique fournie
@@ -363,7 +914,10 @@ initialement.
 
 On calcule donc l'erreur e observ\'ee pour chaque neurone de sortie ni avec :
 
-e(ni) = (valeur théorique(ni) - valeur observée(ni))*(f'(sum(ni)))
+\[
+	e(ni) = (valeur\, theorique(ni)\, -\, valeur\, observee(ni))*(f'(sum(ni)))
+\]
+
 % une formule en LaTeX serait plus jolie ici
 
 On propage ensuite l'erreur vers les couches intérieures 
@@ -381,7 +935,7 @@ sauvegarde/charge des poids finaux des connexions afin de pouvoir
 sauvegarder les valeurs du r\'eseau entra\^iné et les charger
 directement une prochaine fois pour pouvoir utiliser ce dernier
 imm\'ediatement sans avoir besoin d'effectuer l'apprentissage \`a chaque
-utilisation, ce qui s'av\`ere \^etre plus qu'indispensable pour un ocr !
+utilisation, ce qui s'av\`ere \^etre plus qu'indispensable pour un OCR!
 
 
 
@@ -392,34 +946,38 @@ utilisation, ce qui s'av\`ere \^etre plus qu'indispensable pour un ocr !
 
 Un petit shell a \'et\'e impl\'ement\'e afin de tester notre perceptron
 au fur et \`a mesure de sa cr\'eation. Il est lanc\'e par d\'efaut lors
-de l'ex\'ecution du programme "network" et propose diverses
+de l'ex\'ecution du programme ``network'' et propose diverses
 options. 
 %une grosse liste à puce please !
-**Trois fonctions d'affichage sont disponibles : 
-%une tite liste à puce s'il vous plaît !
-*disp_c : affiche l'\'etat des connexions neuronales et leur nombre
-*disp_n : affiche l'\'etat des neurones et leur nombre
-*disp_o : affiche les valeurs du vecteur de sorties (outputs)
+\begin{itemize}
+	\item Trois fonctions d'affichage sont disponibles : 
+\begin{description}
+	\item[\verb!dispc! :] affiche l'\'etat des connexions neuronales et leur nombre
+	\item[\verb!dispn! :] affiche l'\'etat des neurones et leur nombre
+	\item[\verb!dispo! :] affiche les valeurs du vecteur de sorties (outputs)
+\end{description}
 %fin de liste, merci !
 
-**On peut initialiser le r\'eseau avec la fonction init, qui demandera
+\item On peut initialiser le r\'eseau avec la fonction init, qui demandera
 successivement de renseigner le nombre de couches cach\'ees d\'esir\'ees
 ainsi que le nombre de neurones par couche cach\'ee.
 
-**La fonction train entra\^ine le r\'eseau (pour l'instant assez mal, il
+\item La fonction train entra\^ine le r\'eseau (pour l'instant assez mal, il
 faut l'admettre) 
 
-**La fonction active effectue une simple propagation des valeurs
+\item La fonction active effectue une simple propagation des valeurs
 d'entr\'ee vers celles de sortie
 
-**La fonction run permet (Bertrand) quant \`a elle, de pr\'eciser l'indice de la donn\'ee
+\item La fonction run permet (Bertrand) quant \`a elle, de pr\'eciser l'indice de la donn\'ee
 que l'on souhaite tester (donn\'ee pr\'esente dans data.ml ; la donn\'ee
 par d\'efaut est celle correspondant au XOR, il suffit de swaper les
 noms de datatab et datatab2 dans data.ml pour acc\'eder au vecteur de
 donn\'ees de l'afficheur sept segments !)
 
-**Enfin une fonction load et une fonction save sont pr\'esentes pour une
+\item Enfin une fonction load et une fonction save sont pr\'esentes pour une
 impl\'ementation future proche !
+
+\end{itemize}
 
 %fin de grosse liste à puce danke schön !
 
@@ -436,6 +994,22 @@ r\'eutilisable \`a part enti`ere pour d'autres projets.
 %subsection le_banc_de_tests_du_perceptron (end)
 
 % section reseau_de_neurones (end)
+\chapter{Site Web} % (fold)
+\label{cha:site_web}
+	Lors de la soutenance pr\'ec\'edente, nous avions pr\'esent\'e un site assez minimaliste. Tout en \textsc{Html}, peu de pages, vides pour la plupart, bref, on s'\'etait pas foul\'e. Beaucoup de choses ont chang\'ees. Tout d'abord, le site est rempli! On a une belle page ``About'' contenant un r\'esum\'e de nos vies passionantes et pleines d'aventures, un page de t\'el\'echargement contenant pour l'instant la \emph{tarball} rendue lors que la premi\`ere soutenance et son rapport.
+	
+	La grosse nouveaut\'e, c'est la page ``D\'eveloppement'', qui contient\ldots un script de news en PHP! Ce script s'est r\'ev\'el\'e tr\`es simple \`a \'ecrire. Nous avons eu besoin de 3 pages en php uniquement, ainsi qu'une base de donn\'ee MySQL. Une page \verb!liste_news.php! liste les news d\'ej\`a \'ecrites et permet de les \'editer ou de les supprimer. Une autre page \verb!rediger_news.php! nous permet de r\'ediger une nouvelle news. \\
+	Voici à quoi ressemble notre site:
+	
+	
+	\begin{center}
+
+		\includegraphics[width=120mm]{screen_site.png}\\
+		\caption{\emph{Calcul de la sortie d'un neurone}}\\
+	\end{center}
+
+	
+% chapter site_web (end)
 
 \chapter{Conclusion} % (fold)
 \label{cha:conclusion}
@@ -459,6 +1033,19 @@ monde est en bonne marche, et quatre mots (+ 2 caract\`eres qui font 42) suffiro
 cet épisode : vivement notre prochaine entrevue ;)
 
 % chapter Conclusion (end)
+
+
+\appendix
+
+\section{D\'etection des caract\`eres} % (fold)
+\label{sec:d'etection_des_caract`eres}
+
+\begin{center}
+	
+	\includegraphics[width=160mm]{iop.jpg}\\
+\end{center}
+
+% section d'etection_des_caract`eres (end)
 
 \end{document}
 
