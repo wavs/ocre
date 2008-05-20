@@ -14,9 +14,9 @@ object(self)
       layers.(i)#print_neurons();
     done;
   method print_layer_and_weight () =
-    print_string("Il y'a: "^string_of_int(nblayers)^" couches\n");
+    print_string("Il y'a: "^string_of_int(nblayers)^" couches\n\n");
     for i = 0 to nblayers - 1 do
-      print_string("couche numero"^string_of_int(i + 1)^": \n");
+      print_string("couche numero"^string_of_int(i + 1)^": \n\n");
       layers.(i)#print_weight_and_neuron();
     done;
 
@@ -28,10 +28,10 @@ object(self)
     layers.(0) <- new Layer.layer input;
     layers.(nbhlayers + 1) <- new Layer.layer output;
       for i = 0 to nblayers - 3 do
-        layers.(i)#init_neurons nbn
+        layers.(i)#init_neurons nbn;
       done;
       (layers.(nblayers -2))#init_neurons output
-  
+
 
 
 

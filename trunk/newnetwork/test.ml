@@ -51,12 +51,18 @@ let rec init4_() =
                           " superieur a 0\n"); init2_()));;
 
 let init_() =
-  init1_();
-  init2_();
-  init3_();
-  init4_();
+(*   init1_(); *)
+(*   init2_(); *)
+(*   init3_(); *)
+(*   init4_(); *)
+  input := 2;
+  output := 1;
+  nbhlayers := 1;
+  nbn := 3;
+
   p := new Perceptron.perceptron
-    !input !output !nbhlayers !nbn
+    !input !output !nbhlayers !nbn;
+  !p#init()
 
 (* let rec run_() = *)
 (*   print_string "Indice de la donnee a reconnaitre :\ni = "; *)
