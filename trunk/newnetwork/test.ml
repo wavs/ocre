@@ -7,14 +7,14 @@ let nbn = ref 0
 let options =
     "?     : options\n"^
     "init  : initialise le reseau\n"^
-    "train : entraine le reseau\n"^
-    "run   : reconnait la donnee voulue\n"^
-    "dispc : affiche les connexions\n"^
-    "dispn : affiche les neurones\n"^
-    "save  : enregistre l'etat du reseau\n"^
-    "load  : charge l'etat du reseau\n"^
+(*     "train : entraine le reseau\n"^ *)
+(*     "run   : reconnait la donnee voulue\n"^ *)
+    "displ : affiche les connexions\n"^
+    "displw : affiche les neurones\n"^
+   (*  "save  : enregistre l'etat du reseau\n"^ *)
+(*     "load  : charge l'etat du reseau\n"^ *)
     "exit  : quitter\n$";;
-  
+
 let p = ref (new Perceptron.perceptron 2 1 1 3);;
 
 let rec init1_() =
@@ -90,15 +90,16 @@ let main() =
             |"?"    -> print_string options
             |"init" -> (init_(); print_string "init done\n$")
             (* |"train"-> (learn_(); print_string "done\n$") *)
-(*             |"run"  -> (run_(); print_string "done\n$") *)
-            |"displ"-> (!p#lprint(); print_string "\n$")
-(*             |"dispn"-> (p#nprint(); print_string "\n$") *)
-(*             |"save" -> print_string "xpldr\n$" *)
-(*             |"load" -> print_string "omg\n$" *)
+            (*             |"run"  -> (run_(); print_string "done\n$") *)
+            |"displ"-> (!p#print_layer(); print_string "\n$")
+            |"displw"-> (!p#print_layer_and_weight(); print_string "\n$")
+               (*             |"dispn"-> (p#nprint(); print_string "\n$") *)
+               (*             |"save" -> print_string "xpldr\n$" *)
+               (*             |"load" -> print_string "omg\n$" *)
             |_  -> print_string "taper \"?\" pour afficher les options\n$"
         end;
       str :=read_line();
     done
-      
+
 let _ = main()
-  
+
