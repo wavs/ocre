@@ -8,6 +8,9 @@ object(self)
   val mutable patterns = new Data.data input output
   val mutable quad_error = 69.
 
+  method set_nblayers x = nblayers <- x 
+  method get_nblayers() = nblayers
+
   method init() = 
     layers.(0) <- new Layer.layer input;
     layers.(nbhlayers + 1) <- new Layer.layer output;
@@ -17,7 +20,12 @@ object(self)
       (layers.(nblayers -2))#init_neurons output
           
 
+
+
   method learn() = print_int 42
+
+
+
 (*
 
 7 etapes :

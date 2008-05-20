@@ -16,4 +16,5 @@ object(self)
 
   method get_tabneurons () = neurons
   method set_tabneurons x = neurons <- x
+
 end
