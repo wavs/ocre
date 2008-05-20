@@ -15,6 +15,7 @@
 #define SEGMENTATION_H
 
 #include "SDL/SDL.h"
+
 /**
  * This function crosses a connected component
  * and calculates the number of black boxes.
@@ -80,29 +81,30 @@ t_block_list *makeBlocks(t_cc_list *cc_list);
 void checkIfCharacter(t_cc_list *cc_list, int height, int width);
 
 /**
- * This function detects the type of blocks
- * (text, image, ...)
- * 
- * @param block_list Linked list of blocks
- */
-/*void detectTypeOfBlocks(t_block_list *block_list);*/
-
-/**
- * This function traces all the CC with boxes
+ * This function traces all the words with boxes
  * in an output image.
  *
- * @param block_list Linked list of blocks
- * @param limit Margins of the input image.
+ * @param image SDL surface
+ * @param cc_list Linked list of connected components
  */
 void traceCC(SDL_Surface *image, t_cc_list *cc_list);
 
 /**
- * This function traces all the blocks with boxes
+ * This function traces all the words with boxes
  * in an output image.
  *
- * @param block_list Linked list of blocks
- * @param limit Margins of the input image.
+ * @param image SDL surface
+ * @param word_list Linked list of words
  */
-/*void traceBlocks(t_block_list *block_list, t_limit *limit);*/
+void traceWords(SDL_Surface *image, t_word_list *word_list);
+
+/**
+ * This function creates a list of words with the list of connected components.
+ *
+ * @param cc_list Linked list of connected components
+ *
+ * @return Linked list of words
+ */
+t_word_list *makeWords(t_cc_list *cc_list);
 
 #endif /* SEGMENTATION_H */

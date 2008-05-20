@@ -32,6 +32,8 @@ void processAll(t_launch_infos *infos)
   t_binary_image *pic;
   SDL_Surface *image;
   t_cc_list *cc_list;
+  t_word_list *word_list;
+
   pic = NULL;
   image = NULL;
   image = SDL_LoadBMP(infos->inFile);
@@ -48,7 +50,11 @@ void processAll(t_launch_infos *infos)
 		print_listCC(cc_list);
 	      printf(" >> Extraction of characters done.\n");
 
-	      traceCC(image, cc_list);
+	      word_list = makeWords(cc_list);
+	      printf("Nb words: %d",word_list->nbword);
+	      traceWords(image, word_list);
+
+	      /*traceCC(image, cc_list);*/
 	      if (SDL_SaveBMP(image, infos->outFile) < 0)
 		fprintf(stderr," > SDL BMP saving error <\n");
 	      else

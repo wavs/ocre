@@ -48,7 +48,7 @@ int checkIfUnderLimits(int x, int y, int limit_x, int limit_y);
  * @param x X coordinate
  * @param y Y coordinate
  */
-void updateMinMax(t_cc_coordinate *minmax, int x, int y);
+void updateMinMax(t_box_coordinate *minmax, int x, int y);
 
 /**
  * This function initializes a matrix of marks.
@@ -59,15 +59,6 @@ void updateMinMax(t_cc_coordinate *minmax, int x, int y);
  * @return Matrix filled with the value 0
  */
 char **initMarkMatrix(int height, int width);
-
-/**
- * This function adds a connected component in
- * a list.
- * 
- * @param elt Connected component
- * @param cc_list List of connected components
- */
-t_cc_list *addListCC(t_cc_elt *elt, t_cc_list *cc_list);
 
 /**
  * This function adds an element to
@@ -104,5 +95,52 @@ void qDelete(t_queue **p_queue);
  * @return Data stored in the first element of the queue
  */
 t_coordinate *qQeek(t_queue *p_queue);
+
+/**
+ * This function determines if a connected component is in
+ * a word.
+ *
+ * @param cc Connected component
+ * @param word Word
+ *
+ * @return True if >0
+ */
+int isInTheWord(t_cc_elt *cc, t_word_elt *word);
+
+/**
+ * This function updates the minimum and the maximum
+ * values of the coodinates.
+ *
+ * @param coord1 Set of coordinates 1
+ * @param coord2 Set of coordinates 2
+ */
+void updateBoxCoord(t_box_coordinate coord1, t_box_coordinate coord2);
+
+/**
+ * This function adds a connected component in
+ * a list.
+ *
+ * @param elt Connected component
+ * @param cc_list List of connected components
+ */
+t_cc_list *addListCC(t_cc_elt *elt, t_cc_list *cc_list);
+
+/**
+ * This function adds a connected component in
+ * a list.
+ *
+ * @param elt Connected component
+ * @param cc_list List of connected components
+ */
+t_cc_list *addListCCsort(t_cc_elt *elt, t_cc_list *cc_list);
+
+/**
+ * This function adds a word in
+ * a list.
+ *
+ * @param elt Word
+ * @param word_list List of words
+ */
+t_word_list *addListWord(t_word_elt *elt, t_word_list *word_list);
 
 #endif /* TOOLS_H */
