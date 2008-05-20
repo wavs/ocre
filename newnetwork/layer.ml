@@ -8,6 +8,7 @@ object(self)
     for i = 0 to Array.length  neurons - 1 do
       (neurons.(i))#init_nextweights nb_arc_avt
     done;
+    bias#init_nextweights nb_arc_avt
   method set_nbneurons x  = nbneurons <- x
   method get_nbneurons () = nbneurons
 
