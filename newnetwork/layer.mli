@@ -4,6 +4,9 @@ class layer :
     val mutable bias : Neuron.neuron
     val mutable nbneurons : int
     val mutable neurons : Neuron.neuron array
+    method print_neurons : unit -> unit
+    method print_weight_and_neuron : unit -> unit
+
     method init_neurons : int -> unit
     method set_bias : Neuron.neuron -> unit
     method get_bias : unit -> Neuron.neuron

@@ -24,6 +24,8 @@ CMX=${FILES:.ml=.cmx} #Native files
 .ml.cmo:
 	${OCAMLC} -c $<
 
+all:${BINARY}
+
 ${BINARY}: ${CMI} ${CMO}
 	${OCAMLC} -o $@ ${CMO}
 ############################################
