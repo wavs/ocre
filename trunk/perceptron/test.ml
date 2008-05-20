@@ -1,5 +1,4 @@
 
-
 let options =
     "?     : options\n"^
     "init  : initialise le reseau\n"^
@@ -67,8 +66,8 @@ let main() =
             |"init" -> (init_(); print_string "init done\n$")
             |"train"-> (learn_(); print_string "done\n$")
             |"run"  -> (run_(); print_string "done\n$")
-            |"dispc"-> (p#cprint(); print_string "lol\n$")
-            |"dispn"-> (p#nprint(); print_string "kikoo\n$")
+            |"dispc"-> (p#cprint(); print_string "\n$")
+            |"dispn"-> (p#nprint(); print_string "\n$")
             |"save" -> print_string "xpldr\n$" 
             |"load" -> print_string "omg\n$"
             |_  -> print_string "taper \"?\" pour afficher les options\n$"
