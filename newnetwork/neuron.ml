@@ -35,6 +35,9 @@ object(self)
   method set_value x = value <- x
 
   method init_nextweights taille =
+    print_string("debug\n");
+    print_int(taille);
+    print_string("\n");
     let tab = Array.make taille 1. in
     for i = 0 to Array.length tab - 1 do
       let alea = Random.float 1. in
