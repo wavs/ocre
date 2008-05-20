@@ -1,12 +1,17 @@
-class perceptron =
+class perceptron input output nbhlayers nbn =
 object(self)
-  val mutable nblayers = 69
-  val mutable layers = Array.make nblayers (new Layer.layer)
+  val mutable nblayers = nbhlayers + 2
+  val mutable layers = Array.make (nbhlayers + 2) 
+    (new Layer.layer nbn)
   val mutable learning_rate = 0.1
-  val mutable patterns = new Data.data
+  val mutable patterns = new Data.data input output
   val mutable quad_error = 69.
 
-  method learn =
+  method init() = 
+    layers.(0) <- new Layer.layer input;
+    layers.(nbhlayers + 1) <- new Layer.layer output
+
+  method learn() = print_int 42
 (*
 
 7 etapes :
@@ -21,4 +26,20 @@ object(self)
 
 *)
 
+(*1*)
+
+(*2*)
+
+(*3*)
+
+(*4*)
+
+(*5*)
+
+(*6*)
+
+(*7*)
+
+
 end
+
