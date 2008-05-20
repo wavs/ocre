@@ -1,5 +1,6 @@
 class perceptron input output nbhlayers nbn =
 object(self)
+
   val mutable nblayers = nbhlayers + 2
   val mutable layers = Array.make (nbhlayers + 2) 
     (new Layer.layer nbn)
@@ -9,7 +10,12 @@ object(self)
 
   method init() = 
     layers.(0) <- new Layer.layer input;
-    layers.(nbhlayers + 1) <- new Layer.layer output
+    layers.(nbhlayers + 1) <- new Layer.layer output;
+      for i = 0 to nblayers - 3 do
+        layers.(i)#init_neurons nbn 
+      done;  
+      (layers.(nblayers -2))#init_neurons output
+          
 
   method learn() = print_int 42
 (*
@@ -26,8 +32,17 @@ object(self)
 
 *)
 
-(*1*)
+(*boucle principale insert here*)
 
+(*1*)
+(*
+  let inlayer = layers.(0) in
+    for i = 0 to Array.length inlayer - 1 do
+      begin
+        inlayer#set_neurons patterns
+      end
+  done
+*)
 (*2*)
 
 (*3*)
