@@ -7,3 +7,4 @@ object(self)
   val mutable outputs = Array.make y 1 
 
 end
+  
