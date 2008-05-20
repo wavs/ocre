@@ -9,17 +9,31 @@
 	About this file:	OCRed/argument.mli
 		This is the argument.mli file.
 *)
+
 val display             : bool ref
+(** display bool*)
 val seuil               : bool ref
+(** seuil bool*)
 val median              : bool ref
+(** median bool*)
 val rotate              : bool ref
+(***)
 val resize              : bool ref
+(***)
 val percent             : bool ref
+(***)
 val dev                 : bool ref
+(***)
 val right               : bool ref
+(***)
 val left                : bool ref
+(***)
 val percent_res         : int ref
+(***)
 val resize_of_x         : int ref
+(***)
 val resize_of_y         : int ref
+(***)
 val speclist            : (string * Arg.spec * string) list
+(***)
 val usage               : string

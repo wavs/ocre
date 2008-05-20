@@ -9,5 +9,7 @@
 	About this file:	OCRed/main.mli
 		This is the main.mli file.
 *)
+(** Create the sdl video and keyboard for the --display option*)
 val init : unit -> unit
+(** *)
 val main : unit -> unit
