@@ -1,7 +1,7 @@
 class neuron =
 object(self)
 
-  val mutable value = 0.
+  val mutable value = 1.
   val mutable error = 0.
   val mutable nextweights = Array.make 1 1.
   method get_error () = error
