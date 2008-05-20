@@ -400,7 +400,7 @@ object (self)
 *
 *)
   method sigmoideriv x =
-    (exp(-. x)) /. ((1. +. exp(-. x)) *. (1. +. exp(-. x)))
+    (exp(-. x)) /. (1. +. 2.*.exp(-. x) +. exp(-. 2.*.x))
 
 (**
 *Erreur d'un neurone de sortie
@@ -442,9 +442,9 @@ object (self)
     done
   
 (**
-*Initialisation du réseau
+*Initialisation du reseau
 *
-*@remark c'est ça qui est bon
+*@remark c'est ca qui est bon
 *
 *)  
   method init() =
@@ -455,7 +455,7 @@ object (self)
 (**
 *Procédeure d'apprentissage
 *
-*@remark soit on précise le nb iter soit on précise l'erreur à atteindre
+*@remark soit on precise le nb iter soit on precise l'erreur a� atteindre
 *
 *)  
   method learn() =
@@ -466,14 +466,16 @@ object (self)
       print_string "erreur : ";
       print_float (self#geter());
       print_newline();(**)
-      (*on permute les données*)
+
+
+      (*on permute les donnees*)
       self#permutedata();
-      (*on met à jour les valeurs d'entrée*)
+      (*on met a� jour les valeurs d'entree*)
       for j = 0 to Array.length learningdata - 1 do
         for k = 0 to learningdata.(0)#geti() - 1 do
           neurons.(k)#setv ((learningdata.(j)#get_inputs()).(k))
         done;
-        (*on met à jour les valeurs de sortie désirées*)
+        (*on met a� jour les valeurs de sortie desirees*)
         let nb_output = learningdata.(0)#geto() in
         let r = ref 0 in
           for m = Array.length neurons - nb_output to Array.length neurons - 1
@@ -481,7 +483,7 @@ object (self)
             neurons.(m)#seth (((learningdata.(j))#get_outputs()).(!r));
             r := !r + 1
           done;
-          (*on propage les entrées vers les sorties*)
+          (*on propage les entrees vers les sorties*)
           for o = 0 to Array.length neurons - 1 do
             let n = neurons.(o) in
               if n#getl() > 1 then
@@ -489,7 +491,7 @@ object (self)
                   n#setv (self#sigmoid(self#getsum (n#geti())))
                 end
           done;
-          (*on calcule l'erreur des sorties et on rétropropage*)
+          (*on calcule l'erreur des sorties et on retropropage*)
           for q = 0 to Array.length neurons - 1 do
             let n = neurons.(q) in
               if n#getl() = nblayers then
@@ -497,7 +499,7 @@ object (self)
               else
                 self#inerror (n#geti())
           done;
-          (*on met à jour les poids dans toutes les couches*)
+          (*on met a� jour les poids dans toutes les couches*)
           self#wupdate()
       done
     done
