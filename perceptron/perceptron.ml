@@ -7,7 +7,7 @@ object (self)
 
   val mutable treshold = 1. (*seuil pour heaviside*)
 
-  val mutable lambda = 95. (*coef d'apprentissage*)
+  val mutable lambda = 0.01 (*coef d'apprentissage*)
 
   val mutable iter = 500 (*nombre d'itérations pour l'apprentissage*)
 
@@ -156,8 +156,7 @@ object (self)
     (*init des id*)
     let nb_input = (learningdata.(0))#geti() in
     let nb_output = (learningdata.(0))#geto() in
-    let layer_cpt = ref nb_input in
-      
+    let layer_cpt = ref nb_input in  
       (*init des indicateurs de la couche d'entree*)
       for i = 0 to nb_input - 1 do
           let a = new Neuron.neuron in
