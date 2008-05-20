@@ -103,7 +103,7 @@ int checkIfUnderLimits(int x, int y, int limit_x, int limit_y)
  * @param x X coordinate
  * @param y Y coordinate
  */
-void updateMinMax(t_cc_coordinate *minmax, int x, int y)
+void updateMinMax(t_box_coordinate *minmax, int x, int y)
 {
   /* Update of minimum */
   if (x < minmax->xmin)
@@ -116,38 +116,6 @@ void updateMinMax(t_cc_coordinate *minmax, int x, int y)
     minmax->xmax = x;
   if (y > minmax->ymax)
     minmax->ymax = y;
-}
-
-/**
- * This function adds a connected component in
- * a list.
- *
- * @param elt Connected component
- * @param cc_list List of connected components
- */
-t_cc_list *addListCC(t_cc_elt *elt, t_cc_list *cc_list)
-{
-  t_cc_list *res;
-
-  if (elt != NULL)
-    {
-      if (cc_list == NULL)
-	{
-	  res = wmalloc(sizeof(t_cc_list));
-	  res->head = elt;
-	  res->tail = elt;
-	  res->nbcc = 1;
-	  return(res);
-	}
-      else
-	{
-	  cc_list->nbcc++;
-	  cc_list->tail->next = elt;
-	  cc_list->tail = elt;
-	  return(cc_list);
-	}
-    }
-  return(NULL);
 }
 
 /**
@@ -259,4 +227,182 @@ t_coordinate *qQeek(t_queue *p_queue)
   if (p_queue != NULL)
     ret = p_queue->coord;
   return(ret);
+}
+
+/**
+ * This function determines if a connected component is in
+ * a word.
+ *
+ * @param cc Connected component
+ * @param word Word
+ *
+ * @return True if >0
+ */
+int isInTheWord(t_cc_elt *cc, t_word_elt *word)
+{
+  int ymed_word, ymed_cc, xmed_cc, deltav, deltah;
+
+  if (cc == NULL || word == NULL)
+    return(0);
+  
+  ymed_word = word->coord.ymax - word->coord.ymin;
+  ymed_cc = cc->coord.ymax - cc->coord.ymin;
+  xmed_cc = cc->coord.xmax - cc->coord.xmin;
+  deltav = abs(ymed_word - ymed_cc);
+  deltah = abs(cc->coord.xmin - word->coord.xmax);
+
+  if ((deltav < ymed_cc) && (deltah < xmed_cc))
+    return(1);
+  return(0);
+}
+
+
+/**
+ * This function updates the minimum and the maximum
+ * values of the coodinates.
+ *
+ * @param coord1 Set of coordinates 1
+ * @param coord2 Set of coordinates 2
+ */
+void updateBoxCoord(t_box_coordinate coord1, t_box_coordinate coord2)
+{
+  /* Update of minimum */
+  if (coord2.xmin < coord1.xmin)
+    coord1.xmin = coord2.xmin;
+
+  if (coord2.ymin < coord1.ymin)
+    coord1.ymin = coord2.ymin;
+
+  if (coord2.xmax > coord1.xmax)
+    coord1.xmax = coord2.xmax;
+
+  if (coord2.ymax < coord1.ymax)
+    coord1.ymax = coord2.ymax;
+}
+
+/**
+ * This function adds a connected component in
+ * a list.
+ *
+ * @param elt Connected component
+ * @param cc_list List of connected components
+ */
+t_cc_list *addListCC(t_cc_elt *elt, t_cc_list *cc_list)
+{
+  t_cc_list *res;
+
+  if (elt != NULL)
+    {
+      if (cc_list == NULL)
+	{
+	  res = wmalloc(sizeof(t_cc_list));
+	  res->head = elt;
+	  res->tail = elt;
+	  res->nbcc = 1;
+	  return(res);
+	}
+      else
+	{
+	  cc_list->nbcc++;
+	  cc_list->tail->next = elt;
+	  cc_list->tail = elt;
+	  return(cc_list);
+	}
+    }
+  return(NULL);
+}
+
+/**
+ * This function adds a connected component in
+ * a list.
+ *
+ * @param elt Connected component
+ * @param cc_list List of connected components
+ */
+t_cc_list *addListCCsort(t_cc_elt *elt, t_cc_list *cc_list)
+{
+  t_cc_list *res;
+  t_cc_elt *tmp, *father;
+  int som;
+
+  if (elt != NULL)
+    {
+      if (cc_list == NULL)
+	{
+	  res = wmalloc(sizeof(t_cc_list));
+	  res->head = elt;
+	  res->tail = elt;
+	  res->nbcc = 1;
+	  return(res);
+	}
+      else
+	{
+	  cc_list->nbcc++;
+	  
+	  som = elt->coord.xmin + elt->coord.ymin;
+	  tmp = cc_list->head;
+	  father = tmp;
+	  while ((tmp != NULL) && (som >= (tmp->coord.xmin + tmp->coord.ymin)))
+	    {
+	      father = tmp;
+	      tmp = tmp->next;
+	    }
+	  
+	  /* Element en fin de liste */
+	  if (tmp == NULL)
+	    {
+	      cc_list->tail->next = elt;
+	      cc_list->tail = elt;
+	      return(cc_list);
+	    }
+	  
+	  /* Element en tete de liste */
+	  if (cc_list->head == tmp)
+	    {
+	      cc_list->head = elt;
+	      cc_list->head->next = tmp;
+	      return(cc_list);
+	    }
+
+	  elt->next = tmp;
+	  father->next = elt;
+	  if (elt->next == NULL)
+	    cc_list->tail = elt;
+	  
+	  return(cc_list);
+	}
+    }
+  return(NULL);
+}
+
+/**
+ * This function adds a word in
+ * a list.
+ *
+ * @param elt Word
+ * @param word_list List of words
+ */
+t_word_list *addListWord(t_word_elt *elt, t_word_list *word_list)
+{
+  t_word_list *res;
+
+  if (elt != NULL)
+    {
+      if (word_list == NULL)
+	{
+	  res = wmalloc(sizeof(t_word_list));
+	  res->head = elt;
+	  res->tail = elt;
+	  res->nbword = 1;
+	  return(res);
+	}
+      else
+	{
+	  word_list->nbword++;
+	  word_list->tail->next = elt;
+	  word_list->tail = elt;
+	  return(word_list);
+	}
+    }
+  return(NULL);
 }

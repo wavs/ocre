@@ -15,8 +15,8 @@
 #include <stdlib.h>
 #include "wrappers.h"
 #include "structures.h"
-#include "segmentation.h"
 #include "tools.h"
+#include "segmentation.h"
 #include "print.h"
 #include "graphics.h"
 #include "SDL/SDL.h"
@@ -40,12 +40,12 @@ void crossCC(int y,
 {
   int i, j, kmin, kmax, pmin, pmax, first; int pix_count;
   int xtmp, ytmp; t_coordinate *coord, *res;
-  t_cc_coordinate *minmax; t_queue **q;
+  t_box_coordinate *minmax; t_queue **q;
   pix_count = 1;
   q = NULL;
   q = (t_queue **)wcalloc(1, sizeof(t_queue *));
   xtmp = x; ytmp = y;
-  minmax = wcalloc(1, sizeof(t_cc_coordinate));
+  minmax = wcalloc(1, sizeof(t_box_coordinate));
   minmax->xmin = x; minmax->xmax = x;
   minmax->ymin = y; minmax->ymax = y; first = 1;
   do
@@ -259,25 +259,12 @@ void checkIfCharacter(t_cc_list *cc_list, int height, int width)
   wfree(tmp);
 }
 
-
 /**
- * This function detects the type of blocks
- * (text, image, ...)
- *
- * @param block_list Linked list of blocks
- */
-/*void detectTypeOfBlocks(t_block_list *block_list)
-{
-  // FIXME
-}
-*/
-
-/**
- * This function traces all the CC with boxes
+ * This function traces all the words with boxes
  * in an output image.
  *
- * @param block_list Linked list of blocks
- * @param limit Margins of the input image.
+ * @param image SDL surface
+ * @param cc_list Linked list of connected components
  */
 void traceCC(SDL_Surface *image, t_cc_list *cc_list)
 {
@@ -307,16 +294,83 @@ void traceCC(SDL_Surface *image, t_cc_list *cc_list)
     }
 }
 
-
 /**
- * This function traces all the blocks with boxes
+ * This function traces all the words with boxes
  * in an output image.
  *
- * @param block_list Linked list of blocks
- * @param limit Margins of the input image.
+ * @param image SDL surface
+ * @param word_list Linked list of words
  */
-/*void traceBlocks(t_block_list *block_list, t_limit *limit)
+void traceWords(SDL_Surface *image, t_word_list *word_list)
 {
-  // FIXME
+  t_word_elt *tmp;
+  Uint32 cl;
+  int width, height;
+
+  cl = SDL_MapRGB(image->format, 0x00, 0x53, 0xdd);
+  if (word_list != NULL)
+    {
+      tmp = word_list->head;
+      while (tmp != NULL)
+	{
+	  width = tmp->coord.xmax - tmp->coord.xmin;
+	  height = tmp->coord.ymax - tmp->coord.ymin;
+
+	  draw_line(tmp->coord.xmin, tmp->coord.ymin, width, 1, cl, image);
+	  draw_line(tmp->coord.xmin, tmp->coord.ymax, width, 1, cl, image);
+	  draw_line(tmp->coord.xmin, tmp->coord.ymin, 1, height, cl, image);
+	  draw_line(tmp->coord.xmax, tmp->coord.ymin, 1, height, cl, image);
+
+	  tmp = tmp->next;
+	}
+    }
 }
-*/
+
+/**
+ * This function creates a list of words with the list of connected components.
+ *
+ * @param cc_list Linked list of connected components
+ *
+ * @return Linked list of words
+ */
+t_word_list *makeWords(t_cc_list *cc_list)
+{
+  t_word_list *ret;
+  t_word_elt *tmpword;
+  t_cc_elt *tmp;
+
+  if (cc_list != NULL)
+    {
+      /* Initialization */
+      ret = NULL;
+      
+      /* Parcours de la liste de cc */
+      tmp = cc_list->head;
+      while (tmp != NULL)
+	{
+	  if (tmp->chr)
+	    {
+	      tmpword = wmalloc(sizeof(t_word_elt));
+	      tmpword->coord.xmin = 0;
+	      tmpword->coord.xmax = 0;
+	      tmpword->coord.ymin = 0;
+	      tmpword->coord.ymax = 0;
+	      tmpword->cclist = NULL;
+	      tmpword->cclist = addListCC(tmp, tmpword->cclist);
+	      updateBoxCoord(tmpword->coord, tmp->coord);
+	      while ((tmp != NULL) && (isInTheWord(tmp,tmpword)))
+		{
+		  tmpword->cclist = addListCC(tmp,tmpword->cclist);
+		  updateBoxCoord(tmpword->coord,tmp->coord);
+		  tmp = tmp->next;
+		}
+	      ret = addListWord(tmpword,ret);
+	      if (tmp == NULL)
+		break;
+	    }
+	  tmp = tmp->next;
+	}
+	return(ret);
+    }
+  return(NULL);
+}

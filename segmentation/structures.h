@@ -128,7 +128,7 @@ typedef struct s_coordinate t_coordinate;
  * This structure stores the coordinates of a
  * connected component.
  */
-struct s_cc_coordinate
+struct s_box_coordinate
 {
   int xmin;
   int xmax;
@@ -136,7 +136,7 @@ struct s_cc_coordinate
   int ymax;
 };
 
-typedef struct s_cc_coordinate t_cc_coordinate;
+typedef struct s_box_coordinate t_box_coordinate;
 
 /**
  * This structure represents a connected component.
@@ -145,7 +145,7 @@ struct s_cc_elt
 {
   int id;
   int nbpix; /* Optionnal */
-  struct s_cc_coordinate coord;
+  struct s_box_coordinate coord;
   short int chr; /* if >0 then cc is a character */
   struct s_cc_elt *next;
 };
@@ -164,6 +164,31 @@ struct s_cc_list
 };
 
 typedef struct s_cc_list t_cc_list;
+
+/**
+ * This structure represents a word.
+ */
+struct s_word_elt
+{
+  struct s_box_coordinate coord;
+  struct s_cc_list *cclist;
+  int nbcc;
+  struct s_word_elt *next;
+};
+
+typedef struct s_word_elt t_word_elt;
+
+/**
+ * This structure represents a linked list of words.
+ */
+struct s_word_list
+{
+  struct s_word_elt *head;
+  struct s_word_elt *tail;
+  int nbword;
+};
+
+typedef struct s_word_list t_word_list;
 
 /**
  * This structure represents a block in the image
