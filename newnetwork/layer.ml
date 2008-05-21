@@ -31,19 +31,11 @@ object(self)
 
   method init_neurons nb_arc_avt =
     for i = 0 to Array.length  neurons - 1 do
-      print_string("neuronne numero :"^string_of_int(i)^" : ");
-      (neurons.(i))#init_nextweights nb_arc_avt;
-      (*FIXME PROBLEME*)
-    print_string("ceci est un test: ");
-    print_float(neurons.(0)#get_nextweight 0);
-    print_string(" ");
-    print_float(neurons.(1)#get_nextweight 0);
-    print_string("\n");
+      let neuronlol = new Neuron.neuron in
+        neuronlol#init_nextweights nb_arc_avt;
+        neurons.(i) <- neuronlol
     done;
-    print_string("im a biais\n");
     bias#init_nextweights nb_arc_avt;
-    self#print_weight_and_neuron()
-
 
   method set_nbneurons x  = nbneurons <- x
   method get_nbneurons () = nbneurons

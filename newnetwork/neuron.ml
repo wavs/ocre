@@ -36,19 +36,15 @@ object(self)
   method set_value x = value <- x
 
   method init_nextweights taille =
-    let tab = Array.make taille 1. in
-    for i = 0 to Array.length tab - 1 do
+    let tab = ref (Array.make taille 1.) in
+      for i = 0 to Array.length !tab - 1 do
       let alea = Random.float 1. in
         if alea > 0.5 then
-            Array.set tab i (Random.float 10.)
+            Array.set !tab i (Random.float 10.)
         else
-          Array.set tab i (Random.float (-. 10.))
+          Array.set !tab i (Random.float (-. 10.))
     done;
-   nextweights <- tab;
-   for i = 0 to Array.length  nextweights - 1 do
-     print_string(string_of_float(nextweights.(i)));
-     print_string(string_of_int(i)^" \n");
-   done
+   nextweights <- !tab
 
   method set_nextweight pos value = Array.set nextweights pos value
   method get_nextweight pos = Array.get nextweights pos
