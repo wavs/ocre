@@ -23,4 +23,7 @@ class layer :
     method get_neurons_value : int -> float
     method set_neurons_value : int -> float -> unit
 
+    method set_neurons_error : int -> float -> unit
+    method get_neurons_error : int -> float
+
   end

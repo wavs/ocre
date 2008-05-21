@@ -49,6 +49,9 @@ object(self)
   method set_neurons pos x= neurons.(pos) <- x
   method set_neurons_value pos value = neurons.(pos)#set_value value
   method get_neurons_value pos = neurons.(pos)#get_value()
+  method set_neurons_error pos error = neurons.(pos)#set_error error
+  method get_neurons_error pos = neurons.(pos)#get_error()
+
 
 
 end

@@ -100,8 +100,23 @@ object(self)
       done;
     done;
 (*3*)
-
+    (* Il semblerai que l'etape trois est lieu a notre etape 2. il se
+       pourrait que l'on doit applique une application similaire a
+        heaviside
+*)
 (*4*)
+    (* L'on doit ici proceder au calcul de l'erreur de la sortie qui
+       peut s'ecrire sous cette forme : f(x)*(1 - f(x)*(d - y))
+       or f(x) a deja etait calcule!!*)
+  method set_error_for_ouput_neurons num_pattern =
+    let llayer = layers.(nblayers - 1) in
+      for i = 0 to llayer#get_nbneurons() - 1 do
+        let fx = llayer#get_neurons_value i in
+        let d = patterns#get_pos_tab num_pattern in
+        let error = fx*.(1. -. fx)*.
+          ((float_of_int (d#get_input i)) -. fx) in
+          llayer#set_neurons_error i error;
+      done
 
 (*5*)
 

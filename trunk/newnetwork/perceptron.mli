@@ -17,4 +17,5 @@ object
   method set_forward_propagate : unit -> unit
   method set_input_pattern : int -> unit
   method set_nblayers : int -> unit
+  method set_error_for_ouput_neurons : int -> unit
 end
