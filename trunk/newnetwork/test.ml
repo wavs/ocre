@@ -113,12 +113,15 @@ let main() =
             |"input" -> init5_(); (!p#set_input_pattern (!num_pattern
                                                          - 1));
   print_string "\n$"
-            |"backp" -> !p#backpropagation 2;print_string "\n$"
+            |"backp" -> !p#backpropagation_weight 2;print_string "\n$"
             |"set_err" -> !p#set_error_for_ouput_neurons
                (!num_pattern - 1); print_string "\n$"
             |"pavant" -> !p#set_forward_propagate();print_string "\n$"
+            |"retro" -> !p#back_propagation();print_string "\n$"
             |"displ"-> (!p#print_layer(); print_string "\n$")
             |"displw"-> (!p#print_layer_and_weight(); print_string
+                           "\n$")
+            |"herror" -> (!p#refresh_hidden_neurons_value 2; print_string
                            "\n$")
             |"dispquad"->(!p#set_err_quad (!num_pattern -1);print_float(!p#get_quad()); print_string
                             "\n$")
