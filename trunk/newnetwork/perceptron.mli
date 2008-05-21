@@ -7,7 +7,7 @@ object
   val mutable nblayers : int
   val mutable layers : Layer.layer array
   val mutable learning_rate : float
-  val mutable patterns : Data.data
+  val mutable patterns : Data.tab_xor
   val mutable quad_error : float
   method print_layer : unit -> unit
   method print_layer_and_weight : unit -> unit
@@ -16,5 +16,5 @@ object
   method init : unit -> unit
   method learn : unit -> unit
 
-  method set_input_pattern : unit -> unit
+  method set_input_pattern : int -> unit
 end
