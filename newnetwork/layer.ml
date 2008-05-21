@@ -5,7 +5,6 @@ object(self)
   val mutable neurons = Array.make nbn (new Neuron.neuron)
   val mutable bias = new Neuron.neuron
   method print_neurons () =
-    print_string(string_of_int(nbneurons));
     for i = 0 to nbneurons -1 do
       print_int(i);
       print_string(" this was the neuron number : ");
@@ -49,5 +48,7 @@ object(self)
   method get_neurons pos = neurons.(pos)
   method set_neurons pos x= neurons.(pos) <- x
   method set_neurons_value pos value = neurons.(pos)#set_value value
+  method get_neurons_value pos = neurons.(pos)#get_value()
+
 
 end

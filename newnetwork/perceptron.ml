@@ -32,7 +32,8 @@ object(self)
         layers.(i)#init_neurons nbn;
       done;
       (layers.(nblayers -2))#init_neurons output;
-      (layers.(nblayers -1))#init_neurons 0
+      (layers.(nblayers -1))#init_neurons 0;
+      patterns#init_tab()
 
 
 
@@ -59,12 +60,15 @@ object(self)
 (*1*)
   method set_input_pattern numero =
     let inlayer = layers.(0) in
+    let data = patterns#get_pos_tab numero in
       for i = 0 to inlayer#get_nbneurons() - 1 do
         begin
-          let data = patterns#get_pos_tab numero in
-          inlayer#set_neurons_value i (float_of_int(data#get_input i))
+          inlayer#set_neurons_value
+            i
+            (float_of_int(data#get_input  i));
         end
-      done
+      done;
+      layers.(0) <- inlayer
 (*2*)
 
 (*3*)

@@ -6,6 +6,9 @@ class data :
     val mutable nbinputs : int
     val mutable nboutputs : int
     val mutable outputs : int array
+      method print_input : unit -> unit
+
+
       method get_input : int -> int
       method get_inputs : unit -> int array
       method get_nbinputs : int
