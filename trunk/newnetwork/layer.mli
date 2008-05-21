@@ -17,4 +17,8 @@ class layer :
     method set_nbneurons : int -> unit
     method get_nbneurons : unit -> int
 
+    method set_neurons : int -> Neuron.neuron -> unit
+    method get_neurons : int -> Neuron.neuron
+    method set_neurons_value : int -> float -> unit
+
   end

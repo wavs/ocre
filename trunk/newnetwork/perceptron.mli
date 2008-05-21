@@ -11,8 +11,10 @@ object
   val mutable quad_error : float
   method print_layer : unit -> unit
   method print_layer_and_weight : unit -> unit
-  method set_nblayers : int -> unit 
+  method set_nblayers : int -> unit
   method get_nblayers : unit -> int
   method init : unit -> unit
   method learn : unit -> unit
+
+  method set_input_pattern : unit -> unit
 end

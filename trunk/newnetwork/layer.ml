@@ -46,4 +46,8 @@ object(self)
   method get_tabneurons () = neurons
   method set_tabneurons x = neurons <- x
 
+  method get_neurons pos = neurons.(pos)
+  method set_neurons pos x= neurons.(pos) <- x
+  method set_neurons_value pos value = neurons.(pos)#set_value value
+
 end
