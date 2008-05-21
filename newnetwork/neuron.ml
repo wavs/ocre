@@ -8,6 +8,7 @@ object(self)
   method print_value () = print_string(string_of_float(value))
   method print_error () = print_string(string_of_float(error))
   method print_weight() =
+    print_string("il ya "^string_of_int(Array.length nextweights)^" poids\n");
     for i = 0 to Array.length nextweights - 1 do
       print_string(
         "this is the weight between this neuron and "^string_of_int(i)^" :");
@@ -35,18 +36,19 @@ object(self)
   method set_value x = value <- x
 
   method init_nextweights taille =
-    print_string("debug\n");
-    print_int(taille);
-    print_string("\n");
     let tab = Array.make taille 1. in
     for i = 0 to Array.length tab - 1 do
       let alea = Random.float 1. in
         if alea > 0.5 then
-          Array.set tab i (Random.float 10.)
+            Array.set tab i (Random.float 10.)
         else
           Array.set tab i (Random.float (-. 10.))
     done;
-   nextweights <- tab
+   nextweights <- tab;
+   for i = 0 to Array.length  nextweights - 1 do
+     print_string(string_of_float(nextweights.(i)));
+     print_string(string_of_int(i)^" \n");
+   done
 
   method set_nextweight pos value = Array.set nextweights pos value
   method get_nextweight pos = Array.get nextweights pos
