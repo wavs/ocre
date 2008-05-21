@@ -113,7 +113,10 @@ let main() =
                (!num_pattern - 1); print_string "\n$"
             |"pavant" -> !p#set_forward_propagate();print_string "\n$"
             |"displ"-> (!p#print_layer(); print_string "\n$")
-            |"displw"-> (!p#print_layer_and_weight(); print_string "\n$")
+            |"displw"-> (!p#print_layer_and_weight(); print_string
+  "\n$")
+            |"dispquad"->(!p#set_err_quad (!num_pattern -1);print_float(!p#get_quad()); print_string
+  "\n$")
                (*             |"dispn"-> (p#nprint(); print_string "\n$") *)
                (*             |"save" -> print_string "xpldr\n$" *)
                (*             |"load" -> print_string "omg\n$" *)
