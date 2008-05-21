@@ -6,6 +6,12 @@ object(self)
   val mutable inputs = Array.make x 1
   val mutable outputs = Array.make y 1
 
+  method print_input () =
+    for i = 0 to Array.length inputs -1 do
+      print_string("Ceci est la "^string_of_int(i+1)^" valeur de inputs: ");
+      print_string(string_of_int(inputs.(i))^"\n");
+    done;
+
   method init_bool_op e1 e2 s1 =
     if (x == 2) && (y == 1) then
       begin
