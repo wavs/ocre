@@ -71,6 +71,7 @@ object(self)
       layers.(0) <- inlayer
 (*2*)
   method set_forward_propagate () =
+    let f x beta= 1./.(1. +. exp(float_of_int(beta) *. -.1. *. x)) in
     print_string(string_of_int(nblayers));
     for i = 1 to nblayers - 1 do
       (*pour chaque couches je parcours chaque neuronne*)
@@ -91,18 +92,11 @@ object(self)
           newvalue := !newvalue +.
             ((((layers.(i - 1))#get_bias ())#get_value()) *.
                ((layers.(i -1)#get_bias())#get_nextweight j));
+          (*applique la fonction d'activation*)
+          newvalue := (f !newvalue 1);
           (*remise a jour de la valeur des neurones de la couche
         cachees*)
-          print_string("\n cecie est un test: \n");
-          print_string("on print les weight pour voir: ");
-          (layers.(i)#get_neurons j)#print_neuron();
-          print_string("\n on regarde la valeur qu'on devrait avoir: ");
-          print_float(!newvalue       );
-          print_string("\n on set la valeur qu'on vient d'afficher:");
           (layers.(i)#get_neurons j)#set_value !newvalue;
-          print_string("\n apres on affiche la valeur qu'on devraitavoir:");
-          (layers.(i)#get_neurons j)#print_neuron();
-          print_string("\n");
       done;
     done;
 (*3*)
