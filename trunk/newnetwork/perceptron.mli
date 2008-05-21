@@ -4,7 +4,7 @@ class perceptron :
   int ->
   int ->
 object
-  val mutable layers : Layer.layer array
+  val mutable layers : Layer.layer array ref
   val mutable learning_rate : float
   val mutable nblayers : int
   val mutable patterns : Data.tab_xor
