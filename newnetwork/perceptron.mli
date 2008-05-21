@@ -9,7 +9,9 @@ object
   val mutable nblayers : int
   val mutable patterns : Data.tab_xor
   val mutable quad_error : float
-  method backpropagation : int -> unit
+  method back_propagation : unit -> unit
+
+  method backpropagation_weight : int -> unit
   method get_nblayers : unit -> int
   method get_quad : unit -> float
   method init : unit -> unit

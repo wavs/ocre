@@ -145,7 +145,7 @@ object(self)
 (*5*)
   (*  poid ij = poid ij + coef d'apprendtissage*erreurj*valeuri
       le learning_rate c'est le nom de la variable*)
-  method backpropagation num_couche =
+  method backpropagation_weight num_couche =
       (*on va parcourrir la liste des poids de chaques neuronnes*)
       for i = 0 to ((!layers).(num_couche -1))#get_nbneurons() - 1 do
         (* on s'occupe du neurone numero i*)
@@ -200,8 +200,24 @@ object(self)
                             (1. -. (neuron#get_value()))
                           *. !sum);
         (!layers).(num_couche -1)#set_neurons i neuron;
-    done;
+    done
 
 (*7*)
+(*enfaite l'on va passer outre les 7 points exposer plus haut la 7eme
+  fonction aurra pour but de faire une retropopagation total a partir
+  du calcule de l'erreur sur les sorties!*)
+  method back_propagation () =
+    let cpt = ref (nblayers - 1) in
+      (*notre cpt voit les couches en virtuelle comme si elles
+        allaient de 1 a n ou n et le nombre de couches*)
+      while (!cpt > 0) do
+        (* mise a jour des poids  *)
+(*           si on est pas sur la premiere couche mise a jour des
+             erreur *)
+        self#backpropagation_weight !cpt;
+        if (!cpt > 1) then
+          self#refresh_hidden_neurons_value !cpt;
+        cpt := !cpt + 1;
+      done;
 
 end
