@@ -111,10 +111,10 @@ int isInTheWord(t_cc_elt *cc, t_word_elt *word);
  * This function updates the minimum and the maximum
  * values of the coodinates.
  *
- * @param coord1 Set of coordinates 1
- * @param coord2 Set of coordinates 2
+ * @param word Word
+ * @param cc Connected component
  */
-void updateBoxCoord(t_box_coordinate coord1, t_box_coordinate coord2);
+void updateBoxCoord(t_word_elt *word, t_cc_elt *cc);
 
 /**
  * This function adds a connected component in
