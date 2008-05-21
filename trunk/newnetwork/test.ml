@@ -9,12 +9,13 @@ let options =
     "init  : initialise le reseau\n"^
 (*     "train : entraine le reseau\n"^ *)
 (*     "run   : reconnait la donnee voulue\n"^ *)
-    "input : initialise avec des donne"^
-      "pavant : forwardpropagation"^
-      "set_err : trouve l'erreur de sortie!"^
+    "input : initialise avec des donne\n"^
+      "pavant : forwardpropagation\n"^
+      "set_err : trouve l'erreur de sortie!\n"^
     "displ : affiche les connexions\n"^
     "displw : affiche les neurones\n"^
-    "dispquad : affiche l'erreur quadratique"^
+    "dispquad : affiche l'erreur quadratique\n"^
+      "backp : backpropagation \n"^
    (*  "save  : enregistre l'etat du reseau\n"^ *)
 (*     "load  : charge l'etat du reseau\n"^ *)
     "exit  : quitter\n$";;
