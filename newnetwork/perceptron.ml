@@ -2,8 +2,8 @@ class perceptron input output nbhlayers nbn =
 object(self)
 
   val mutable nblayers = nbhlayers + 2
-  val mutable layers = Array.make (nbhlayers + 2)
-    (new Layer.layer nbn)
+  val mutable layers = ref (Array.make (nbhlayers + 2)
+    (new Layer.layer nbn))
   val mutable learning_rate = 0.1
   val mutable patterns = new Data.tab_xor
   val mutable quad_error = 69.
@@ -16,13 +16,13 @@ object(self)
     print_string("Il y'a: "^string_of_int(nblayers)^" couches\n");
     for i = 0 to nblayers - 1 do
       print_string("couche numero"^string_of_int(i + 1)^": \n");
-      layers.(i)#print_neurons();
+      !layers.(i)#print_neurons();
     done;
   method print_layer_and_weight () =
     print_string("Il y'a: "^string_of_int(nblayers)^" couches\n\n");
     for i = 0 to nblayers - 1 do
       print_string("couche numero"^string_of_int(i + 1)^": \n\n");
-      layers.(i)#print_weight_and_neuron();
+     !layers.(i)#print_weight_and_neuron();
     done;
 
 
@@ -30,13 +30,13 @@ object(self)
   method get_nblayers() = nblayers
 
   method init() =
-    layers.(0) <- new Layer.layer input;
-    layers.(nbhlayers + 1) <- new Layer.layer output;
+    !layers.(0) <- new Layer.layer input;
+    !layers.(nbhlayers + 1) <- new Layer.layer output;
       for i = 0 to nblayers - 3 do
-        layers.(i)#init_neurons nbn;
+        !layers.(i)#init_neurons nbn;
       done;
-      (layers.(nblayers -2))#init_neurons output;
-      (layers.(nblayers -1))#init_neurons 0;
+      (!layers.(nblayers -2))#init_neurons output;
+      (!layers.(nblayers -1))#init_neurons 0;
       patterns#init_tab()
 
 
@@ -63,7 +63,7 @@ object(self)
 
 (*1*)
   method set_input_pattern numero =
-    let inlayer = layers.(0) in
+    let inlayer = !layers.(0) in
     let data = patterns#get_pos_tab numero in
       for i = 0 to inlayer#get_nbneurons() - 1 do
         begin
@@ -72,7 +72,7 @@ object(self)
             (float_of_int(data#get_input  i));
         end
       done;
-      layers.(0) <- inlayer
+      (!layers).(0) <- inlayer
 (*2*)
   method set_forward_propagate () =
     let f x beta= 1./.(1. +. exp(float_of_int(beta) *. -.1. *. x)) in
@@ -80,27 +80,27 @@ object(self)
     for i = 1 to nblayers - 1 do
       (*pour chaque couches je parcours chaque neuronne*)
 
-      for j = 0 to layers.(i)#get_nbneurons() - 1 do
+      for j = 0 to (!layers).(i)#get_nbneurons() - 1 do
         (*pour chaque neurones je calcule la nouvelle valeur des
           cellules cachees :D pourquoi parceque je le vaux bien! *)
         let newvalue = ref 0. in
-        for k = 0 to layers.(i - 1)#get_nbneurons() - 1 do
+        for k = 0 to (!layers).(i - 1)#get_nbneurons() - 1 do
           (* cette nouvelle valeur est equivalente a la somme des
              (chaque valeur des neurones de la couche precedente fois
              le poid entre ce dernier et le neurone courrant)*)
           newvalue := !newvalue +.
-            ((layers.(i - 1)#get_neurons k)#get_value() *.
-               ((layers.(i -1)#get_neurons k)#get_nextweight j))
+            (((!layers).(i - 1)#get_neurons k)#get_value() *.
+               (((!layers).(i -1)#get_neurons k)#get_nextweight j))
         done;
           (*oups pas oublie le biais*)
           newvalue := !newvalue +.
-            ((((layers.(i - 1))#get_bias ())#get_value()) *.
-               ((layers.(i -1)#get_bias())#get_nextweight j));
+            (((((!layers).(i - 1))#get_bias ())#get_value()) *.
+               (((!layers).(i -1)#get_bias())#get_nextweight j));
           (*applique la fonction d'activation*)
           newvalue := (f !newvalue 1);
           (*remise a jour de la valeur des neurones de la couche
         cachees*)
-          (layers.(i)#get_neurons j)#set_value !newvalue;
+          ((!layers).(i)#get_neurons j)#set_value !newvalue;
       done;
     done;
 (*3*)
@@ -113,7 +113,7 @@ object(self)
        peut s'ecrire sous cette forme : f(x)*(1 - f(x)*(d - y))
        or f(x) a deja etait calcule!!*)
   method set_error_for_ouput_neurons num_pattern =
-    let llayer = layers.(nblayers - 1) in
+    let llayer = (!layers).(nblayers - 1) in
       for i = 0 to llayer#get_nbneurons() - 1 do
         let fx = llayer#get_neurons_value i in
         let d = patterns#get_pos_tab num_pattern in
@@ -128,7 +128,7 @@ object(self)
    obtenu)au caarre] il peut etre sympa de la diviser par le nbr de
    neurones;*)
   method set_err_quad num_pattern =
-    let llayer = layers.(nblayers - 1) in
+    let llayer = (!layers).(nblayers - 1) in
     let sum = ref 0. in
       for i = 0 to llayer#get_nbneurons() - 1 do
         let f = llayer#get_neurons_value i in
@@ -146,7 +146,7 @@ object(self)
   (*  poid ij = poid ij + coef d'apprendtissage*erreurj*valeuri
       le learning_rate c'est le nom de la variable*)
   method backpropagation num_couche =
-    let clayer = layers.(num_couche -1) in
+    let clayer = (!layers).(num_couche -1) in
       (*on va parcourrir la liste des poids de chaques neuronnes*)
       for i = 0 to clayer#get_nbneurons() - 1 do
         (* on s'occupe du neurone numero i*)
@@ -156,11 +156,11 @@ object(self)
             let newpoid =
               (neuron#get_nextweight j) +.
               (learning_rate *.
-              ((layers.(num_couche)#get_neurons_error j))*.
+              (((!layers).(num_couche)#get_neurons_error j))*.
              neuron#get_value()) in
             neuron#set_nextweight j newpoid;
           done;
-          clayer#set_neurons i neuron;
+          ((!layers).(num_couche -1))#set_neurons i neuron;
       done;
       (*JE NE Dois pas oublie le biais!*)
       let bias = new Neuron.neuron in
@@ -168,7 +168,7 @@ object(self)
           let newpoid =
             (bias#get_nextweight j) +.
               (learning_rate *.
-                 ((layers.(num_couche)#get_neurons_error j))*.
+                 (((!layers).(num_couche)#get_neurons_error j))*.
              bias#get_value()) in
             bias#set_nextweight j newpoid;
         done;

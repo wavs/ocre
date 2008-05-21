@@ -113,7 +113,7 @@ let main() =
             |"input" -> init5_(); (!p#set_input_pattern (!num_pattern
                                                          - 1));
   print_string "\n$"
-            |"backp" -> !p#backpropagation 1;print_string "\n$"
+            |"backp" -> !p#backpropagation 2;print_string "\n$"
             |"set_err" -> !p#set_error_for_ouput_neurons
                (!num_pattern - 1); print_string "\n$"
             |"pavant" -> !p#set_forward_propagate();print_string "\n$"
