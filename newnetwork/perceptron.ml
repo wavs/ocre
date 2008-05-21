@@ -4,7 +4,7 @@ object(self)
   val mutable nblayers = nbhlayers + 2
   val mutable layers = ref (Array.make (nbhlayers + 2)
     (new Layer.layer nbn))
-  val mutable learning_rate = 0.1
+  val mutable learning_rate = 10.
   val mutable patterns = new Data.tab_xor
   val mutable quad_error = 69.
 
@@ -150,15 +150,19 @@ object(self)
       for i = 0 to ((!layers).(num_couche -1))#get_nbneurons() - 1 do
         (* on s'occupe du neurone numero i*)
         let neuron = (!layers).(num_couche -1)#get_neurons i in
-
           for j = 0 to (Array.length (neuron#get_nextweights())) - 1 do
+            neuron#print_weight();
+            print_string("juste avant ct le poid du neurons\n");
             let newpoid =
               (neuron#get_nextweight j) +.
               (learning_rate *.
               (((!layers).(num_couche)#get_neurons_error j))*.
              neuron#get_value()) in
             neuron#set_nextweight j newpoid;
-          done;
+            neuron#print_weight();
+            print_string("juste avant ct les poids des neurones apres le changement de poids!!\n");
+            print_string(string_of_int(i)^"to neurone"^string_of_int(j)^"\n");
+         done;
           ((!layers).(num_couche -1))#set_neurons i neuron;
       done;
       (*JE NE Dois pas oublie le biais!*)
@@ -217,7 +221,7 @@ object(self)
         self#backpropagation_weight !cpt;
         if (!cpt > 1) then
           self#refresh_hidden_neurons_value !cpt;
-        cpt := !cpt + 1;
+        cpt := !cpt - 1;
       done;
 
 end
