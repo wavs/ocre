@@ -106,7 +106,7 @@ t_cc_list *makeCC(int i,
   crossCC(i, j, elt, matrix, mark);
 
   /* Update of the linked list */
-  return(addListCC(elt, cc_list));
+  return(addListCCsort(elt, cc_list));
 
 }
 
@@ -271,12 +271,14 @@ void traceCC(SDL_Surface *image, t_cc_list *cc_list)
   t_cc_elt *tmp;
   Uint32 cl;
   int width, height;
+  int count;
 
+  count = 500;
   cl = SDL_MapRGB(image->format, 0x00, 0x53, 0xdd);
   if (cc_list != NULL)
     {
       tmp = cc_list->head;
-      while (tmp != NULL)
+      while ((tmp != NULL) && (count >= 0))
 	{
 	  width = tmp->coord.xmax - tmp->coord.xmin;
 	  height = tmp->coord.ymax - tmp->coord.ymin;
@@ -288,7 +290,8 @@ void traceCC(SDL_Surface *image, t_cc_list *cc_list)
 	      draw_line(tmp->coord.xmin, tmp->coord.ymin, 1, height, cl, image);
 	      draw_line(tmp->coord.xmax, tmp->coord.ymin, 1, height, cl, image);
 	    }
-
+	  
+	  count--;
 	  tmp = tmp->next;
 	}
     }
