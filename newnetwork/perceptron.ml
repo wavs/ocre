@@ -61,7 +61,7 @@ object(self)
     let inlayer = layers.(0) in
       for i = 0 to inlayer#get_nbneurons() - 1 do
         begin
-          inlayer#set_neurons patterns
+          inlayer#set_neurons_value i (float_of_int(patterns#get_input i))
         end
       done
 (*2*)

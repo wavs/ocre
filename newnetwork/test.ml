@@ -97,6 +97,7 @@ let main() =
             |"init" -> (init_(); print_string "init done\n$")
             (* |"train"-> (learn_(); print_string "done\n$") *)
             (*             |"run"  -> (run_(); print_string "done\n$") *)
+            |"input" -> (!p#set_input_pattern())
             |"displ"-> (!p#print_layer(); print_string "\n$")
             |"displw"-> (!p#print_layer_and_weight(); print_string "\n$")
                (*             |"dispn"-> (p#nprint(); print_string "\n$") *)
