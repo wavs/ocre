@@ -146,11 +146,10 @@ object(self)
   (*  poid ij = poid ij + coef d'apprendtissage*erreurj*valeuri
       le learning_rate c'est le nom de la variable*)
   method backpropagation num_couche =
-    let clayer = (!layers).(num_couche -1) in
       (*on va parcourrir la liste des poids de chaques neuronnes*)
-      for i = 0 to clayer#get_nbneurons() - 1 do
+      for i = 0 to ((!layers).(num_couche -1))#get_nbneurons() - 1 do
         (* on s'occupe du neurone numero i*)
-        let neuron = clayer#get_neurons i in
+        let neuron = (!layers).(num_couche -1)#get_neurons i in
 
           for j = 0 to (Array.length (neuron#get_nextweights())) - 1 do
             let newpoid =
@@ -163,17 +162,45 @@ object(self)
           ((!layers).(num_couche -1))#set_neurons i neuron;
       done;
       (*JE NE Dois pas oublie le biais!*)
-      let bias = new Neuron.neuron in
-        for j = 0 to (Array.length (bias#get_nextweights())) - 1 do
-          let newpoid =
+    let bias =  (!layers).(num_couche -1)#get_bias() in
+      for j = 0 to (Array.length (bias#get_nextweights())) - 1 do
+        let newpoid =
             (bias#get_nextweight j) +.
               (learning_rate *.
                  (((!layers).(num_couche)#get_neurons_error j))*.
              bias#get_value()) in
             bias#set_nextweight j newpoid;
         done;
-        clayer#set_bias bias
+        ((!layers).(num_couche -1))#set_bias bias
 (*6*)
+          (*il faudra ptet penser a faire une boucle pour faire ceci
+            quelque soit le nombre de couche!!*)
+    (*soit i -> j ou j neuronne de sortie alors on a l'erreur du
+      neuronne i qui vaut (fprime de la valeur du neuronne i) multiplie
+      par la somme des erreurs des neuronne j fois la valeur des
+      poids de i vers j*)
+  method refresh_hidden_neurons_value num_couche =
+(* pour i = 0 jusquau nombre de neuronne -1 faire *)
+(*     calcule de l'erreur du neuroone() = *)
+(*     calcule de la somme des poid* les erreurs *)
+(*       pour j = 0 jusqua taille du tableau de poid faire *)
+(*     sum := sum + (valeur du poid en j)*valeur de l'erreur dans la *)
+(*     couche suivant du neurone j *)
+(*     f'de la valeur du neuronne multiplie par sum *)
+(*     finpour *)
+    for i = 0 to ((!layers).(num_couche -1))#get_nbneurons() - 1 do
+      let sum = ref 0. in
+      let neuron = (!layers).(num_couche -1)#get_neurons i in
+        for j = 0 to ((Array.length (neuron#get_nextweights())) - 1)
+        do
+          sum := !sum +. (neuron#get_nextweight j)*.
+            (((!layers).(num_couche))#get_neurons j)#get_error();
+        done;
+        neuron#set_error ((neuron#get_value()) *.
+                            (1. -. (neuron#get_value()))
+                          *. !sum);
+        (!layers).(num_couche -1)#set_neurons i neuron;
+    done;
 
 (*7*)
 
