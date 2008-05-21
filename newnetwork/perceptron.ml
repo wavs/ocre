@@ -7,6 +7,7 @@ object(self)
   val mutable learning_rate = 0.1
   val mutable patterns = new Data.data input output
   val mutable quad_error = 69.
+
   method print_layer () =
     print_string("Il y'a: "^string_of_int(nblayers)^" couches\n");
     for i = 0 to nblayers - 1 do
@@ -31,7 +32,7 @@ object(self)
         layers.(i)#init_neurons nbn;
       done;
       (layers.(nblayers -2))#init_neurons output;
-      (layers.(nblayers -1))#init_neurons 0;
+      (layers.(nblayers -1))#init_neurons 0
 
 
 
@@ -56,14 +57,13 @@ object(self)
 (*boucle principale insert here*)
 
 (*1*)
-(*
-  let inlayer = layers.(0) in
-    for i = 0 to Array.length inlayer - 1 do
-      begin
-        inlayer#set_neurons patterns
-      end
-  done
-*)
+  method set_input_pattern () =
+    let inlayer = layers.(0) in
+      for i = 0 to inlayer#get_nbneurons() - 1 do
+        begin
+          inlayer#set_neurons patterns
+        end
+      done
 (*2*)
 
 (*3*)
@@ -76,6 +76,4 @@ object(self)
 
 (*7*)
 
-
 end
-
