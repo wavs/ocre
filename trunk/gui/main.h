@@ -6,9 +6,12 @@ libglade-2.0`
 #include "gtkspell.h"
 #include "/usr/local/include/libglade-2.0/glade/glade.h"
 #include <stdlib.h>
+#include <string.h>
 #include <pthread.h>
 #include <glib.h>
 #include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 
 typedef struct {
@@ -17,4 +20,5 @@ typedef struct {
   GtkWidget* image;
   GtkWidget* aboutdialog;
   GtkWidget* textview;
+  char* file;
 }GUI_;

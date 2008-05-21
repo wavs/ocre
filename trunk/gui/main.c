@@ -32,7 +32,7 @@ void on_about_show (gpointer user_data)
 				      GTK_RESPONSE_ACCEPT,
 				      NULL);
   /* text shown in the about box */
-  label = gtk_label_new("OCRe - HUGE Software - 2008");
+  label = gtk_label_new("        OCRe \nHUGE Software\n        2008");
   /* destroy the widget when clicking on the cross */
   g_signal_connect_swapped (about,
 			    "response",
@@ -52,20 +52,22 @@ void on_about_show (gpointer user_data)
 void preprocess (GtkImageMenuItem* test, gpointer user_data)
 {
   GUI_* guisex;
+  char* appel = malloc(sizeof(char *));
   /* so there's no unused parameter... */
   (void)test;
   guisex = (GUI_ *)user_data;
-  char* filename;
-  filename = (char *)guisex->image->file;
+  sprintf(appel, "../bin/OCRed -i %s -s 100", guisex->file);
+  system(appel);
+  /*
   if (!fork())
     {
-      execl("../bin/OCRed", "-i", filename, "-s", "100", NULL);
+      execl("../bin/OCRed", "-i", "lost.jpg", "-s", "100", NULL);
       exit(0);
     }
   else
     {
       wait(NULL);
-    }
+      } */
   /* open the file */
   gtk_image_set_from_file(GTK_IMAGE(guisex->image), "tresholded.bmp");
 }
@@ -160,12 +162,13 @@ void on_open_show (GtkImageMenuItem* test, gpointer user_data)
   gtk_widget_show(open);
   if (gtk_dialog_run (GTK_DIALOG (open)) == GTK_RESPONSE_ACCEPT)
     {
-      char* filename;
+      char *filename;
       /* get the filename */
       filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER
     					(open));
+      guisex->file = filename;
       /* open the file */
-      gtk_image_set_from_file(GTK_IMAGE(guisex->image), filename);
+      gtk_image_set_from_file(GTK_IMAGE(guisex->image), filename );
     }
   gtk_widget_destroy (open);
 }
