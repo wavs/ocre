@@ -2,13 +2,14 @@ let input = ref 0
 let output = ref 0
 let nbhlayers = ref 0
 let nbn = ref 0
-
+let num_pattern = ref 0
 
 let options =
     "?     : options\n"^
     "init  : initialise le reseau\n"^
 (*     "train : entraine le reseau\n"^ *)
 (*     "run   : reconnait la donnee voulue\n"^ *)
+    "input : initialise avec des donne"^
     "displ : affiche les connexions\n"^
     "displw : affiche les neurones\n"^
    (*  "save  : enregistre l'etat du reseau\n"^ *)
@@ -39,7 +40,7 @@ let rec init3_() =
     (match nbn1 with
        |x when x > 0 -> input :=  x
        |_            -> (print_string ("Entrez un entier"^
-                          " superieur a 0\n"); init2_()));;
+                          " superieur a 0\n"); init3_()));;
 
 
 let rec init4_() =
@@ -48,7 +49,15 @@ let rec init4_() =
     (match nbn1 with
        |x when x > 0 -> output :=  x
        |_            -> (print_string ("Entrez un entier"^
-                          " superieur a 0\n"); init2_()));;
+                          " superieur a 0\n"); init4_()));;
+
+let rec init5_() =
+  print_string "Numero du pattern :\nn = ";
+  let nbn1 = read_int() in
+    (match nbn1 with
+       |x when x > 0 -> num_pattern :=  x
+       |_            -> (print_string ("Entrez un entier"^
+                          " superieur a 0\n"); init5_()));;
 
 let init_() =
 (*   init1_(); *)
@@ -97,7 +106,8 @@ let main() =
             |"init" -> (init_(); print_string "init done\n$")
             (* |"train"-> (learn_(); print_string "done\n$") *)
             (*             |"run"  -> (run_(); print_string "done\n$") *)
-            |"input" -> (!p#set_input_pattern())
+            |"input" -> init4_(); (!p#set_input_pattern (!num_pattern
+                                                         - 1))
             |"displ"-> (!p#print_layer(); print_string "\n$")
             |"displw"-> (!p#print_layer_and_weight(); print_string "\n$")
                (*             |"dispn"-> (p#nprint(); print_string "\n$") *)

@@ -5,7 +5,7 @@ object(self)
   val mutable layers = Array.make (nbhlayers + 2)
     (new Layer.layer nbn)
   val mutable learning_rate = 0.1
-  val mutable patterns = new Data.data input output
+  val mutable patterns = new Data.tab_xor
   val mutable quad_error = 69.
 
   method print_layer () =
@@ -57,11 +57,12 @@ object(self)
 (*boucle principale insert here*)
 
 (*1*)
-  method set_input_pattern () =
+  method set_input_pattern numero =
     let inlayer = layers.(0) in
       for i = 0 to inlayer#get_nbneurons() - 1 do
         begin
-          inlayer#set_neurons_value i (float_of_int(patterns#get_input i))
+          let data = patterns#get_pos_tab numero in
+          inlayer#set_neurons_value i (float_of_int(data#get_input i))
         end
       done
 (*2*)

@@ -6,6 +6,15 @@ object(self)
   val mutable inputs = Array.make x 1
   val mutable outputs = Array.make y 1
 
+  method init_bool_op e1 e2 s1 =
+    if (x == 2) && (y == 1) then
+      begin
+        inputs.(0) <- e1;
+        inputs.(1) <- e2;
+        outputs.(0) <- s1;
+      end
+
+
   method get_nbinputs = nbinputs
   method set_nbinputs x = nbinputs <- x
   method set_nboutputs x = nboutputs <- x
@@ -21,4 +30,25 @@ object(self)
   method set_outputs x  = outputs <- x
   method get_outputs () = outputs
 
+end
+
+
+(** tabdata pour le xor*)
+
+class tab_xor =
+object (self)
+  val mutable tab = Array.make 4 (new data 2 1)
+  method get_tab() = tab
+  method set_tab x = tab <- x
+  method init_tab () =
+    let pattern1 = new data 2 1 in
+      pattern1#init_bool_op 0 0 0;
+    let pattern2 = new data 2 1 in
+      pattern2#init_bool_op 0 1 1;
+    let pattern3 = new data 2 1 in
+      pattern3#init_bool_op 1 0 1;
+    let pattern4 = new data 2 1 in
+      pattern4#init_bool_op 1 1 0;
+      tab <- [|pattern1;pattern2;pattern3;pattern4|]
+  method get_pos_tab pos = Array.get tab pos
 end
