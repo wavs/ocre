@@ -338,10 +338,12 @@ t_word_list *makeWords(t_cc_list *cc_list)
   t_word_list *ret;
   t_word_elt *tmpword;
   t_cc_elt *tmp;
+  int first;
 
   /* Initialization */
   ret = NULL;
   
+  first = 1;
   /* Parcours de la liste de cc */
   tmp = cc_list->head;
   while (tmp != NULL)
@@ -355,12 +357,19 @@ t_word_list *makeWords(t_cc_list *cc_list)
 	  tmpword->coord.ymax = tmp->coord.ymax;
 	  tmpword->cclist = NULL;
 	  tmpword->cclist = addListCC(tmp, tmpword->cclist);
+	  if (first)
+	    {
+	      tmp = tmp->next;
+	      first = 0;
+	    }
 	  while ((tmp != NULL) && isInTheWord(tmp,tmpword))
 	    {
+	      printf("dans la boucle\n");
 	      tmpword->cclist = addListCC(tmp,tmpword->cclist);
 	      updateBoxCoord(tmpword,tmp);
 	      tmp = tmp->next;
 	    }
+	  /* printf("Nb cc dans la liste: %d\n",tmpword->cclist->nbcc); */
 	  ret = addListWord(tmpword,ret);
 	  if (tmp == NULL)
 	    break;
