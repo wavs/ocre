@@ -30,8 +30,8 @@ object(self)
       for i = 0 to nblayers - 3 do
         layers.(i)#init_neurons nbn;
       done;
-      (layers.(nblayers -2))#init_neurons output
-
+      (layers.(nblayers -2))#init_neurons output;
+      (layers.(nblayers -1))#init_neurons 0;
 
 
 
