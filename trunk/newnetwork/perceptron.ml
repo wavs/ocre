@@ -8,6 +8,10 @@ object(self)
   val mutable patterns = new Data.tab_xor
   val mutable quad_error = 69.
 
+  method get_quad () = quad_error
+  method set_quad x = quad_error <- x
+
+
   method print_layer () =
     print_string("Il y'a: "^string_of_int(nblayers)^" couches\n");
     for i = 0 to nblayers - 1 do
@@ -114,12 +118,49 @@ object(self)
         let fx = llayer#get_neurons_value i in
         let d = patterns#get_pos_tab num_pattern in
         let error = fx*.(1. -. fx)*.
-          ((float_of_int (d#get_input i)) -. fx) in
+          ((float_of_int (d#get_output i)) -. fx) in
           llayer#set_neurons_error i error;
+          print_string("this is the output"^string_of_int(d#get_output i)^"\n");
       done
 
-(*5*)
+(* on rajoute une methode qui nous permet de calculer l'erreur quad
+   qui rappellons le est de la form: somme des[ (theo - valeur
+   obtenu)au caarre] il peut etre sympa de la diviser par le nbr de
+   neurones;*)
+  method set_err_quad num_pattern =
+    let llayer = layers.(nblayers - 1) in
+    let sum = ref 0. in
+      for i = 0 to llayer#get_nbneurons() - 1 do
+        let f = llayer#get_neurons_value i in
+        let d = float_of_int((patterns#get_pos_tab num_pattern)#get_output i) in
+          sum := !sum +. ((d -. f) *. (d -. f));
+      done;
+      self#set_quad (!sum /. float_of_int(llayer#get_nbneurons()))
 
+(* Pour 5-6-7 deux choix se presentent: calcule d'erreur en fonction
+   des poids precedent ou calcule des poids puis des erreurs; il
+   semblerai donc que je sois oblige de coder deux fonctions de
+   backpropagation qui s'appelleront chacune backp1 et backp2 je
+   devrais mettre deux k .. ca ferait kk comme ca ! Bahh c'est KK p2*)
+(*5*)
+  (*  poid ij = poid ij + coef d'apprendtissage*erreurj*valeuri
+      le learning_rate c'est le nom de la variable*)
+  method backpropagation num_couche =
+    let clayer = layers.(num_couche -1) in
+      (*on va parcourrir la liste des poids de chaques neuronnes*)
+      for i = 0 to clayer#get_nbneurons() - 1 do
+        (* on s'occupe du neurone numero i*)
+        let neuron = clayer#get_neurons i in
+
+          for j = 0 to (Array.length (neuron#get_nextweights())) - 1 do
+            let newpoid =
+              (neuron#get_nextweight j) +.
+              (learning_rate *.
+              ((layers.(num_couche)#get_neurons_error j))*.
+             neuron#get_value()) in
+            neuron#set_nextweight j newpoid;
+          done;
+      done
 (*6*)
 
 (*7*)
