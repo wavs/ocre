@@ -261,23 +261,23 @@ int isInTheWord(t_cc_elt *cc, t_word_elt *word)
  * This function updates the minimum and the maximum
  * values of the coodinates.
  *
- * @param coord1 Set of coordinates 1
- * @param coord2 Set of coordinates 2
+ * @param word Word
+ * @param cc Connected component
  */
-void updateBoxCoord(t_box_coordinate coord1, t_box_coordinate coord2)
+void updateBoxCoord(t_word_elt *word, t_cc_elt *cc)
 {
   /* Update of minimum */
-  if (coord2.xmin < coord1.xmin)
-    coord1.xmin = coord2.xmin;
+  if (cc->coord.xmin < word->coord.xmin)
+    word->coord.xmin = cc->coord.xmin;
 
-  if (coord2.ymin < coord1.ymin)
-    coord1.ymin = coord2.ymin;
+  if (cc->coord.ymin < word->coord.ymin)
+    word->coord.ymin = cc->coord.ymin;
 
-  if (coord2.xmax > coord1.xmax)
-    coord1.xmax = coord2.xmax;
+  if (cc->coord.xmax > word->coord.xmax)
+    word->coord.xmax = cc->coord.xmax;
 
-  if (coord2.ymax < coord1.ymax)
-    coord1.ymax = coord2.ymax;
+  if (cc->coord.ymax < word->coord.ymax)
+    word->coord.ymax = cc->coord.ymax;
 }
 
 /**
@@ -342,8 +342,11 @@ t_cc_list *addListCCsort(t_cc_elt *elt, t_cc_list *cc_list)
 	  som = elt->coord.xmin + elt->coord.ymin;
 	  tmp = cc_list->head;
 	  father = tmp;
-	  while ((tmp != NULL) && (som >= (tmp->coord.xmin + tmp->coord.ymin)))
+	  while (tmp != NULL)
 	    {
+	      if (elt->coord.xmin < tmp->coord.xmin)
+		if (!(elt->coord.ymin > tmp->coord.ymax))
+		  break;
 	      father = tmp;
 	      tmp = tmp->next;
 	    }

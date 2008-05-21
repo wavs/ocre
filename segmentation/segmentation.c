@@ -271,14 +271,12 @@ void traceCC(SDL_Surface *image, t_cc_list *cc_list)
   t_cc_elt *tmp;
   Uint32 cl;
   int width, height;
-  int count;
 
-  count = 500;
   cl = SDL_MapRGB(image->format, 0x00, 0x53, 0xdd);
   if (cc_list != NULL)
     {
       tmp = cc_list->head;
-      while ((tmp != NULL) && (count >= 0))
+      while (tmp != NULL)
 	{
 	  width = tmp->coord.xmax - tmp->coord.xmin;
 	  height = tmp->coord.ymax - tmp->coord.ymin;
@@ -291,7 +289,6 @@ void traceCC(SDL_Surface *image, t_cc_list *cc_list)
 	      draw_line(tmp->coord.xmax, tmp->coord.ymin, 1, height, cl, image);
 	    }
 	  
-	  count--;
 	  tmp = tmp->next;
 	}
     }
@@ -342,38 +339,33 @@ t_word_list *makeWords(t_cc_list *cc_list)
   t_word_elt *tmpword;
   t_cc_elt *tmp;
 
-  if (cc_list != NULL)
+  /* Initialization */
+  ret = NULL;
+  
+  /* Parcours de la liste de cc */
+  tmp = cc_list->head;
+  while (tmp != NULL)
     {
-      /* Initialization */
-      ret = NULL;
-      
-      /* Parcours de la liste de cc */
-      tmp = cc_list->head;
-      while (tmp != NULL)
+      if (tmp->chr)
 	{
-	  if (tmp->chr)
+	  tmpword = wmalloc(sizeof(t_word_elt));
+	  tmpword->coord.xmin = tmp->coord.xmin;
+	  tmpword->coord.xmax = tmp->coord.xmax;
+	  tmpword->coord.ymin = tmp->coord.ymin;
+	  tmpword->coord.ymax = tmp->coord.ymax;
+	  tmpword->cclist = NULL;
+	  tmpword->cclist = addListCC(tmp, tmpword->cclist);
+	  while ((tmp != NULL) && isInTheWord(tmp,tmpword))
 	    {
-	      tmpword = wmalloc(sizeof(t_word_elt));
-	      tmpword->coord.xmin = 0;
-	      tmpword->coord.xmax = 0;
-	      tmpword->coord.ymin = 0;
-	      tmpword->coord.ymax = 0;
-	      tmpword->cclist = NULL;
-	      tmpword->cclist = addListCC(tmp, tmpword->cclist);
-	      updateBoxCoord(tmpword->coord, tmp->coord);
-	      while ((tmp != NULL) && (isInTheWord(tmp,tmpword)))
-		{
-		  tmpword->cclist = addListCC(tmp,tmpword->cclist);
-		  updateBoxCoord(tmpword->coord,tmp->coord);
-		  tmp = tmp->next;
-		}
-	      ret = addListWord(tmpword,ret);
-	      if (tmp == NULL)
-		break;
+	      tmpword->cclist = addListCC(tmp,tmpword->cclist);
+	      updateBoxCoord(tmpword,tmp);
+	      tmp = tmp->next;
 	    }
-	  tmp = tmp->next;
+	  ret = addListWord(tmpword,ret);
+	  if (tmp == NULL)
+	    break;
 	}
-	return(ret);
+      tmp = tmp->next;
     }
-  return(NULL);
+  return(ret);
 }
