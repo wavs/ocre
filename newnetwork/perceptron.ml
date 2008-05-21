@@ -70,7 +70,24 @@ object(self)
       done;
       layers.(0) <- inlayer
 (*2*)
-
+  method set_forward_propagate () =
+    print_string(string_of_int(nblayers));
+    for i = 1 to nblayers - 1 do
+      (*pour chaque couches je parcours chaque neuronne*)
+      let newvalue = ref 0. in
+      for j = 0 to layers.(i)#get_nbneurons() - 1 do
+        (*pour chaque neuronnes je calcule la nouvelle valeur des
+          cellules cachees :D pourquoi parceque je le vaux bien! *)
+        for k = 0 to layers.(i - 1)#get_nbneurons() - 1 do
+          (* cette nouvelle valeur est equivalente a la somme des
+             (chaque valeur des neurones de la couche precedente fois
+             le poid entre ce dernier et le neurone courrant)*)
+          newvalue := !newvalue +.
+            ((layers.(i - 1)#get_neurons k)#get_value() *.
+               ((layers.(i -1)#get_neurons k)#get_nextweight j))
+        done;
+      done;
+    done;
 (*3*)
 
 (*4*)
