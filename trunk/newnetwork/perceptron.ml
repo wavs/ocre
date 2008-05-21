@@ -74,10 +74,11 @@ object(self)
     print_string(string_of_int(nblayers));
     for i = 1 to nblayers - 1 do
       (*pour chaque couches je parcours chaque neuronne*)
-      let newvalue = ref 0. in
+
       for j = 0 to layers.(i)#get_nbneurons() - 1 do
-        (*pour chaque neuronnes je calcule la nouvelle valeur des
+        (*pour chaque neurones je calcule la nouvelle valeur des
           cellules cachees :D pourquoi parceque je le vaux bien! *)
+        let newvalue = ref 0. in
         for k = 0 to layers.(i - 1)#get_nbneurons() - 1 do
           (* cette nouvelle valeur est equivalente a la somme des
              (chaque valeur des neurones de la couche precedente fois
@@ -86,6 +87,22 @@ object(self)
             ((layers.(i - 1)#get_neurons k)#get_value() *.
                ((layers.(i -1)#get_neurons k)#get_nextweight j))
         done;
+          (*oups pas oublie le biais*)
+          newvalue := !newvalue +.
+            ((((layers.(i - 1))#get_bias ())#get_value()) *.
+               ((layers.(i -1)#get_bias())#get_nextweight j))
+          (*remise a jour de la valeur des neurones de la couche
+        cachees*)
+          print_string("\n cecie est un test: \n");
+          print_string("on print les weight pour voir: ");
+          (layers.(i)#get_neurons j)#print_neuron();
+          print_string("\n on regarde la valeur qu'on devrait avoir: ");
+          print_float(!newvalue       );
+          print_string("\n on set la valeur qu'on vient d'afficher:");
+          (layers.(i)#get_neurons j)#set_value !newvalue;
+          print_string("\n apres on affiche la valeur qu'on devraitavoir:");
+          (layers.(i)#get_neurons j)#print_neuron();
+          print_string("\n");
       done;
     done;
 (*3*)
