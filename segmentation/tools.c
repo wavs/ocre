@@ -240,18 +240,21 @@ t_coordinate *qQeek(t_queue *p_queue)
  */
 int isInTheWord(t_cc_elt *cc, t_word_elt *word)
 {
-  int ymed_word, ymed_cc, xmed_cc, deltav, deltah;
+  int ymed_word, ymed_cc, deltav, deltah;
+  int word_height, cc_width;
 
   if (cc == NULL || word == NULL)
-    return(0);
   
-  ymed_word = word->coord.ymax - word->coord.ymin;
-  ymed_cc = cc->coord.ymax - cc->coord.ymin;
-  xmed_cc = cc->coord.xmax - cc->coord.xmin;
-  deltav = abs(ymed_word - ymed_cc);
+  word_height = word->coord.ymax - word->coord.ymin;
+  cc_width = cc->coord.xmax - cc->coord.xmin;
+
+  ymed_word = (word->coord.ymin + word->coord.ymax) / 2;
+  ymed_cc = (cc->coord.ymin + cc->coord.ymax) / 2;
+ 
+  deltav = abs(ymed_cc - ymed_word);
   deltah = abs(cc->coord.xmin - word->coord.xmax);
 
-  if ((deltav < ymed_cc) && (deltah < xmed_cc))
+  if ((deltav < (word_height)) && (deltah < cc_width))
     return(1);
   return(0);
 }
@@ -267,8 +270,10 @@ int isInTheWord(t_cc_elt *cc, t_word_elt *word)
 void updateBoxCoord(t_word_elt *word, t_cc_elt *cc)
 {
   /* Update of minimum */
+  printf("Avant: %d", word->coord.xmin);
   if (cc->coord.xmin < word->coord.xmin)
     word->coord.xmin = cc->coord.xmin;
+  printf("Apres: %d", word->coord.xmin);
 
   if (cc->coord.ymin < word->coord.ymin)
     word->coord.ymin = cc->coord.ymin;

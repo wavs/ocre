@@ -49,12 +49,13 @@ void processAll(t_launch_infos *infos)
 	      if (infos->verbose)
 		print_listCC(cc_list);
 	      printf(" >> Extraction of characters done.\n");
+	      printf("Nb cc: %d\n", cc_list->nbcc);
 
 	      word_list = makeWords(cc_list);
 	      if (word_list != NULL)
 		{
-		  printf("Nb words: %d\n",word_list->nbword);
 		  printf(" >> Extraction of words done.\n");
+		  printf("Nb words: %d\n",word_list->nbword);
 		  traceWords(image, word_list);
 		}
 
