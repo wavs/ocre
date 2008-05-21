@@ -10,8 +10,11 @@ let options =
 (*     "train : entraine le reseau\n"^ *)
 (*     "run   : reconnait la donnee voulue\n"^ *)
     "input : initialise avec des donne"^
+      "pavant : forwardpropagation"^
+      "set_err : trouve l'erreur de sortie!"^
     "displ : affiche les connexions\n"^
     "displw : affiche les neurones\n"^
+    "dispquad : affiche l'erreur quadratique"^
    (*  "save  : enregistre l'etat du reseau\n"^ *)
 (*     "load  : charge l'etat du reseau\n"^ *)
     "exit  : quitter\n$";;
@@ -109,14 +112,15 @@ let main() =
             |"input" -> init5_(); (!p#set_input_pattern (!num_pattern
                                                          - 1));
   print_string "\n$"
+            |"backp" -> !p#backpropagation 1;print_string "\n$"
             |"set_err" -> !p#set_error_for_ouput_neurons
                (!num_pattern - 1); print_string "\n$"
             |"pavant" -> !p#set_forward_propagate();print_string "\n$"
             |"displ"-> (!p#print_layer(); print_string "\n$")
             |"displw"-> (!p#print_layer_and_weight(); print_string
-  "\n$")
+                           "\n$")
             |"dispquad"->(!p#set_err_quad (!num_pattern -1);print_float(!p#get_quad()); print_string
-  "\n$")
+                            "\n$")
                (*             |"dispn"-> (p#nprint(); print_string "\n$") *)
                (*             |"save" -> print_string "xpldr\n$" *)
                (*             |"load" -> print_string "omg\n$" *)

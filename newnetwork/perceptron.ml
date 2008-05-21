@@ -160,7 +160,19 @@ object(self)
              neuron#get_value()) in
             neuron#set_nextweight j newpoid;
           done;
-      done
+          clayer#set_neurons i neuron;
+      done;
+      (*JE NE Dois pas oublie le biais!*)
+      let bias = new Neuron.neuron in
+        for j = 0 to (Array.length (bias#get_nextweights())) - 1 do
+          let newpoid =
+            (bias#get_nextweight j) +.
+              (learning_rate *.
+                 ((layers.(num_couche)#get_neurons_error j))*.
+             bias#get_value()) in
+            bias#set_nextweight j newpoid;
+        done;
+        clayer#set_bias bias
 (*6*)
 
 (*7*)
