@@ -90,7 +90,7 @@ object(self)
           (*oups pas oublie le biais*)
           newvalue := !newvalue +.
             ((((layers.(i - 1))#get_bias ())#get_value()) *.
-               ((layers.(i -1)#get_bias())#get_nextweight j))
+               ((layers.(i -1)#get_bias())#get_nextweight j));
           (*remise a jour de la valeur des neurones de la couche
         cachees*)
           print_string("\n cecie est un test: \n");
