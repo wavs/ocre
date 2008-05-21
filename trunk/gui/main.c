@@ -49,6 +49,26 @@ void on_about_show (gpointer user_data)
     }
 }
 
+void preprocess (GtkImageMenuItem* test, gpointer user_data)
+{
+  GUI_* guisex;
+  /* so there's no unused parameter... */
+  (void)test;
+  guisex = (GUI_ *)user_data;
+  char* filename;
+  filename = (char *)guisex->image->file;
+  if (!fork())
+    {
+      execl("../bin/OCRed", "-i", filename, "-s", "100", NULL);
+      exit(0);
+    }
+  else
+    {
+      wait(NULL);
+    }
+  /* open the file */
+  gtk_image_set_from_file(GTK_IMAGE(guisex->image), "tresholded.bmp");
+}
 
 /* fct qui balance du texte dans l'editeur */
 void on_text_show (GtkImageMenuItem* test, gpointer user_data)
@@ -143,13 +163,7 @@ void on_open_show (GtkImageMenuItem* test, gpointer user_data)
       char* filename;
       /* get the filename */
       filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER
-						(open));
-      /* preprocessing */
-/*       if (fork()) */
-/* 	execl("../bin/OCRed", "-i", filename, "-dev", NULL); */
-/*      if (fork())
-        execlp("../bin/OCRed", "-i", filename, "--resize-auto", NULL);
-      sleep(3); */
+    					(open));
       /* open the file */
       gtk_image_set_from_file(GTK_IMAGE(guisex->image), filename);
     }
@@ -181,7 +195,7 @@ int main (int argc, char *argv[])
 				 G_CALLBACK (on_save_show),
 				 gui);
   glade_xml_signal_connect_data (gui->gxml, "on_text_show",
-				 G_CALLBACK (on_text_show),
+				 G_CALLBACK (preprocess),
 				 gui);
   glade_xml_signal_connect (gui->gxml, "on_about_show",
 			    G_CALLBACK (on_about_show));
