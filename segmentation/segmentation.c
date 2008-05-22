@@ -337,44 +337,70 @@ t_word_list *makeWords(t_cc_list *cc_list)
 {
   t_word_list *ret;
   t_word_elt *tmpword;
-  t_cc_elt *tmp;
-  int first;
+  t_cc_elt *tmp, *next;
 
   /* Initialization */
   ret = NULL;
-  
-  first = 1;
-  /* Parcours de la liste de cc */
+  tmp = cc_list->head;
+
+  while (tmp != NULL)
+    {
+
+      tmpword = wmalloc(sizeof(t_word_elt));
+      tmpword->coord.xmin = tmp->coord.xmin;
+      tmpword->coord.xmax = tmp->coord.xmax;
+      tmpword->coord.ymin = tmp->coord.ymin;
+      tmpword->coord.ymax = tmp->coord.ymax;
+      tmpword->cclist = NULL;
+      tmpword->next = NULL;
+      do
+	{
+	  tmpword->cclist = addListCC(tmp, tmpword->cclist);
+	  updateBoxCoord(tmpword, tmp);
+	  next = tmp->next;
+	  tmp->next = NULL;
+	  tmp = next;
+	}
+      while ((tmp != NULL) && (isInWord(tmp, tmpword)));
+      ret = addListWord(tmpword, ret);
+    }
+  return(ret);
+}
+
+/**
+ * This function creates a list of lines with the list of connected components.
+ *
+ * @param cc_list Linked list of connected components
+ *
+ * @return t_line_list Linked list of lines
+ */
+/*t_line_list *makeLines(t_cc_list cc_list)
+{
+  t_line_list *ret;
+  t_line_elt *tmpline;
+  t_cc_elt *tmp, *next;
+
+  ret = NULL;
+
   tmp = cc_list->head;
   while (tmp != NULL)
     {
-      if (tmp->chr)
+      tmpline = wmalloc(sizeof(t_line_elt));
+      tmpline->coord.xmin = tmp->coord.xmin;
+      tmpline->coord.xmax = tmp->coord.xmax;
+      tmpline->coord.ymin = tmp->coord.ymin;
+      tmpline->coord.ymax = tmp->coord.ymax;
+      tmpline->cc_list = NULL;
+      tmpline->next = NULL;
+      tmpline->cclist = addListCC(tmp,tmpline->cclist);
+
+      while ((tmp != NULL) && (isInLine(tmp,tmpline)))
 	{
-	  tmpword = wmalloc(sizeof(t_word_elt));
-	  tmpword->coord.xmin = tmp->coord.xmin;
-	  tmpword->coord.xmax = tmp->coord.xmax;
-	  tmpword->coord.ymin = tmp->coord.ymin;
-	  tmpword->coord.ymax = tmp->coord.ymax;
-	  tmpword->cclist = NULL;
-	  tmpword->cclist = addListCC(tmp, tmpword->cclist);
-	  if (first)
-	    {
-	      tmp = tmp->next;
-	      first = 0;
-	    }
-	  while ((tmp != NULL) && isInTheWord(tmp,tmpword))
-	    {
-	      printf("dans la boucle\n");
-	      tmpword->cclist = addListCC(tmp,tmpword->cclist);
-	      updateBoxCoord(tmpword,tmp);
-	      tmp = tmp->next;
-	    }
-	  /* printf("Nb cc dans la liste: %d\n",tmpword->cclist->nbcc); */
-	  ret = addListWord(tmpword,ret);
-	  if (tmp == NULL)
-	    break;
 	}
+      
+ 
       tmp = tmp->next;
     }
   return(ret);
 }
+*/

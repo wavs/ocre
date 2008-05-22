@@ -105,7 +105,7 @@ t_coordinate *qQeek(t_queue *p_queue);
  *
  * @return True if >0
  */
-int isInTheWord(t_cc_elt *cc, t_word_elt *word);
+int isInWord(t_cc_elt *cc, t_word_elt *word);
 
 /**
  * This function updates the minimum and the maximum
@@ -142,5 +142,13 @@ t_cc_list *addListCCsort(t_cc_elt *elt, t_cc_list *cc_list);
  * @param word_list List of words
  */
 t_word_list *addListWord(t_word_elt *elt, t_word_list *word_list);
+
+/**
+ * This function adds a line in a list.
+ *
+ * @param elt Line
+ * @param line_list List of lines
+ */
+t_line_list *addListLine(t_line_elt *elt, t_line_list *line_list);
 
 #endif /* TOOLS_H */

@@ -172,7 +172,6 @@ struct s_word_elt
 {
   struct s_box_coordinate coord;
   struct s_cc_list *cclist;
-  int nbcc;
   struct s_word_elt *next;
 };
 
@@ -189,6 +188,30 @@ struct s_word_list
 };
 
 typedef struct s_word_list t_word_list;
+
+/**
+ * This structure represents a line.
+ */
+struct s_line_elt
+{
+  struct s_box_coordinate coord;
+  struct s_cc_list *cclist;
+  struct s_line_elt *next;
+};
+
+typedef struct s_line_elt t_line_elt;
+
+/**
+ * this structure represents a linked list of lines.
+ */
+struct s_line_list
+{
+  struct s_line_elt *head;
+  struct s_line_elt *tail;
+  int nbline;
+};
+
+typedef struct s_line_list t_line_list;
 
 /**
  * This structure represents a block in the image
