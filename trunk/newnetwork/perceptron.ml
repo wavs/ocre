@@ -224,4 +224,11 @@ object(self)
         cpt := !cpt - 1;
       done;
 
+(* maintenant qu'on sait faire ca on va faire une methode qui prent
+   un pattern .. et qui fait une propagation avant suivi d'une
+   retropagation avec un plus le calcule de l'erreur quadratique..
+   cette fonction devra etre utilise par une autre method qui fera
+   l'apprentissage, en gros ce sera une boucle *)
+  method 
+
 end
