@@ -195,7 +195,7 @@ typedef struct s_word_list t_word_list;
 struct s_line_elt
 {
   struct s_box_coordinate coord;
-  struct s_cc_list *cclist;
+  struct s_word_list *wordlist;
   struct s_line_elt *next;
 };
 

@@ -108,6 +108,17 @@ t_coordinate *qQeek(t_queue *p_queue);
 int isInWord(t_cc_elt *cc, t_word_elt *word);
 
 /**
+ * This function determines if a word is in
+ * a line.
+ *
+ * @param word Word
+ * @param line Line
+ *
+ * @return True if >0
+ */
+int isInLine(t_word_elt *word, t_line_elt *line);
+
+/**
  * This function updates the minimum and the maximum
  * values of the coodinates.
  *
@@ -115,6 +126,15 @@ int isInWord(t_cc_elt *cc, t_word_elt *word);
  * @param cc Connected component
  */
 void updateBoxCoord(t_word_elt *word, t_cc_elt *cc);
+
+/**
+ * This function updates the minimum and the maximum
+ * values of the coodinates for a line.
+ *
+ * @param line Line
+ * @param word Word
+ */
+void updateBoxCoordLine(t_line_elt *line, t_word_elt *word);
 
 /**
  * This function adds a connected component in

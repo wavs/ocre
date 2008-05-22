@@ -307,7 +307,7 @@ void traceWords(SDL_Surface *image, t_word_list *word_list)
   Uint32 cl;
   int width, height;
 
-  cl = SDL_MapRGB(image->format, 0x00, 0x53, 0xdd);
+  cl = SDL_MapRGB(image->format, 0xdd, 0x53, 0x00);
   if (word_list != NULL)
     {
       tmp = word_list->head;
@@ -346,25 +346,62 @@ t_word_list *makeWords(t_cc_list *cc_list)
   while (tmp != NULL)
     {
 
-      tmpword = wmalloc(sizeof(t_word_elt));
-      tmpword->coord.xmin = tmp->coord.xmin;
-      tmpword->coord.xmax = tmp->coord.xmax;
-      tmpword->coord.ymin = tmp->coord.ymin;
-      tmpword->coord.ymax = tmp->coord.ymax;
-      tmpword->cclist = NULL;
-      tmpword->next = NULL;
-      do
+      if (tmp->chr)
 	{
-	  tmpword->cclist = addListCC(tmp, tmpword->cclist);
-	  updateBoxCoord(tmpword, tmp);
-	  next = tmp->next;
-	  tmp->next = NULL;
-	  tmp = next;
+	  tmpword = wmalloc(sizeof(t_word_elt));
+	  tmpword->coord.xmin = tmp->coord.xmin;
+	  tmpword->coord.xmax = tmp->coord.xmax;
+	  tmpword->coord.ymin = tmp->coord.ymin;
+	  tmpword->coord.ymax = tmp->coord.ymax;
+	  tmpword->cclist = NULL;
+	  tmpword->next = NULL;
+	  do
+	    {
+	      tmpword->cclist = addListCC(tmp, tmpword->cclist);
+	      updateBoxCoord(tmpword, tmp);
+	      next = tmp->next;
+	      tmp->next = NULL;
+	      tmp = next;
+	    }
+	  while ((tmp != NULL) && (isInWord(tmp, tmpword)) && (tmp->chr));
+	  ret = addListWord(tmpword, ret);
 	}
-      while ((tmp != NULL) && (isInWord(tmp, tmpword)));
-      ret = addListWord(tmpword, ret);
+      else
+	tmp = tmp->next;
     }
   return(ret);
+}
+
+/**
+ * This function traces all the lines with boxes
+ * in an output image.
+ *
+ * @param image SDL surface
+ * @param line_list Linked list of lines
+ */
+void traceLines(SDL_Surface *image, t_line_list *line_list)
+{
+  t_line_elt *tmp;
+  Uint32 cl;
+  int width, height;
+
+  cl = SDL_MapRGB(image->format, 0x00, 0x53, 0xdd);
+  if (line_list != NULL)
+    {
+      tmp = line_list->head;
+      while (tmp != NULL)
+	{
+	  width = tmp->coord.xmax - tmp->coord.xmin;
+	  height = tmp->coord.ymax - tmp->coord.ymin;
+
+	  draw_line(tmp->coord.xmin, tmp->coord.ymin, width, 1, cl, image);
+	  draw_line(tmp->coord.xmin, tmp->coord.ymax, width, 1, cl, image);
+	  draw_line(tmp->coord.xmin, tmp->coord.ymin, 1, height, cl, image);
+	  draw_line(tmp->coord.xmax, tmp->coord.ymin, 1, height, cl, image);
+
+	  tmp = tmp->next;
+	}
+    }
 }
 
 /**
@@ -374,15 +411,15 @@ t_word_list *makeWords(t_cc_list *cc_list)
  *
  * @return t_line_list Linked list of lines
  */
-/*t_line_list *makeLines(t_cc_list cc_list)
+t_line_list *makeLines(t_word_list *word_list)
 {
   t_line_list *ret;
   t_line_elt *tmpline;
-  t_cc_elt *tmp, *next;
+  t_word_elt *tmp, *next;
 
   ret = NULL;
+  tmp = word_list->head;
 
-  tmp = cc_list->head;
   while (tmp != NULL)
     {
       tmpline = wmalloc(sizeof(t_line_elt));
@@ -390,17 +427,18 @@ t_word_list *makeWords(t_cc_list *cc_list)
       tmpline->coord.xmax = tmp->coord.xmax;
       tmpline->coord.ymin = tmp->coord.ymin;
       tmpline->coord.ymax = tmp->coord.ymax;
-      tmpline->cc_list = NULL;
+      tmpline->wordlist = NULL;
       tmpline->next = NULL;
-      tmpline->cclist = addListCC(tmp,tmpline->cclist);
-
-      while ((tmp != NULL) && (isInLine(tmp,tmpline)))
+      do
 	{
+	  tmpline->wordlist = addListWord(tmp, tmpline->wordlist);
+	  updateBoxCoordLine(tmpline, tmp);
+	  next = tmp->next;
+	  tmp->next = NULL;
+	  tmp = next;
 	}
-      
- 
-      tmp = tmp->next;
+      while ((tmp != NULL) && (isInLine(tmp, tmpline)));
+      ret = addListLine(tmpline, ret);
     }
   return(ret);
 }
-*/

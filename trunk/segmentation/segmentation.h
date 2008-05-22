@@ -108,12 +108,21 @@ void traceWords(SDL_Surface *image, t_word_list *word_list);
 t_word_list *makeWords(t_cc_list *cc_list);
 
 /**
+ * This function traces all the lines with boxes
+ * in an output image.
+ *
+ * @param image SDL surface
+ * @param line_list Linked list of lines
+ */
+void traceLines(SDL_Surface *image, t_line_list *line_list);
+
+/**
  * This function creates a list of lines with the list of connected components.
  *
  * @param cc_list Linked list of connected components
  *
  * @return t_line_list Linked list of lines
  */
-/* t_line_list *makeLines(t_cc_list cc_list); */
+t_line_list *makeLines(t_word_list *word_list);
 
 #endif /* SEGMENTATION_H */

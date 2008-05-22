@@ -244,7 +244,8 @@ int isInWord(t_cc_elt *cc, t_word_elt *word)
   int word_height, cc_width;
 
   if (cc == NULL || word == NULL)
-  
+    return(0);
+
   word_height = word->coord.ymax - word->coord.ymin;
   cc_width = cc->coord.xmax - cc->coord.xmin;
 
@@ -259,6 +260,35 @@ int isInWord(t_cc_elt *cc, t_word_elt *word)
   return(0);
 }
 
+/**
+ * This function determines if a word is in
+ * a line.
+ *
+ * @param word Word
+ * @param line Line
+ *
+ * @return True if >0
+ */
+int isInLine(t_word_elt *word, t_line_elt *line)
+{
+  int ymed_word, ymed_line, deltav, deltah;
+  int line_height;
+
+  if (word == NULL || line == NULL)
+    return(0);
+
+  line_height = line->coord.ymax - line->coord.ymin;
+
+  ymed_word = (word->coord.ymin + word->coord.ymax) / 2;
+  ymed_line = (line->coord.ymin + line->coord.ymax) / 2;
+ 
+  deltav = abs(ymed_word - ymed_line);
+  deltah = abs(word->coord.xmin - line->coord.xmax);
+
+  if ((deltav) < (line_height)) /* && (deltah < line_height)) */
+    return(1);
+  return(0);
+}
 
 /**
  * This function updates the minimum and the maximum
@@ -270,10 +300,10 @@ int isInWord(t_cc_elt *cc, t_word_elt *word)
 void updateBoxCoord(t_word_elt *word, t_cc_elt *cc)
 {
   /* Update of minimum */
-  printf("Avant: %d", word->coord.xmin);
+  /* printf("Avant: %d", word->coord.xmin); */
   if (cc->coord.xmin < word->coord.xmin)
     word->coord.xmin = cc->coord.xmin;
-  printf("Apres: %d", word->coord.xmin);
+  /*printf("Apres: %d", word->coord.xmin); */
 
   if (cc->coord.ymin < word->coord.ymin)
     word->coord.ymin = cc->coord.ymin;
@@ -281,8 +311,30 @@ void updateBoxCoord(t_word_elt *word, t_cc_elt *cc)
   if (cc->coord.xmax > word->coord.xmax)
     word->coord.xmax = cc->coord.xmax;
 
-  if (cc->coord.ymax < word->coord.ymax)
+  if (cc->coord.ymax > word->coord.ymax)
     word->coord.ymax = cc->coord.ymax;
+}
+
+/**
+ * This function updates the minimum and the maximum
+ * values of the coodinates for a line.
+ *
+ * @param line Line
+ * @param word Word
+ */
+void updateBoxCoordLine(t_line_elt *line, t_word_elt *word)
+{
+  if (word->coord.xmin < line->coord.xmin)
+    line->coord.xmin = word->coord.xmin;
+
+  if (word->coord.ymin < line->coord.ymin)
+    line->coord.ymin = word->coord.ymin;
+
+  if (word->coord.xmax > line->coord.xmax)
+    line->coord.xmax = word->coord.xmax;
+
+  if (word->coord.ymax > line->coord.ymax)
+    line->coord.ymax = word->coord.ymax;
 }
 
 /**
