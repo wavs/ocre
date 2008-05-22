@@ -238,7 +238,7 @@ t_coordinate *qQeek(t_queue *p_queue)
  *
  * @return True if >0
  */
-int isInTheWord(t_cc_elt *cc, t_word_elt *word)
+int isInWord(t_cc_elt *cc, t_word_elt *word)
 {
   int ymed_word, ymed_cc, deltav, deltah;
   int word_height, cc_width;
@@ -410,6 +410,37 @@ t_word_list *addListWord(t_word_elt *elt, t_word_list *word_list)
 	  word_list->tail->next = elt;
 	  word_list->tail = elt;
 	  return(word_list);
+	}
+    }
+  return(NULL);
+}
+
+/**
+ * This function adds a line in a list.
+ *
+ * @param elt Line
+ * @param line_list List of lines
+ */
+t_line_list *addListLine(t_line_elt *elt, t_line_list *line_list)
+{
+  t_line_list *res;
+
+  if (elt != NULL)
+    {
+      if (line_list == NULL)
+	{
+	  res = wmalloc(sizeof(t_line_list));
+	  res->head = elt;
+	  res->tail = elt;
+	  res->nbline = 1;
+	  return(res);
+	}
+      else
+	{
+	  line_list->nbline++;
+	  line_list->tail->next = elt;
+	  line_list->tail = elt;
+	  return(line_list);
 	}
     }
   return(NULL);
