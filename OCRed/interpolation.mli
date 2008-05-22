@@ -17,6 +17,7 @@ val is_in_rect          : int -> int -> int -> int -> bool
 val resize              : Sdlvideo.surface -> int -> int -> Sdlvideo.surface
 val resize_percent      : Sdlvideo.surface -> int -> Sdlvideo.surface
 val resize_percent_unit : Sdlvideo.surface -> int -> unit
+val detect_percent      : Sdlvideo.surface -> int
 val resize_for_disco     : Sdlvideo.surface -> unit
 val sommet_of_h         : (int32, Bigarray.int32_elt,
                            Bigarray.c_layout) Bigarray.Array1.t -> int
