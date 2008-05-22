@@ -58,18 +58,10 @@ void preprocess (GtkImageMenuItem* test, gpointer user_data)
   guisex = (GUI_ *)user_data;
   sprintf(appel, "../bin/OCRed -i %s -s 100", guisex->file);
   system(appel);
-  /*
-  if (!fork())
-    {
-      execl("../bin/OCRed", "-i", "lost.jpg", "-s", "100", NULL);
-      exit(0);
-    }
-  else
-    {
-      wait(NULL);
-      } */
+  sprintf(appel, "../bin/OCRed -i %s --resize-auto", "tresholded.bmp");
+  system(appel);
   /* open the file */
-  gtk_image_set_from_file(GTK_IMAGE(guisex->image), "tresholded.bmp");
+  gtk_image_set_from_file(GTK_IMAGE(guisex->image), "resized.bmp");
 }
 
 /* fct qui balance du texte dans l'editeur */
@@ -167,8 +159,11 @@ void on_open_show (GtkImageMenuItem* test, gpointer user_data)
       filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER
     					(open));
       guisex->file = filename;
+      /* resize */
+      sprintf(appel, "../bin/OCRed -i %s --resize-auto", guisex->file);
+      system(appel);
       /* open the file */
-      gtk_image_set_from_file(GTK_IMAGE(guisex->image), filename );
+      gtk_image_set_from_file(GTK_IMAGE(guisex->image), "resize.bmp" );
     }
   gtk_widget_destroy (open);
 }

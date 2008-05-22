@@ -21,4 +21,5 @@ typedef struct {
   GtkWidget* aboutdialog;
   GtkWidget* textview;
   char* file;
+  int resized;
 }GUI_;

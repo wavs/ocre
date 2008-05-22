@@ -14,10 +14,10 @@ void exportLetter (FILE* f, t_letter_elt)
 {
     int mot, xmin, xmax, ymin, ymax;
     
-    xmin = lettre->coord->xmin;
-    xmax = lettre->coord->xmax;
-    ymin = lettre->coord->ymin;
-    ymax = lettre->coord->ymax;
+    xmin = lettre->coord.xmin;
+    xmax = lettre->coord.xmax;
+    ymin = lettre->coord.ymin;
+    ymax = lettre->coord.ymax;
     
     mot = fprintf(f, "<letter:%i x[%i,%i] y[%i,%i] />\n",
         lettre->id, xmin, xmax, ymin, ymax);
@@ -28,10 +28,10 @@ void exportWord (FILE* f, t_word_elt word)
     int mot, xmin, xmax, ymin, ymax;
     t_letter_elt lettre;
     
-    xmin = word->coord->xmin;
-    xmax = word->coord->xmax;
-    ymin = word->coord->ymin;
-    ymax = word->coord->ymax;
+    xmin = word->coord.xmin;
+    xmax = word->coord.xmax;
+    ymin = word->coord.ymin;
+    ymax = word->coord.ymax;
     
     mot = fprintf(f, "<word:%i x[%i,%i] y[%i,%i]>\n", 
         word->id, xmin, xmax, ymin, ymax);
@@ -51,10 +51,10 @@ void exportParagraph (FILE* f, t_paragraph_elt paragraph)
     int para, xmin, xmax, ymin, ymax;
     t_word_elt mot;
     
-    xmin = paragraph->coord->xmin;
-    xmax = paragraph->coord->xmax;
-    ymin = paragraph->coord->ymin;
-    ymax = paragraph->coord->ymax;
+    xmin = paragraph->coord.xmin;
+    xmax = paragraph->coord.xmax;
+    ymin = paragraph->coord.ymin;
+    ymax = paragraph->coord.ymax;
     
     para = fprintf(f, "<paragraph:%i x[%i,%i] y[%i,%i]>\n", 
         word->id, xmin, xmax, ymin, ymax);
@@ -80,10 +80,10 @@ int exportCC (t_cc_list cc)
       fprintf(stderr, "Can't open file\n");
     else
     {
-        xmin = document->coord->xmin;
-        xmax = document->coord->xmax;
-        ymin = document->coord->ymin;
-        ymax = document->coord->ymax;
+        xmin = document->coord.xmin;
+        xmax = document->coord.xmax;
+        ymin = document->coord.ymin;
+        ymax = document->coord.ymax;
 
         doc = fprintf(f, "<document x[%i,%i] y[%i,%i]>\n", 
             xmin, xmax, ymin, ymax);
