@@ -119,6 +119,17 @@ int isInWord(t_cc_elt *cc, t_word_elt *word);
 int isInLine(t_word_elt *word, t_line_elt *line);
 
 /**
+ * This function determines if a line is in
+ * a paragraph.
+ *
+ * @param line Line
+ * @param para Paragraph
+ *
+ * @return True if >0
+ */
+int isInParagraph(t_line_elt *line, t_paragraph_elt *para);
+
+/**
  * This function updates the minimum and the maximum
  * values of the coodinates.
  *
@@ -135,6 +146,15 @@ void updateBoxCoord(t_word_elt *word, t_cc_elt *cc);
  * @param word Word
  */
 void updateBoxCoordLine(t_line_elt *line, t_word_elt *word);
+
+/**
+ * This function updates the minimum and the maximum
+ * values of the coodinates for a paragraph.
+ *
+ * @param para Paragraph
+ * @param line Line
+ */
+void updateBoxCoordParagraph(t_paragraph_elt *para, t_line_elt *line);
 
 /**
  * This function adds a connected component in
@@ -170,5 +190,13 @@ t_word_list *addListWord(t_word_elt *elt, t_word_list *word_list);
  * @param line_list List of lines
  */
 t_line_list *addListLine(t_line_elt *elt, t_line_list *line_list);
+
+/**
+ * This function adds a paragraph in a list.
+ *
+ * @param elt Line
+ * @param paragraph_list List of paragraphes
+ */
+t_paragraph_list *addListParagraph(t_paragraph_elt *elt, t_paragraph_list *paragraph_list);
 
 #endif /* TOOLS_H */

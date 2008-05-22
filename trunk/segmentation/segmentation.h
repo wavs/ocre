@@ -125,4 +125,25 @@ void traceLines(SDL_Surface *image, t_line_list *line_list);
  */
 t_line_list *makeLines(t_word_list *word_list);
 
+
+
+/**
+ * This function traces all the paragraphes with boxes
+ * in an output image.
+ *
+ * @param image SDL surface
+ * @param paragraph_list Linked list of paragraphes
+ */
+void traceParagraphes(SDL_Surface *image, t_paragraph_list *paragraph_list);
+
+/**
+ * This function creates a list of paragraphes with the list of lines.
+ *
+ * @param line_list Linked list of lines
+ *
+ * @return t_paragraph_list Linked list of paragraphes
+ */
+t_paragraph_list *makeParagraphes(t_line_list *line_list);
+
+
 #endif /* SEGMENTATION_H */
