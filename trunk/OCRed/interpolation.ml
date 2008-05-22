@@ -282,7 +282,7 @@ with
       ("image non-altere percentage too high\n");
       surf
 
-let detect_percent surf =
+let detect_percent_for_rotate surf =
   let surf = Transforme.surf_to_matrix surf in
   let width = Bigarray.Array2.dim1 surf in
     match width with
@@ -292,8 +292,13 @@ let detect_percent surf =
       | x when (x < 5200) -> 5
       | _ -> 100
 
+let detect_percent surf =
+  let surf = Transforme.surf_to_matrix surf in
+  let width = Bigarray.Array2.dim1 surf in
+    (width/600)
+
 let resize_for_disco surf =
-  let perc = detect_percent surf in
+  let perc = detect_percent_for_rotate surf in
     resize_percent_unit surf perc
 
 

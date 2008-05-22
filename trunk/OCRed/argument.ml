@@ -60,9 +60,12 @@ let set_anglef a =
     rotate := true
 
 let set_resize_auto () =
+  let surf = Transforme.surf_to_matrix !Surface.image in
+  let width = Bigarray.Array2.dim1 surf in
+  let percent = float_of_int(Bigarray.Array2.dim2 surf)/.600. in
   resize        := true;
-  resize_of_x   := 200;
-  resize_of_y   := 300
+  resize_of_x   := int_of_float(float_of_int(width)/.percent);
+  resize_of_y   := 600
 
 let set_width i =
   resize        := true;
