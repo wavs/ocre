@@ -12,6 +12,7 @@ class perceptron :
     val mutable learning_rate : float
     val mutable out_errors : float array
     val mutable outputs : float array
+    val mutable quad : float
     method activation : float -> float
     method error_hidd : unit -> unit
     method error_out : unit -> unit
@@ -33,6 +34,8 @@ class perceptron :
     method get_out_errors : unit -> float array
     method get_output : int -> float
     method get_outputs : unit -> float array
+    method get_quad : unit -> float
+    method learn : unit -> unit
     method netsum1 : unit -> unit
     method netsum2 : unit -> unit
     method pretty_print : unit -> unit
@@ -44,6 +47,7 @@ class perceptron :
     method print_learning_rate : unit -> unit
     method print_out_errors : unit -> unit
     method print_outputs : unit -> unit
+    method print_quad : unit -> unit
     method quaderror : unit -> unit
     method set_hidd_error : int -> float -> unit
     method set_hidd_errors : float array -> unit
@@ -62,6 +66,7 @@ class perceptron :
     method set_out_errors : float array -> unit
     method set_output : int -> float -> unit
     method set_outputs : float array -> unit
+    method set_quad : float -> unit
     method weight_up_hidd : unit -> unit
     method weight_up_out : unit -> unit
   end
