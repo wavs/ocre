@@ -33,6 +33,7 @@ void processAll(t_launch_infos *infos)
   SDL_Surface *image;
   t_cc_list *cc_list;
   t_word_list *word_list;
+  t_line_list *line_list;
 
   pic = NULL;
   image = NULL;
@@ -48,15 +49,20 @@ void processAll(t_launch_infos *infos)
 	      checkIfCharacter(cc_list, pic->height, pic->width);
 	      if (infos->verbose)
 		print_listCC(cc_list);
-	      printf(" >> Extraction of characters done.\n");
-	      printf("Nb cc: %d\n", cc_list->nbcc);
-
+	      printf(" >> Extraction of %d characters done.\n", cc_list->nbcc);
 	      word_list = makeWords(cc_list);
 	      if (word_list != NULL)
 		{
-		  printf(" >> Extraction of words done.\n");
-		  printf("Nb words: %d\n",word_list->nbword);
+		  printf(" >> Extraction of %d words done.\n", word_list->nbword);
 		  traceWords(image, word_list);
+		  
+		  line_list = makeLines(word_list);
+		  if (line_list != NULL)
+		    {
+		      printf(" >> Extraction of %d line done.\n", line_list->nbline);
+		      traceLines(image, line_list);
+		    }
+		  
 		}
 
 	      /* traceCC(image, cc_list); */
