@@ -40,9 +40,9 @@ object(self)
       for i = 0 to Array.length !tab - 1 do
       let alea = Random.float 1. in
         if alea > 0.5 then
-            Array.set !tab i (Random.float 10.)
+            Array.set !tab i (Random.float 0.5)
         else
-          Array.set !tab i (Random.float (-. 10.))
+          Array.set !tab i (Random.float (-. 0.5))
     done;
    nextweights <- !tab
 
