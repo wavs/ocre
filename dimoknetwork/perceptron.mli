@@ -44,6 +44,7 @@ class perceptron :
     method print_learning_rate : unit -> unit
     method print_out_errors : unit -> unit
     method print_outputs : unit -> unit
+    method quaderror : unit -> unit
     method set_hidd_error : int -> float -> unit
     method set_hidd_errors : float array -> unit
     method set_hidd_out_weight : int -> int -> float -> unit

@@ -182,6 +182,17 @@ object(self)
       done 
     done
 
+  method quaderror() =
+    let sum = ref 0. in
+      for i = 0 to nboutputs - 1 do
+        sum := !sum +. (((pattern#get_outputs()).(i) -.
+                              self#get_output i )) *. (((pattern#get_outputs()).(i) -.
+                              self#get_output i ))
+      done;
+      let quad = 1./.2. *. !sum in
+        print_float quad;
+        print_newline()
+
 end
 
   
