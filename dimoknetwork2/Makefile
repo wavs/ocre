@@ -3,7 +3,7 @@ OCAMLOPT=ocamlopt
 .SUFFIXES: .ml .mli .cmo .cmi .cmx
 
 BINARY=dimok
-FILES=pattern.ml data.ml perceptron.ml test.ml
+FILES=pattern.ml perceptron.ml test.ml
 MLI=${FILES:.ml=.mli} #auto generation of .mli files (if not exist)
 CMI=${FILES:.ml=.cmi}
 CMO=${FILES:.ml=.cmo}

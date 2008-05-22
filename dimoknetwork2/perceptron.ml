@@ -4,11 +4,11 @@ class perceptron nbneuronbyhiddenlayer
                  data =
 object(self)
   
-  val mutable patterns = data#get_patterns()
-  val mutable pattern = (data#get_patterns()).(0)
+  val mutable patterns = Array.make 4 (new Pattern.pattern)
+  val mutable current_pattern = data.(0)
   val mutable quad = 10.
   val mutable learning_rate = 0.1
-  val mutable inputs = ((data#get_patterns()).(0))#get_inputs()
+  val mutable inputs = (data.(0))#get_inputs()
   val mutable hiddenlayer = Array.make nbneuronbyhiddenlayer 1.
   val mutable outputs = Array.make nboutputs 1.
   val mutable in_hidd_weights_v = Array.make nbinputs 
@@ -17,6 +17,21 @@ object(self)
                                 (Array.make nboutputs 0.5) 
   val mutable out_errors = Array.make nboutputs 0.
   val mutable hidd_errors = Array.make nbneuronbyhiddenlayer 0.
+
+  method get_patterns() = patterns
+  method set_patterns p = patterns <- p
+  method print_patterns() = 
+    for i = 0 to Array.length (self#get_patterns()) - 1 do
+      print_string "pattern n° ";
+      print_int i;
+      print_string " :\n";
+      ((self#get_patterns()).(i))#print_inputs();
+      ((self#get_patterns()).(i))#print_outputs();
+      print_newline()
+    done
+
+  method get_current_pattern() = current_pattern
+  method set_current_pattern cp = current_pattern <- cp
 
   method get_quad() = quad
   method set_quad q = quad <- q
@@ -154,7 +169,7 @@ object(self)
 
   method error_out() =
     for i = 0 to nboutputs - 1 do
-      self#set_out_error i (((pattern#get_outputs()).(i) -.
+      self#set_out_error i (((current_pattern#get_outputs()).(i) -.
                               self#get_output i ) *.
                               (self#get_output i) *.
                               (1. -. self#get_output i))
@@ -195,8 +210,8 @@ object(self)
   method quaderror() =
     let sum = ref 0. in
       for i = 0 to nboutputs - 1 do
-        sum := !sum +. (((pattern#get_outputs()).(i) -.
-                              self#get_output i )) *. (((pattern#get_outputs()).(i) -.
+        sum := !sum +. (((current_pattern#get_outputs()).(i) -.
+                              self#get_output i )) *. (((current_pattern#get_outputs()).(i) -.
                               self#get_output i ))
       done;
       quad <- 1./.2. *. !sum
@@ -214,6 +229,8 @@ object(self)
       Array.sort compareThatShit patterns
 
   method learn() =
+    (*on load le jeu de données*)
+    self#set_patterns data;
     (*while self#get_quad() > 0.005 do*)
     for iter = 1 to 10000 do
       self#quaderror();
@@ -222,9 +239,9 @@ object(self)
       self#permute_patterns();
       (*on lance l'apprentissage de chaque pattern*)
       for i = 0 to Array.length patterns - 1 do
-        pattern <- patterns.(i);
+        current_pattern <- patterns.(i);
         (*on charge la pattern dans le reseau*)
-        inputs <- pattern#get_inputs();
+        inputs <- current_pattern#get_inputs();
         (*et c'est parti mon kiki !*)
         self#forward();
         self#error_out();
