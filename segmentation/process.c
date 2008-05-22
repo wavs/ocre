@@ -34,6 +34,7 @@ void processAll(t_launch_infos *infos)
   t_cc_list *cc_list;
   t_word_list *word_list;
   t_line_list *line_list;
+  t_paragraph_list *paragraph_list;
 
   pic = NULL;
   image = NULL;
@@ -59,8 +60,15 @@ void processAll(t_launch_infos *infos)
 		  line_list = makeLines(word_list);
 		  if (line_list != NULL)
 		    {
-		      printf(" >> Extraction of %d line done.\n", line_list->nbline);
+		      printf(" >> Extraction of %d lines done.\n", line_list->nbline);
 		      traceLines(image, line_list);
+
+		      paragraph_list = makeParagraphes(line_list);
+		      if (paragraph_list != NULL)
+			{
+			  printf(" >> Extraction of %d paragraphes done.\n", paragraph_list->nbparagraph);
+			  traceParagraphes(image, paragraph_list);
+			}
 		    }
 		  
 		}

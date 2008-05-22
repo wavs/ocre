@@ -442,3 +442,84 @@ t_line_list *makeLines(t_word_list *word_list)
     }
   return(ret);
 }
+
+
+
+
+
+
+
+
+
+/*************************************************************/
+
+/**
+ * This function traces all the paragraphes with boxes
+ * in an output image.
+ *
+ * @param image SDL surface
+ * @param paragraph_list Linked list of paragraphes
+ */
+void traceParagraphes(SDL_Surface *image, t_paragraph_list *paragraph_list)
+{
+  t_paragraph_elt *tmp;
+  Uint32 cl;
+  int width, height;
+
+  cl = SDL_MapRGB(image->format, 0x00, 0xdd, 0x53);
+  if (paragraph_list != NULL)
+    {
+      tmp = paragraph_list->head;
+      while (tmp != NULL)
+	{
+	  width = tmp->coord.xmax - tmp->coord.xmin;
+	  height = tmp->coord.ymax - tmp->coord.ymin;
+
+	  draw_line(tmp->coord.xmin, tmp->coord.ymin, width, 1, cl, image);
+	  draw_line(tmp->coord.xmin, tmp->coord.ymax, width, 1, cl, image);
+	  draw_line(tmp->coord.xmin, tmp->coord.ymin, 1, height, cl, image);
+	  draw_line(tmp->coord.xmax, tmp->coord.ymin, 1, height, cl, image);
+
+	  tmp = tmp->next;
+	}
+    }
+}
+
+/**
+ * This function creates a list of paragraphes with the list of lines.
+ *
+ * @param line_list Linked list of lines
+ *
+ * @return t_paragraph_list Linked list of paragraphes
+ */
+t_paragraph_list *makeParagraphes(t_line_list *line_list)
+{
+  t_paragraph_list *ret;
+  t_paragraph_elt *tmppara;
+  t_line_elt *tmp, *next;
+
+  ret = NULL;
+  tmp = line_list->head;
+
+  while (tmp != NULL)
+    {
+      tmppara = wmalloc(sizeof(t_paragraph_elt));
+      tmppara->coord.xmin = tmp->coord.xmin;
+      tmppara->coord.xmax = tmp->coord.xmax;
+      tmppara->coord.ymin = tmp->coord.ymin;
+      tmppara->coord.ymax = tmp->coord.ymax;
+      tmppara->linelist = NULL;
+      tmppara->next = NULL;
+      do
+	{
+	  tmppara->linelist = addListLine(tmp, tmppara->linelist);
+	  updateBoxCoordParagraph(tmppara, tmp);
+	  next = tmp->next;
+	  tmp->next = NULL;
+	  tmp = next;
+	}
+      while ((tmp != NULL) && (isInParagraph(tmp, tmppara)));
+      ret = addListParagraph(tmppara, ret);
+    }
+  return(ret);
+}

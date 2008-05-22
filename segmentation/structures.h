@@ -214,6 +214,31 @@ struct s_line_list
 typedef struct s_line_list t_line_list;
 
 /**
+ * This structure represents a paragraph.
+ */
+struct s_paragraph_elt
+{
+  struct s_box_coordinate coord;
+  struct s_line_list *linelist;
+  struct s_paragraph_elt *next;
+};
+
+typedef struct s_paragraph_elt t_paragraph_elt;
+
+/**
+ * This structure represents a linked list of
+ * paragraphs.
+ */
+struct s_paragraph_list
+{
+  struct s_paragraph_elt *head;
+  struct s_paragraph_elt *tail;
+  int nbparagraph;
+};
+
+typedef struct s_paragraph_list t_paragraph_list;
+
+/**
  * This structure represents a block in the image
  * with(out) connnected components.
  */

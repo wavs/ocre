@@ -255,7 +255,7 @@ int isInWord(t_cc_elt *cc, t_word_elt *word)
   deltav = abs(ymed_cc - ymed_word);
   deltah = abs(cc->coord.xmin - word->coord.xmax);
 
-  if ((deltav < (word_height)) && (deltah < cc_width))
+  if ((deltav < (word_height)) && (deltah < word_height / 2))    /* cc_width */
     return(1);
   return(0);
 }
@@ -286,6 +286,30 @@ int isInLine(t_word_elt *word, t_line_elt *line)
   deltah = abs(word->coord.xmin - line->coord.xmax);
 
   if ((deltav) < (line_height)) /* && (deltah < line_height)) */
+    return(1);
+  return(0);
+}
+
+/**
+ * This function determines if a line is in
+ * a paragraph.
+ *
+ * @param line Line
+ * @param para Paragraph
+ *
+ * @return True if >0
+ */
+int isInParagraph(t_line_elt *line, t_paragraph_elt *para)
+{
+  int deltav, line_height;
+
+  if (line == NULL || para == NULL)
+    return(0);
+
+  line_height = line->coord.ymax - line->coord.ymin;
+  deltav = abs(line->coord.ymin - para->coord.ymax);
+
+  if (deltav < line_height)
     return(1);
   return(0);
 }
@@ -335,6 +359,28 @@ void updateBoxCoordLine(t_line_elt *line, t_word_elt *word)
 
   if (word->coord.ymax > line->coord.ymax)
     line->coord.ymax = word->coord.ymax;
+}
+
+/**
+ * This function updates the minimum and the maximum
+ * values of the coodinates for a paragraph.
+ *
+ * @param para Paragraph
+ * @param line Line
+ */
+void updateBoxCoordParagraph(t_paragraph_elt *para, t_line_elt *line)
+{
+  if (line->coord.xmin < para->coord.xmin)
+    para->coord.xmin = line->coord.xmin;
+
+  if (line->coord.ymin < para->coord.ymin)
+    para->coord.ymin = line->coord.ymin;
+
+  if (line->coord.xmax > para->coord.xmax)
+    para->coord.xmax = line->coord.xmax;
+
+  if (line->coord.ymax > para->coord.ymax)
+    para->coord.ymax = line->coord.ymax;
 }
 
 /**
@@ -493,6 +539,38 @@ t_line_list *addListLine(t_line_elt *elt, t_line_list *line_list)
 	  line_list->tail->next = elt;
 	  line_list->tail = elt;
 	  return(line_list);
+	}
+    }
+  return(NULL);
+}
+
+
+/**
+ * This function adds a paragraph in a list.
+ *
+ * @param elt Line
+ * @param paragraph_list List of paragraphes
+ */
+t_paragraph_list *addListParagraph(t_paragraph_elt *elt, t_paragraph_list *paragraph_list)
+{
+  t_paragraph_list *res;
+
+  if (elt != NULL)
+    {
+      if (paragraph_list == NULL)
+	{
+	  res = wmalloc(sizeof(t_paragraph_list));
+	  res->head = elt;
+	  res->tail = elt;
+	  res->nbparagraph = 1;
+	  return(res);
+	}
+      else
+	{
+	  paragraph_list->nbparagraph++;
+	  paragraph_list->tail->next = elt;
+	  paragraph_list->tail = elt;
+	  return(paragraph_list);
 	}
     }
   return(NULL);
