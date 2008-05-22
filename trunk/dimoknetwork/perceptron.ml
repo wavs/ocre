@@ -4,6 +4,7 @@ class perceptron nbneuronbyhiddenlayer
                  pattern =
 object(self)
   
+  val mutable quad = 0.
   val mutable learning_rate = 0.1
   val mutable inputs = pattern#get_inputs()
   val mutable hiddenlayer = Array.make nbneuronbyhiddenlayer 1.
@@ -14,6 +15,13 @@ object(self)
                                 (Array.make nboutputs 0.5) 
   val mutable out_errors = Array.make nboutputs 0.
   val mutable hidd_errors = Array.make nbneuronbyhiddenlayer 0.
+
+  method get_quad() = quad
+  method set_quad q = quad <- q
+  method print_quad() =
+    print_string "erreur quadratique : "; 
+    print_float quad;
+    print_newline()
 
   method get_leaning_rate() = learning_rate
   method set_learning_rate lr = learning_rate <- lr
@@ -189,9 +197,14 @@ object(self)
                               self#get_output i )) *. (((pattern#get_outputs()).(i) -.
                               self#get_output i ))
       done;
-      let quad = 1./.2. *. !sum in
-        print_float quad;
-        print_newline()
+      quad <- 1./.2. *. !sum
+      
+       
+
+  method learn() =
+    while quad > 0.005 do
+      print_int 42(*FIXME*)
+    done
 
 end
 
