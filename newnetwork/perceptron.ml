@@ -151,17 +151,17 @@ object(self)
         (* on s'occupe du neurone numero i*)
         let neuron = (!layers).(num_couche -1)#get_neurons i in
           for j = 0 to (Array.length (neuron#get_nextweights())) - 1 do
-            neuron#print_weight();
-            print_string("juste avant ct le poid du neurons\n");
+(*             neuron#print_weight(); *)
+(*             print_string("juste avant ct le poid du neurons\n"); *)
             let newpoid =
               (neuron#get_nextweight j) +.
               (learning_rate *.
               (((!layers).(num_couche)#get_neurons_error j))*.
              neuron#get_value()) in
             neuron#set_nextweight j newpoid;
-            neuron#print_weight();
-            print_string("juste avant ct les poids des neurones apres le changement de poids!!\n");
-            print_string(string_of_int(i)^"to neurone"^string_of_int(j)^"\n");
+(*             neuron#print_weight(); *)
+          (*   print_string("juste avant ct les poids des neurones apres le changement de poids!!\n"); *)
+(*             print_string(string_of_int(i)^"to neurone"^string_of_int(j)^"\n"); *)
          done;
           ((!layers).(num_couche -1))#set_neurons i neuron;
       done;
