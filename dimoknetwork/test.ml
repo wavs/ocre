@@ -8,16 +8,14 @@ let main() =
       outputs.(0) <- 0.;
       data#set_outputs outputs;
       let p = new Perceptron.perceptron 3 2 1 data in
+        p#pretty_print();
         for i = 0 to 10000 do
-        p#pretty_print();
-        p#forward();
-        p#pretty_print();
-        p#error_out();
-        p#weight_up_out();
-        p#pretty_print();
-        p#error_hidd();
-        p#weight_up_hidd();
+          p#forward();
+          p#error_out();
+          p#weight_up_out();
+          p#error_hidd();
+          p#weight_up_hidd();
+        done;
         p#pretty_print()
-        done
 
 let _ = main()
