@@ -1,6 +1,4 @@
 let main() =
-  let data = new Data.data in
-
   let pattern1 = new Pattern.pattern in
   let inputs = Array.make 2 3. in
     inputs.(0) <- 0.;
@@ -36,11 +34,19 @@ let main() =
     let outputs = Array.make 1 3. in
       outputs.(0) <- 0.;
       pattern4#set_outputs outputs;
-      data#set_patterns [|pattern1;pattern2;pattern3;pattern4|];
+      let data = [|pattern1;pattern2;pattern3;pattern4|] in
 
       let p = new Perceptron.perceptron 3 2 1 data in
-        p#pretty_print();
+        p#set_patterns data;
+        (*p#pretty_print();
         p#learn();
-        p#pretty_print()
+        p#pretty_print()*)
 
+        for i = 0 to Array.length data - 1 do
+          data.(i)#print_inputs();
+          data.(i)#print_outputs()
+        done;
+        p#permute_patterns();
+        p#print_patterns()
+        
 let _ = main()
