@@ -229,6 +229,6 @@ object(self)
    retropagation avec un plus le calcule de l'erreur quadratique..
    cette fonction devra etre utilise par une autre method qui fera
    l'apprentissage, en gros ce sera une boucle *)
-  method 
+(*   method  *)
 
 end
