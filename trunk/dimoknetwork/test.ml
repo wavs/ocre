@@ -15,6 +15,7 @@ let main() =
           p#weight_up_out();
           p#error_hidd();
           p#weight_up_hidd();
+          p#quaderror()
         done;
         p#pretty_print()
 
