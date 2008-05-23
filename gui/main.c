@@ -56,12 +56,10 @@ void preprocess (GtkImageMenuItem* test, gpointer user_data)
   /* so there's no unused parameter... */
   (void)test;
   guisex = (GUI_ *)user_data;
-  sprintf(appel, "../bin/OCRed -i %s -s 100", guisex->file);
-  system(appel);
-  sprintf(appel, "../bin/OCRed -i %s --resize-auto", "tresholded.bmp");
+  sprintf(appel, "../bin/OCRed -i %s -s 100", "../resize.bmp");
   system(appel);
   /* open the file */
-  gtk_image_set_from_file(GTK_IMAGE(guisex->image), "resized.bmp");
+  gtk_image_set_from_file(GTK_IMAGE(guisex->image), "tresholded.bmp");
 }
 
 /* fct qui balance du texte dans l'editeur */
@@ -155,6 +153,7 @@ void on_open_show (GtkImageMenuItem* test, gpointer user_data)
   if (gtk_dialog_run (GTK_DIALOG (open)) == GTK_RESPONSE_ACCEPT)
     {
       char *filename;
+      char* appel = malloc(sizeof(char *));
       /* get the filename */
       filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER
     					(open));
@@ -163,7 +162,7 @@ void on_open_show (GtkImageMenuItem* test, gpointer user_data)
       sprintf(appel, "../bin/OCRed -i %s --resize-auto", guisex->file);
       system(appel);
       /* open the file */
-      gtk_image_set_from_file(GTK_IMAGE(guisex->image), "resize.bmp" );
+      gtk_image_set_from_file(GTK_IMAGE(guisex->image), "../resize.bmp");
     }
   gtk_widget_destroy (open);
 }
