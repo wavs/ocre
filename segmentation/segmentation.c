@@ -239,7 +239,6 @@ void checkIfCharacter(t_cc_list *cc_list, int height, int width)
   int nbpixtot, h, w;
   float seuil = 1.6;
   t_cc_elt* tmp;
-  tmp = wmalloc(sizeof(t_cc_elt));
   tmp = cc_list->head;
 
   while (tmp != NULL)
@@ -256,7 +255,6 @@ void checkIfCharacter(t_cc_list *cc_list, int height, int width)
         }
       tmp = tmp->next;
     }
-  wfree(tmp);
 }
 
 /**
