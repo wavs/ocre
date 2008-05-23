@@ -6,6 +6,7 @@ object(self)
     (new Layer.layer nbn))
   val mutable learning_rate = 10.
   val mutable patterns = new Data.tab_xor
+  val mutable pattern_alpha = new Data.alphabet
   val mutable quad_error = 69.
 
   method get_quad () = quad_error
@@ -37,7 +38,8 @@ object(self)
       done;
       (!layers.(nblayers -2))#init_neurons output;
       (!layers.(nblayers -1))#init_neurons 0;
-      patterns#init_tab()
+      patterns#init_tab();
+      pattern_alpha#init_tab_alpha ()
 
 
 
@@ -135,7 +137,7 @@ object(self)
         let d = float_of_int((patterns#get_pos_tab num_pattern)#get_output i) in
           sum := !sum +. ((d -. f) *. (d -. f));
       done;
-      self#set_quad (!sum /. float_of_int(llayer#get_nbneurons()))
+v      self#set_quad (!sum /. float_of_int(llayer#get_nbneurons()))
 
 (* Pour 5-6-7 deux choix se presentent: calcule d'erreur en fonction
    des poids precedent ou calcule des poids puis des erreurs; il
@@ -254,6 +256,20 @@ object(self)
       pattern := 3;
       self#learn_pattern !pattern;
     done
+
+  method boucle_learn_alpha nbr_iteration =
+    let pattern = ref 0 in
+    for i = 0 to nbr_iteration - 1 do
+      pattern := 0;
+      self#learn_pattern !pattern;
+      pattern := 1;
+      self#learn_pattern !pattern;
+      pattern := 2;
+      self#learn_pattern !pattern;
+      pattern := 3;
+      self#learn_pattern !pattern;
+    done
+
 
   method test_pattern () =
     for i = 0 to 3 do

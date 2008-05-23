@@ -68,10 +68,10 @@ let init_() =
 (*   init2_(); *)
 (*   init3_(); *)
 (*   init4_(); *)
-  input := 2;
+  input := 100;
   output := 1;
   nbhlayers := 1;
-  nbn := 3;
+  nbn := 50;
 
   p := new Perceptron.perceptron
     !input !output !nbhlayers !nbn;
