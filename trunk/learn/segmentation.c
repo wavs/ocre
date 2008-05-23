@@ -266,7 +266,7 @@ t_matrix *resizeMatrix(t_matrix *mat, t_cc_elt *cc, t_binary_image *pic)
   int height_cc, width_cc;
   int i, j, itmp, jtmp;
   t_matrix *ccmat;
-  float percent;
+  float percentx, percenty;
 
   /* Search of cc informations */
   height_cc = cc->coord.ymax - cc->coord.ymin;
@@ -288,22 +288,16 @@ t_matrix *resizeMatrix(t_matrix *mat, t_cc_elt *cc, t_binary_image *pic)
 	ccmat->data[i][j] = pic->matrix->data[itmp][jtmp];
       }
   
-  if (height_cc > width_cc)
-    percent = 10 / height_cc;
-  else
-    percent = 10 / width_cc;
+    percenty = 10 / height_cc;
+    percentx = 10 / width_cc;
 
   for (i=0; i < 10; ++i)
     for (j=0; j < 10; ++j)
       {
-	itmp = trunc(i / percent);
-	jtmp = trunc(j / percent);
-	if (checkIfUnderLimits(itmp, jtmp, width_cc, height_cc))
-	  mat->data[i][j] = ccmat->data[itmp][jtmp];
-	else
-	  mat->data[i][j] = 0;
+	itmp = i / percenty;
+	jtmp = j / percentx;
+	mat->data[i][j] = ccmat->data[itmp][jtmp];
       }
-  
 
   return(mat);
 }
@@ -384,6 +378,7 @@ void exportCC(t_cc_list *cc_list, t_binary_image *pic)
 		  else
 		    fputc('0', file);
 		}
+	      fputc('\n', file);
 	    }
 	  fputc('\n', file);
 	  

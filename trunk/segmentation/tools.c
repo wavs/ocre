@@ -241,12 +241,13 @@ t_coordinate *qQeek(t_queue *p_queue)
 int isInWord(t_cc_elt *cc, t_word_elt *word)
 {
   int ymed_word, ymed_cc, deltav, deltah;
-  int word_height, cc_width;
+  int word_height, cc_width, cc_height;
 
   if (cc == NULL || word == NULL)
     return(0);
 
   word_height = word->coord.ymax - word->coord.ymin;
+  cc_height = cc->coord.ymax - cc->coord.ymin;
   cc_width = cc->coord.xmax - cc->coord.xmin;
 
   ymed_word = (word->coord.ymin + word->coord.ymax) / 2;
@@ -255,7 +256,7 @@ int isInWord(t_cc_elt *cc, t_word_elt *word)
   deltav = abs(ymed_cc - ymed_word);
   deltah = abs(cc->coord.xmin - word->coord.xmax);
 
-  if ((deltah < word_height / 2))    /* cc_width */
+  if ((deltah < word_height / 1.4) || (deltah < cc_height / 1.4))
     return(1);
   return(0);
 }
