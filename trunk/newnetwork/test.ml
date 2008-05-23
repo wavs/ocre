@@ -121,6 +121,8 @@ let main() =
             |"displ"-> (!p#print_layer(); print_string "\n$")
             |"displw"-> (!p#print_layer_and_weight(); print_string
                            "\n$")
+            |"train" -> !p#boucle_learn 4000;print_string "\n$"
+            |"test" ->  !p#test_pattern ();print_string "\n$"
             |"herror" -> (!p#refresh_hidden_neurons_value 2; print_string
                            "\n$")
             |"dispquad"->(!p#set_err_quad (!num_pattern -1);print_float(!p#get_quad()); print_string

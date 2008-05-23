@@ -10,6 +10,10 @@ object
   val mutable patterns : Data.tab_xor
   val mutable quad_error : float
   method back_propagation : unit -> unit
+  method learn_pattern : int -> unit
+  method boucle_learn : int -> unit
+  method test_pattern : unit -> unit
+
 
   method backpropagation_weight : int -> unit
   method get_nblayers : unit -> int
