@@ -62,14 +62,14 @@ void processAll(t_launch_infos *infos)
 		{
 		  if (infos->verbose)
 		    printf(" >> Extraction of %d words done.\n", word_list->nbword);
-		  /* traceWords(image, word_list); */
+		  traceWords(image, word_list);
 		  
 		  line_list = makeLines(word_list);
 		  if (line_list != NULL)
 		    {
 		      if (infos->verbose)
 			printf(" >> Extraction of %d lines done.\n", line_list->nbline);
-		      /* traceLines(image, line_list); */
+		      traceLines(image, line_list);
 
 		      paragraph_list = makeParagraphes(line_list);
 		      if (paragraph_list != NULL)
@@ -77,7 +77,7 @@ void processAll(t_launch_infos *infos)
 			  if (infos->verbose)
 			    printf(" >> Extraction of %d paragraphes done.\n", paragraph_list->nbparagraph);
 			  updateCC(paragraph_list, image);
-			  /* traceParagraphes(image, paragraph_list); */
+			  traceParagraphes(image, paragraph_list);
 			}
 		    }
 		  

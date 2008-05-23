@@ -537,6 +537,8 @@ void updateCC(t_paragraph_list *paragraph_list, SDL_Surface *image)
   t_word_elt *tmpword;
   t_cc_elt *tmpcc;
 
+  image = image;
+
   tmppara = paragraph_list->head;
   while (tmppara != NULL)
     {
@@ -556,7 +558,7 @@ void updateCC(t_paragraph_list *paragraph_list, SDL_Surface *image)
 		  tmpcc->coord.ymax = ymax;
 		  tmpcc = tmpcc->next;
 		}
-	      traceCC(image, tmpword->cclist);
+	      /* traceCC(image, tmpword->cclist); */
 	      
 	      tmpword = tmpword->next;
 	    }
