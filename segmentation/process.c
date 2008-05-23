@@ -20,6 +20,7 @@
 #include "segmentation.h"
 #include "print.h"
 #include "free.h"
+#include "tools.h"
 #include "wrappers.h"
 
 /**
@@ -55,19 +56,20 @@ void processAll(t_launch_infos *infos)
 	      if (word_list != NULL)
 		{
 		  printf(" >> Extraction of %d words done.\n", word_list->nbword);
-		  traceWords(image, word_list);
+		  /* traceWords(image, word_list); */
 		  
 		  line_list = makeLines(word_list);
 		  if (line_list != NULL)
 		    {
 		      printf(" >> Extraction of %d lines done.\n", line_list->nbline);
-		      traceLines(image, line_list);
+		      /* traceLines(image, line_list); */
 
 		      paragraph_list = makeParagraphes(line_list);
 		      if (paragraph_list != NULL)
 			{
 			  printf(" >> Extraction of %d paragraphes done.\n", paragraph_list->nbparagraph);
-			  traceParagraphes(image, paragraph_list);
+			  updateCC(paragraph_list, image);
+			  /* traceParagraphes(image, paragraph_list); */
 			}
 		    }
 		  

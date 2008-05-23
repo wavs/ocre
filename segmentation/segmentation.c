@@ -523,3 +523,50 @@ t_paragraph_list *makeParagraphes(t_line_list *line_list)
     }
   return(ret);
 }
+
+
+/**
+ * This function updates the coordinates of the
+ * connected components 
+ */
+void updateCC(t_paragraph_list *paragraph_list, SDL_Surface *image)
+{
+  int ymin, ymax;
+  t_paragraph_elt *tmppara;
+  t_line_elt *tmpline;
+  t_word_elt *tmpword;
+  t_cc_elt *tmpcc;
+
+  tmppara = paragraph_list->head;
+  while (tmppara != NULL)
+    {
+      tmpline = tmppara->linelist->head;
+      while (tmpline != NULL)
+	{
+	  ymin = tmpline->coord.ymin;
+	  ymax = tmpline->coord.ymax;
+	  
+	  tmpword = tmpline->wordlist->head;
+	  while (tmpword != NULL)
+	    {
+	      tmpcc = tmpword->cclist->head;
+	      while (tmpcc != NULL)
+		{
+		  tmpcc->coord.ymin = ymin;
+		  tmpcc->coord.ymax = ymax;
+		  tmpcc = tmpcc->next;
+		}
+	      traceCC(image, tmpword->cclist);
+	      
+	      tmpword = tmpword->next;
+	    }
+	  /* traceWords(image, tmpline->wordlist); */
+
+	  tmpline = tmpline->next;
+	}
+      /* traceLines(image, tmppara->linelist); */
+
+      tmppara = tmppara->next;
+    }
+  /* traceParagraphes(image, paragraph_list); */
+}

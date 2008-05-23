@@ -574,11 +574,4 @@ t_paragraph_list *addListParagraph(t_paragraph_elt *elt, t_paragraph_list *parag
 }
 
 
-/**
- * This function updates the coordinates of the
- * connected components 
- */
-/*void updateCC(t_paragraph_list *paragraph_list)
-{
-  
-}*/
+
