@@ -21,6 +21,7 @@
 #include "print.h"
 #include "free.h"
 #include "tools.h"
+#include "export.h"
 #include "wrappers.h"
 
 /**
@@ -75,9 +76,10 @@ void processAll(t_launch_infos *infos)
 		      if (paragraph_list != NULL)
 			{
 			  if (infos->verbose)
-			    printf(" >> Extraction of %d paragraphes done.\n", paragraph_list->nbparagraph);
+			    printf(" >> Extraction of %d paragraphs done.\n", paragraph_list->nbparagraph);
 			  updateCC(paragraph_list, image);
 			  traceParagraphes(image, paragraph_list);
+			  exportAll(paragraph_list, "seg_export.txt");
 			}
 		    }
 		  

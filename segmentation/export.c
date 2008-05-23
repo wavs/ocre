@@ -85,7 +85,7 @@ void exportParagraph (FILE* f, t_paragraph_elt* paragraph)
     fprintf(f, "</p>\n");
 }
 
-int main (t_paragraph_list* document, char* filename)
+void exportAll(t_paragraph_list* document, char* filename)
 {
     FILE *f;
     t_paragraph_elt* para;
@@ -104,5 +104,4 @@ int main (t_paragraph_list* document, char* filename)
     }
 
     fclose(f);
-    return 0;
 }
