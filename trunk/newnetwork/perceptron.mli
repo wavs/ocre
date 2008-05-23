@@ -7,13 +7,15 @@ object
   val mutable layers : Layer.layer array ref
   val mutable learning_rate : float
   val mutable nblayers : int
+  val mutable pattern_alpha : Data.alphabet
   val mutable patterns : Data.tab_xor
+  val mutable pattern_input : Data.data_alpha
   val mutable quad_error : float
   method back_propagation : unit -> unit
   method learn_pattern : int -> unit
   method boucle_learn : int -> unit
   method test_pattern : unit -> unit
-
+  method boucle_learn_alpha : int -> unit
 
   method backpropagation_weight : int -> unit
   method get_nblayers : unit -> int

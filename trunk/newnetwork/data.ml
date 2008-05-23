@@ -63,11 +63,16 @@ end
 class data_alpha =
 object (self)
   val mutable char = 0
-  val mutable tab_input = Array.make 100 1)
+  val mutable output = 0
+  val mutable tab_input = Array.make 100 1
 (*   method init_from_file num_charactere file_path = *)
 (*     let filed = Unix.openfile file_path in *)
   method get_char () = char
   method set_char x  = char <- x
+
+  method get_output = output
+  method set_output x = output <-x
+
   method get_tab () = tab_input
   method set_tab x  =  tab_input <- x
   method get_tabpos pos = tab_input.(pos)
@@ -80,7 +85,7 @@ object (self)
   method init_tab string =
     for i = 0 to 99 do
       let char = String.get string i in
-        Array.set i (zero_or_one (Char.code char))
+        Array.set (self#get_tab()) i (self#zero_or_one (Char.code char))
     done
 (*       Unix.close filed *)
 end
@@ -372,13 +377,14 @@ object (self)
 
   method get_tabpos pos = tab.(pos)
   method set_tabpos pos x =  tab.(pos) <- x
+  method get_string_tab pos = tab_string.(pos)
 
   method init_tab_alpha () =
     for i = 0 to 25 do
       let a = new data_alpha in
-        a#set_char i
-        a#init_tab ;
-      self#set_tabpos i a;
+        a#set_char i;
+        a#init_tab (self#get_string_tab i);
+        self#set_tabpos i a;
     done
 
 end
