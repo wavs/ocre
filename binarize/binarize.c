@@ -120,6 +120,7 @@ void binarizeTheBitmap(SDL_Surface *image, char *output)
 	    }
 	  fputc('\n', file);
 	}
+      fputc('\n', file);
       
       SDL_UnlockSurface(image);
 
