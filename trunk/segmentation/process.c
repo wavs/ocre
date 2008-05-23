@@ -41,33 +41,41 @@ void processAll(t_launch_infos *infos)
   image = NULL;
   image = SDL_LoadBMP(infos->inFile);
   if (image != NULL)
-    { printf("\n >> Image %s loaded.\n", infos->inFile);
+    { 
+      if (infos->verbose)
+	printf("\n >> Image %s loaded.\n", infos->inFile);
       pic = bitmap_to_binaryimage(image,infos->inFile);
       if (pic != NULL)
-	{ printf(" >> Binarization done.\n");
+	{ 
+	  if (infos->verbose)
+	    printf(" >> Binarization done.\n");
 	  cc_list = findCC(pic->matrix);
 	  if (cc_list != NULL)
 	    {
 	      checkIfCharacter(cc_list, pic->height, pic->width);
+
+	      /*  print_listCC(cc_list); */
 	      if (infos->verbose)
-		print_listCC(cc_list);
-	      printf(" >> Extraction of %d characters done.\n", cc_list->nbcc);
+		printf(" >> Extraction of %d characters done.\n", cc_list->nbcc);
 	      word_list = makeWords(cc_list);
 	      if (word_list != NULL)
 		{
-		  printf(" >> Extraction of %d words done.\n", word_list->nbword);
+		  if (infos->verbose)
+		    printf(" >> Extraction of %d words done.\n", word_list->nbword);
 		  /* traceWords(image, word_list); */
 		  
 		  line_list = makeLines(word_list);
 		  if (line_list != NULL)
 		    {
-		      printf(" >> Extraction of %d lines done.\n", line_list->nbline);
+		      if (infos->verbose)
+			printf(" >> Extraction of %d lines done.\n", line_list->nbline);
 		      /* traceLines(image, line_list); */
 
 		      paragraph_list = makeParagraphes(line_list);
 		      if (paragraph_list != NULL)
 			{
-			  printf(" >> Extraction of %d paragraphes done.\n", paragraph_list->nbparagraph);
+			  if (infos->verbose)
+			    printf(" >> Extraction of %d paragraphes done.\n", paragraph_list->nbparagraph);
 			  updateCC(paragraph_list, image);
 			  /* traceParagraphes(image, paragraph_list); */
 			}
@@ -80,7 +88,8 @@ void processAll(t_launch_infos *infos)
 	      if (SDL_SaveBMP(image, infos->outFile) < 0)
 		fprintf(stderr," > SDL BMP saving error <\n");
 	      else
-		printf(" >> Image %s saved.\n\n", infos->outFile);
+		if (infos->verbose)
+		  printf(" >> Image %s saved.\n\n", infos->outFile);
 	      /* free_listCC(cc_list) */
 	      free_pic(pic);
 	    }
