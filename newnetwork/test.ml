@@ -5,6 +5,17 @@ let nbn = ref 0
 let num_pattern = ref 0
 
 let options =
+            "backp: seule options\n"^
+            "set_err: set error for output\n"^
+            "pavant: propagation avant\n"^
+            "retro: backpropagation\n"^
+            "trainchar: trainfor char\n"^
+            "testchar: print_pour char\n"^
+            "train: learn xor 4000 ite\n"^
+            "test: testpattern xor\n"^
+            "herror: refresh hidden neuron\n"^
+
+
     "?     : options\n"^
     "init  : initialise le reseau\n"^
 (*     "train : entraine le reseau\n"^ *)
