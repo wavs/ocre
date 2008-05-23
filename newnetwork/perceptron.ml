@@ -8,10 +8,18 @@ object(self)
   val mutable patterns = new Data.tab_xor
   val mutable pattern_alpha = new Data.alphabet
   val mutable pattern_input = new Data.data_alpha
+  val mutable pattern_output = 1
   val mutable quad_error = 69.
 
   method get_quad () = quad_error
   method set_quad x = quad_error <- x
+
+  method set_pattern_alpha x = pattern_alpha  <- x
+  method get_pattern_alpha = pattern_alpha
+  method get_pattern_input = pattern_input
+  method set_pattern_input x = pattern_input <- x
+  method get_pattern_output = pattern_output
+  method set_pattern_output x = pattern_output <- x
 
 
   method print_layer () =
@@ -147,6 +155,17 @@ object(self)
           print_string("this is the output"^string_of_int(d#get_output i)^"\n");
       done
 
+  method set_error_for_ouput_neurons_alpha () =
+    let llayer = (!layers).(nblayers - 1) in
+      for i = 0 to llayer#get_nbneurons() - 1 do
+        let fx = llayer#get_neurons_value i in
+        let error = fx*.(1. -. fx)*.
+          ((float_of_int (pattern_output)) -. fx) in
+          llayer#set_neurons_error i error;
+          print_string("this is the output"^string_of_int(output)^"\n");
+      done
+
+
 (* on rajoute une methode qui nous permet de calculer l'erreur quad
    qui rappellons le est de la form: somme des[ (theo - valeur
    obtenu)au caarre] il peut etre sympa de la diviser par le nbr de
@@ -160,6 +179,17 @@ object(self)
           sum := !sum +. ((d -. f) *. (d -. f));
       done;
       self#set_quad (!sum /. float_of_int(llayer#get_nbneurons()))
+  method foi x = float_of_int x
+
+  method set_err_quad_alpha ()=
+    let llayer = (!layers).(nblayers - 1) in
+    let sum = ref 0. in
+      for i = 0 to llayer#get_nbneurons() - 1 do
+        let f = llayer#get_neurons_value i in
+          sum := !sum +. (((self#foi pattern_output) -. f) *. (self#foi(pattern_output) -. f));
+      done;
+      self#set_quad (!sum /. self#foi(llayer#get_nbneurons()))
+
 
 (* Pour 5-6-7 deux choix se presentent: calcule d'erreur en fonction
    des poids precedent ou calcule des poids puis des erreurs; il
@@ -266,6 +296,19 @@ object(self)
     self#set_err_quad pattern;
     self#back_propagation ()
 
+  method  learn_pattern_alpha () =
+(*      initialisation des vecteurs d'entrees *)
+(*        propagation avant avec la valeur des poids deja existant *)
+(*        set_error *)
+(*        calcule de l'erreur quadratique *)
+(*        retropropagation de l'erreur et mise a jour des poids *)
+    self#set_input_pattern_alpha();
+    self#set_forward_propagate();
+    self#set_error_for_ouput_neurons_alpha();
+    self#set_err_quad_alpha();
+    self#back_propagation ()
+
+
   method boucle_learn nbr_iteration =
     let pattern = ref 0 in
     for i = 0 to nbr_iteration - 1 do
@@ -280,16 +323,8 @@ object(self)
     done
 
   method boucle_learn_alpha nbr_iteration =
-    let pattern = ref 0 in
     for i = 0 to nbr_iteration - 1 do
-      pattern := 0;
-      self#learn_pattern !pattern;
-      pattern := 1;
-      self#learn_pattern !pattern;
-      pattern := 2;
-      self#learn_pattern !pattern;
-      pattern := 3;
-      self#learn_pattern !pattern;
+      self#learn_pattern_alpha();
     done
 
 
@@ -299,5 +334,20 @@ object(self)
       self#set_forward_propagate ();
       (!layers.(nblayers -1)#get_neurons 0)#print_neuron ();
     done
+
+  method train_for_noob nbr_iteration =
+    for i = 0 to 25 do
+      self#set_pattern_input (pattern_alpha#get_tabpos i);
+      self#boucle_learn_alpha nbr_iteration;
+    done
+
+  method test_pattern_alpha () =
+    for i = 0 to 25 do
+      self#set_pattern_input (pattern_alpha#get_tabpos i);
+      self#set_input_pattern_alpha();
+      self#set_forward_propagate ();
+      (!layers.(nblayers -1)#get_neurons 0)#print_neuron ();
+    done
+
 
 end

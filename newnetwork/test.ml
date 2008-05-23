@@ -121,6 +121,8 @@ let main() =
             |"displ"-> (!p#print_layer(); print_string "\n$")
             |"displw"-> (!p#print_layer_and_weight(); print_string
                            "\n$")
+            |"trainchar" -> !p#train_for_noob 5000;print_string "\n$"
+            |"testchar" -> !p#test_pattern_alpha ();print_string "\n$"
             |"train" -> !p#boucle_learn 4000;print_string "\n$"
             |"test" ->  !p#test_pattern ();print_string "\n$"
             |"herror" -> (!p#refresh_hidden_neurons_value 2; print_string
