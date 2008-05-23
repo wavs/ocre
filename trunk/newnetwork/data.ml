@@ -62,11 +62,26 @@ end
 
 class data_alpha =
 object (self)
-  val mutable charactere = ' '
-  val mutable tab_input = Array.make 10 (Array.make 10 1)
+  val mutable char = 0
+  val mutable tab_input = Array.make 100 1)
 (*   method init_from_file num_charactere file_path = *)
 (*     let filed = Unix.openfile file_path in *)
-      
+  method get_char () = char
+  method set_char x  = char <- x
+  method get_tab () = tab_input
+  method set_tab x  =  tab_input <- x
+  method get_tabpos pos = tab_input.(pos)
+  method set_tabpos pos x =  tab_input.(pos) <- x
+  method zero_or_one int =
+    if (int == 48) then
+      0
+    else
+      1
+  method init_tab string =
+    for i = 0 to 99 do
+      let char = String.get string i in
+        Array.set i (zero_or_one (Char.code char))
+    done
 (*       Unix.close filed *)
 end
 
@@ -87,4 +102,45 @@ object (self)
      correspondant aux symboles reconnnu. Pour chaque valeur on aurra
      un tableau d'entree!!! donc on utilise une class data qui possede
      une structure differente*)
+  val mutable tab = Array.make 26 (new data_alpha)
+  val mutable tab_string =
+    [|
+      "0111111000"^
+        "1110011100"^
+        "1100001100"^
+        "0000011100"^
+        "0111111100"^
+        "1110001100"^
+        "1100001100"^
+        "1100001100"^
+        "1110011110"^
+        "0111100110";
+      "1000000000"^
+        "1000000000"^
+        "1011000000"^
+        "1100100000"^
+        "1000100000"^
+        "1000100000"^
+        "1000100000"^
+        "1100100000"^
+        "1011000000"^
+        "0000000000";
+      
+
+    |]
+
+  method get_tab() = tab
+  method set_tab x = tab <- x
+
+  method get_tabpos pos = tab.(pos)
+  method set_tabpos pos x =  tab.(pos) <- x
+
+  method init_tab_alpha () =
+    for i = 0 to 25 do
+      let a = new data_alpha in
+        a#set_char i
+        a#init_tab ;
+      self#set_tabpos i a;
+    done
+
 end
