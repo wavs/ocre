@@ -573,5 +573,20 @@ t_paragraph_list *addListParagraph(t_paragraph_elt *elt, t_paragraph_list *parag
   return(NULL);
 }
 
-
-
+/**
+ * This function returns a resized matrix (10x10)  for the cc.
+ *
+ * @param cc Connected component
+ *
+ * @return Matrix 10x10
+ */
+/*t_matrix *resizeCC(t_cc_elt *cc)
+{
+  t_matrix *ret;
+*/
+  /* Initialization */
+  /*ret = wmalloc(sizeof(t_matrix));
+  ret->nbrows = 10;
+  ret->nbcols = 10;
+  ret->data= NULL;
+}*/
