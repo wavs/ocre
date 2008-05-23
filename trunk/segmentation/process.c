@@ -79,7 +79,7 @@ void processAll(t_launch_infos *infos)
 			    printf(" >> Extraction of %d paragraphs done.\n", paragraph_list->nbparagraph);
 			  updateCC(paragraph_list, image);
 			  traceParagraphes(image, paragraph_list);
-			  exportAll(paragraph_list, "seg_export.txt");
+			  exportAll(paragraph_list, "seg_export.xml");
 			}
 		    }
 		  
