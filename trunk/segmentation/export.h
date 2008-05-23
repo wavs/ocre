@@ -16,4 +16,6 @@
 #include <stdio.h>
 #include "structures.h"
 
+void exportAll(t_paragraph_list* document, char* filename);
+
 #endif
