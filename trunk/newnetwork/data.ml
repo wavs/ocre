@@ -63,15 +63,15 @@ end
 class data_alpha =
 object (self)
   val mutable char = 0
-  val mutable output = 0
+(*   val mutable output = 0 *)
   val mutable tab_input = Array.make 100 1
 (*   method init_from_file num_charactere file_path = *)
 (*     let filed = Unix.openfile file_path in *)
   method get_char () = char
   method set_char x  = char <- x
 
-  method get_output = output
-  method set_output x = output <-x
+(*   method get_output = output *)
+(*   method set_output x = output <-x *)
 
   method get_tab () = tab_input
   method set_tab x  =  tab_input <- x
