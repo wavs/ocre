@@ -118,7 +118,6 @@ void binarizeTheBitmap(SDL_Surface *image, char *output)
 	      else
 		fputc('0', file);
 	    }
-	  fputc('\n', file);
 	}
       fputc('\n', file);
       

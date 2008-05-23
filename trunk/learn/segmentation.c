@@ -384,7 +384,6 @@ void exportCC(t_cc_list *cc_list, t_binary_image *pic)
 		  else
 		    fputc('0', file);
 		}
-	      fputc('\n', file);
 	    }
 	  fputc('\n', file);
 	  
