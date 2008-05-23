@@ -14,5 +14,6 @@
 #define EXPORT_H
 
 #include <stdio.h>
+#include "structures.h"
 
 #endif

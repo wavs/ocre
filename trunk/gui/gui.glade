@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.2.2 on Fri May 23 11:22:29 2008 by testu_a@theilax-->
+<!--Generated with glade3 3.2.2 on Fri May 23 12:16:19 2008 by testu_a@theilax-->
 <glade-interface>
   <widget class="GtkWindow" id="window">
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -224,6 +224,17 @@
                 <property name="label" translatable="yes">Detect blocks</property>
                 <property name="stock_id">gtk-select-all</property>
                 <signal name="clicked" handler="on_block"/>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkToolButton" id="toolbox_learn">
+                <property name="visible">True</property>
+                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="label" translatable="yes">Learn</property>
+                <property name="stock_id">gtk-sort-ascending</property>
               </widget>
               <packing>
                 <property name="expand">False</property>

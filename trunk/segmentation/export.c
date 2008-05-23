@@ -10,93 +10,99 @@
  *   This file contains functions about the exportation.
  */
 
-void exportLetter (FILE *f, t_letter_elt)
+#include "export.h"
+
+void exportLetter (FILE *f, t_cc_elt* letter)
 {
-    int xmin, xmax, ymin, ymax;
-
-    xmin = lettre->coord.xmin;
-    xmax = lettre->coord.xmax;
-    ymin = lettre->coord.ymin;
-    ymax = lettre->coord.ymax;
-
-    fprintf(f, "<letter:%i x[%i,%i] y[%i,%i] />\n",
-        lettre->id, xmin, xmax, ymin, ymax);
+    fprintf(f, "\t\t\t<c x[%i,%i] y[%i,%i] />\n",
+            letter->coord.xmin,
+            letter->coord.xmax,
+            letter->coord.ymin,
+            letter->coord.ymax);
 }
 
-void exportWord (FILE* f, t_word_elt word)
+void exportWord (FILE* f, t_word_elt* word)
 {
-    int xmin, xmax, ymin, ymax;
-    t_letter_elt lettre;
+    t_cc_elt* letter;
 
-    xmin = word->coord.xmin;
-    xmax = word->coord.xmax;
-    ymin = word->coord.ymin;
-    ymax = word->coord.ymax;
+    fprintf(f, "\t\t<w x[%i,%i] y[%i,%i]>\n",
+            word->coord.xmin,
+            word->coord.xmax,
+            word->coord.ymin,
+            word->coord.ymax);
 
-    fprintf(f, "<word:%i x[%i,%i] y[%i,%i]>\n",
-        word->id, xmin, xmax, ymin, ymax);
-    lettre = word->letter;
-
-    while (lettre)
+    letter = word->cclist->head;
+    while (letter)
     {
-        exportLetter (f, lettre);
-        lettre = lettre->next;
+        exportLetter (f, letter);
+        letter = letter->next;
     }
 
-    fprintf(f, "</word:%i>\n", word->id);
+    fprintf(f, "\t\t</w>\n");
 }
 
-void exportParagraph (FILE* f, t_paragraph_elt paragraph)
+
+
+void exportLine (FILE* f, t_line_elt* line)
 {
-    int xmin, xmax, ymin, ymax;
-    t_word_elt mot;
+    t_word_elt* word;
 
-    xmin = paragraph->coord.xmin;
-    xmax = paragraph->coord.xmax;
-    ymin = paragraph->coord.ymin;
-    ymax = paragraph->coord.ymax;
+    fprintf(f, "\t<l x[%i,%i] y[%i,%i]>\n",
+            line->coord.xmin,
+            line->coord.xmax,
+            line->coord.ymin,
+            line->coord.ymax);
 
-    fprintf(f, "<paragraph:%i x[%i,%i] y[%i,%i]>\n",
-        word->id, xmin, xmax, ymin, ymax);
-    mot = paragraph->word;
-
-    while (mot)
+    word = line->wordlist->head;
+    while (word)
     {
-        exportLetter (f, mot);
-        mot = mot->next;
+        exportWord (f, word);
+        word = word->next;
     }
 
-    fprintf(f, "</paragraph:%i>\n", word->id);
+    fprintf(f, "\t</l>\n");
 }
 
-int exportDoc (t_cc_list cc)
-{
-    FILE *fp;
-    char* doc;
-    int xmin, xmax, ymin, ymax;
-    fp = fopen(filename, "w");
 
-    if(!fp)
-      fprintf(stderr, "Can't open file\n");
+
+void exportParagraph (FILE* f, t_paragraph_elt* paragraph)
+{
+    t_line_elt* line;
+
+    fprintf(f, "<p x[%i,%i] y[%i,%i]>\n",
+            paragraph->coord.xmin,
+            paragraph->coord.xmax,
+            paragraph->coord.ymin,
+            paragraph->coord.ymax);
+
+    line = paragraph->linelist->head;
+    while (line)
+    {
+        exportLine (f, line);
+        line = line->next;
+    }
+
+    fprintf(f, "</p>\n");
+}
+
+int main (t_paragraph_list* document, char* filename)
+{
+    FILE *f;
+    t_paragraph_elt* para;
+    f = fopen(filename, "w");
+
+    if(!f)
+      fprintf(stderr, "Can't open file: %s\n", filename);
     else
     {
-        xmin = document->coord.xmin;
-        xmax = document->coord.xmax;
-        ymin = document->coord.ymin;
-        ymax = document->coord.ymax;
-
-        fprintf(f, "<document x[%i,%i] y[%i,%i]>\n",
-            xmin, xmax, ymin, ymax);
-        para = document->paragraph;
-
-        while (para)
+      para = document->head;
+      while (para)
         {
-            exportLetter (f, mot);
-            mot = mot->next;
+          exportParagraph (f, para);
+          para = para->next;
         }
-
-        fprintf(f, "</document>%s\n", "");
     }
-    fclose(fp);
+
+    fclose(f);
     return 0;
 }

@@ -56,10 +56,12 @@ void preprocess (GtkImageMenuItem* test, gpointer user_data)
   /* so there's no unused parameter... */
   (void)test;
   guisex = (GUI_ *)user_data;
-  sprintf(appel, "../bin/OCRed -i %s -s 100", "../resize.bmp");
+  sprintf(appel, "../bin/OCRed -i %s -s 100", guisex->file);
+  system(appel);
+  sprintf(appel, "../bin/OCRed -i %s --resize-auto", "tresholded.bmp");
   system(appel);
   /* open the file */
-  gtk_image_set_from_file(GTK_IMAGE(guisex->image), "tresholded.bmp");
+  gtk_image_set_from_file(GTK_IMAGE(guisex->image), "../resize.bmp");
 }
 
 /* fct qui balance du texte dans l'editeur */
@@ -140,10 +142,12 @@ void detect_blocks (GtkImageMenuItem* test, gpointer user_data)
   (void)test;
   guisex = (GUI_ *)user_data;
 
-  sprintf(appel, "../bin/seg -i %s -o blocks.bmp", "../resize.bmp");
+  sprintf(appel, "../bin/seg -i %s -o blocks.bmp", "tresholded.bmp");
+  system(appel);
+  sprintf(appel, "../bin/OCRed -i %s --resize-auto", "blocks.bmp");
   system(appel);
   /* open the file */
-  gtk_image_set_from_file(GTK_IMAGE(guisex->image), "blocks.bmp");
+  gtk_image_set_from_file(GTK_IMAGE(guisex->image), "../resize.bmp");
 
 }
 /*
