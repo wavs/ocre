@@ -255,7 +255,7 @@ int isInWord(t_cc_elt *cc, t_word_elt *word)
   deltav = abs(ymed_cc - ymed_word);
   deltah = abs(cc->coord.xmin - word->coord.xmax);
 
-  if ((deltav < (word_height)) && (deltah < word_height / 2))    /* cc_width */
+  if ((deltah < word_height / 2))    /* cc_width */
     return(1);
   return(0);
 }
@@ -323,11 +323,8 @@ int isInParagraph(t_line_elt *line, t_paragraph_elt *para)
  */
 void updateBoxCoord(t_word_elt *word, t_cc_elt *cc)
 {
-  /* Update of minimum */
-  /* printf("Avant: %d", word->coord.xmin); */
   if (cc->coord.xmin < word->coord.xmin)
     word->coord.xmin = cc->coord.xmin;
-  /*printf("Apres: %d", word->coord.xmin); */
 
   if (cc->coord.ymin < word->coord.ymin)
     word->coord.ymin = cc->coord.ymin;
@@ -575,3 +572,13 @@ t_paragraph_list *addListParagraph(t_paragraph_elt *elt, t_paragraph_list *parag
     }
   return(NULL);
 }
+
+
+/**
+ * This function updates the coordinates of the
+ * connected components 
+ */
+/*void updateCC(t_paragraph_list *paragraph_list)
+{
+  
+}*/

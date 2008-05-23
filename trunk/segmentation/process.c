@@ -35,7 +35,7 @@ void processAll(t_launch_infos *infos)
   t_word_list *word_list;
   t_line_list *line_list;
   t_paragraph_list *paragraph_list;
-
+  
   pic = NULL;
   image = NULL;
   image = SDL_LoadBMP(infos->inFile);
@@ -72,8 +72,8 @@ void processAll(t_launch_infos *infos)
 		    }
 		  
 		}
-
-	      /* traceCC(image, cc_list); */
+	      
+	      /*traceCC(image, cc_list); */
 
 	      if (SDL_SaveBMP(image, infos->outFile) < 0)
 		fprintf(stderr," > SDL BMP saving error <\n");
