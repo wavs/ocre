@@ -130,6 +130,22 @@ void on_save_show (GtkImageMenuItem* test, gpointer user_data)
   gtk_widget_destroy (save);
 }
 
+
+void detect_blocks (GtkImageMenuItem* test, gpointer user_data)
+{
+  GUI_* guisex;
+  char* appel = malloc(sizeof(char *));
+
+  /* so there's no unused parameter... */
+  (void)test;
+  guisex = (GUI_ *)user_data;
+
+  sprintf(appel, "../bin/seg -i %s -o blocks.bmp", "../resize.bmp");
+  system(appel);
+  /* open the file */
+  gtk_image_set_from_file(GTK_IMAGE(guisex->image), "blocks.bmp");
+
+}
 /*
 ** opens an "Open File" dialog
 */
@@ -193,6 +209,9 @@ int main (int argc, char *argv[])
 				 gui);
   glade_xml_signal_connect_data (gui->gxml, "on_text_show",
 				 G_CALLBACK (preprocess),
+				 gui);
+  glade_xml_signal_connect_data (gui->gxml, "on_block",
+				 G_CALLBACK (detect_blocks),
 				 gui);
   glade_xml_signal_connect (gui->gxml, "on_about_show",
 			    G_CALLBACK (on_about_show));
