@@ -58,3 +58,33 @@ object (self)
       tab <- [|pattern1;pattern2;pattern3;pattern4|]
   method get_pos_tab pos = Array.get tab pos
 end
+
+
+class data_alpha =
+object (self)
+  val mutable charactere = ' '
+  val mutable tab_input = Array.make 10 (Array.make 10 1)
+(*   method init_from_file num_charactere file_path = *)
+(*     let filed = Unix.openfile file_path in *)
+      
+(*       Unix.close filed *)
+end
+
+
+class alphabet =
+object (self)
+  (* Le principe est le suivant : on va avoir N pattern un reseau de
+     neurones devra reconnaitre un pattern => que l'on aura N reseau de
+     neurones. La reponse a ce probleme est le suivant. On aura Un
+     tableau de reseau de neuronne chaque case correspondant a une
+     valeur de l'alphabet "a b ou c par exemple". donc on aurra une
+     boucle qui pour chaque valeur de l'alphabet "n" apprendra a
+     reconnaitre cette valeur au reseau de neurone "n" du tableau de
+     reseau de neurones. Cette boucle sera au courrant que la valeur de
+     sortie du reseau de neuronnes sera vrai pour la valeur rechercher
+     et fausse pour tout les valeurs de l'alphabet. Ce qui nous amene a
+     la structure de la classe alphabet:  L'alphabet contien N valeur
+     correspondant aux symboles reconnnu. Pour chaque valeur on aurra
+     un tableau d'entree!!! donc on utilise une class data qui possede
+     une structure differente*)
+end

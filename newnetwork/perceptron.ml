@@ -229,6 +229,37 @@ object(self)
    retropagation avec un plus le calcule de l'erreur quadratique..
    cette fonction devra etre utilise par une autre method qui fera
    l'apprentissage, en gros ce sera une boucle *)
-(*   method  *)
+
+  method  learn_pattern pattern =
+(*      initialisation des vecteurs d'entrees *)
+(*        propagation avant avec la valeur des poids deja existant *)
+(*        set_error *)
+(*        calcule de l'erreur quadratique *)
+(*        retropropagation de l'erreur et mise a jour des poids *)
+    self#set_input_pattern pattern;
+    self#set_forward_propagate();
+    self#set_error_for_ouput_neurons pattern;
+    self#set_err_quad pattern;
+    self#back_propagation ()
+
+  method boucle_learn nbr_iteration =
+    let pattern = ref 0 in
+    for i = 0 to nbr_iteration - 1 do
+      pattern := 0;
+      self#learn_pattern !pattern;
+      pattern := 1;
+      self#learn_pattern !pattern;
+      pattern := 2;
+      self#learn_pattern !pattern;
+      pattern := 3;
+      self#learn_pattern !pattern;
+    done
+
+  method test_pattern () =
+    for i = 0 to 3 do
+      self#set_input_pattern i;
+      self#set_forward_propagate ();
+      (!layers.(nblayers -1)#get_neurons 0)#print_neuron ();
+    done
 
 end
