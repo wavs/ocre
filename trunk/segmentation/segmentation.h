@@ -145,5 +145,10 @@ void traceParagraphes(SDL_Surface *image, t_paragraph_list *paragraph_list);
  */
 t_paragraph_list *makeParagraphes(t_line_list *line_list);
 
+/**
+ * This function updates the coordinates of the
+ * connected components 
+ */
+void updateCC(t_paragraph_list *paragraph_list, SDL_Surface *image);
 
 #endif /* SEGMENTATION_H */
