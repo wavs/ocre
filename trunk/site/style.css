@@ -1,0 +1,148 @@
+* { padding: 0; margin: 0; }
+
+body {
+ font-family: Arial, Helvetica, sans-serif;
+ font-size: 13px;
+ padding: 0px;
+}
+
+#wrapper { 
+ margin: 0 auto;
+ width: 800px;
+}
+
+#h1 {
+	float: left;
+	color: #333;
+	margin-top: 20px;
+	margin-bottom: 0px;
+	font-size: 50px;
+}
+
+#h2 {
+	color: #a3a3a3;
+	margin-top: 65px;
+	float: left;
+	position: absolute;
+	font-size: 20px;
+}
+
+#h3 {
+	color: #a3a3a3;
+	float: left;
+	font-size: 20px;
+}
+
+#leftcolumn { 
+	 float: left;
+	 color: #333;
+	 margin-top: 40px;
+	 margin-left: 10px;
+	 padding: 0px;
+	 width: 570px;
+	 display: inline;
+	 position: relative;
+}
+
+	a {
+		color: #bca47b;
+	}
+	
+	a:visited {
+		color: black;
+		text-decoration: none;
+	}
+	
+	a:hover {
+		text-decoration: none;
+		background-color: #bca47b;
+		color: white;
+}
+	
+span.blur a{
+	color: black;
+	text-decoration: none;
+}
+
+span.blur a:hover{
+	color: black;
+	text-decoration: none;
+	background-color: white;
+	/*border-top: 30px solid #bca47b;*/
+	text-shadow: #000000 0 0 100px;
+}
+
+span.none a{
+	color: black;
+	text-decoration: none;
+}
+
+span.none a:hover{
+	color: black;
+	text-decoration: none;
+	background-color: white;
+}
+
+span.footer a{
+	color: black;
+	text-decoration: none;
+}
+
+span.footer a:hover{
+	color: black;
+	text-decoration: none;
+	background-color: white;
+}	
+
+#footer {
+	margin-left: 10px;
+	padding: 0px;
+	width: 570px;
+	color: #333;
+	margin: 10px;
+	width: 200px;
+	float: left;
+	bottom: 20%;
+}
+
+span.footer {
+	position: absolute;
+	margin-left: 10px;
+	padding: 0px;
+	width: 200px;
+	color: #333;
+	margin: 10px;
+	width: 200px;
+	float: right;
+	bottom: 20%;
+}
+
+#rightcolumn { 
+	display: inline;
+	color: #333;
+	margin: 10px;
+	padding: 0px;
+	width: 195px;
+	float: right;
+	text-align: right;
+}
+
+
+li {
+	margin-left: 35px;
+	list-style-type: circle;
+}
+
+.clear { clear: both; background: none; }
+
+.news p {
+	background-color:#CCCCCC;
+	margin-top:0px;
+}
+
+.news	{
+	margin-left: 10px;
+	float: left;
+	width:70%;
+	margin:auto;
+}
