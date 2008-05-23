@@ -7,6 +7,7 @@ object(self)
   val mutable learning_rate = 10.
   val mutable patterns = new Data.tab_xor
   val mutable pattern_alpha = new Data.alphabet
+  val mutable pattern_input = new Data.data_alpha
   val mutable quad_error = 69.
 
   method get_quad () = quad_error
@@ -75,6 +76,27 @@ object(self)
         end
       done;
       (!layers).(0) <- inlayer
+
+
+(*                DAANNNNNGGEERRR              *)
+(*                DAANNNNNGGEERRR              *)
+(*                DAANNNNNGGEERRR              *)
+(*                DAANNNNNGGEERRR              *)
+
+(*pas oublier d'initialiser la valeur du tableau d'entree *)
+  method set_input_pattern_alpha ()=
+    let inlayer = !layers.(0) in
+    let data = pattern_input in
+      for i = 0 to inlayer#get_nbneurons() - 1 do
+        begin
+          inlayer#set_neurons_value
+            i
+            (float_of_int(data#get_tabpos i));
+        end
+      done;
+      (!layers).(0) <- inlayer
+
+
 (*2*)
   method set_forward_propagate () =
     let f x beta= 1./.(1. +. exp(float_of_int(beta) *. -.1. *. x)) in
@@ -103,8 +125,8 @@ object(self)
           (*remise a jour de la valeur des neurones de la couche
         cachees*)
           ((!layers).(i)#get_neurons j)#set_value !newvalue;
-      done;
-    done;
+      done; (*kikooololllll xDDDDDDDD MAIS MDRRRRRRRRRRRRRRRRRRrr*)
+    done; (*MAIS LOLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL*)
 (*3*)
     (* Il semblerai que l'etape trois est lieu a notre etape 2. il se
        pourrait que l'on doit applique une application similaire a
@@ -137,7 +159,7 @@ object(self)
         let d = float_of_int((patterns#get_pos_tab num_pattern)#get_output i) in
           sum := !sum +. ((d -. f) *. (d -. f));
       done;
-v      self#set_quad (!sum /. float_of_int(llayer#get_nbneurons()))
+      self#set_quad (!sum /. float_of_int(llayer#get_nbneurons()))
 
 (* Pour 5-6-7 deux choix se presentent: calcule d'erreur en fonction
    des poids precedent ou calcule des poids puis des erreurs; il
