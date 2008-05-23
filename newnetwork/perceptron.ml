@@ -76,11 +76,13 @@ object(self)
   method set_input_pattern numero =
     let inlayer = !layers.(0) in
     let data = patterns#get_pos_tab numero in
+
       for i = 0 to inlayer#get_nbneurons() - 1 do
         begin
           inlayer#set_neurons_value
             i
             (float_of_int(data#get_input  i));
+(*            print_string(string_of_int(34)); *)
         end
       done;
       (!layers).(0) <- inlayer

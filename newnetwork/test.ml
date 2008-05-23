@@ -79,10 +79,10 @@ let init_() =
 (*   init2_(); *)
 (*   init3_(); *)
 (*   init4_(); *)
-  input := 100;
+  input := 2;
   output := 1;
   nbhlayers := 1;
-  nbn := 50;
+  nbn := 3;
 
   p := new Perceptron.perceptron
     !input !output !nbhlayers !nbn;
@@ -132,7 +132,7 @@ let main() =
             |"displ"-> (!p#print_layer(); print_string "\n$")
             |"displw"-> (!p#print_layer_and_weight(); print_string
                            "\n$")
-            |"trainchar" -> !p#train_for_noob 5000;print_string "\n$"
+            |"trainchar" -> !p#train_for_noob 1;print_string "\n$"
             |"testchar" -> !p#test_pattern_alpha ();print_string "\n$"
             |"train" -> !p#boucle_learn 4000;print_string "\n$"
             |"test" ->  !p#test_pattern ();print_string "\n$"
