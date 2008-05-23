@@ -8,7 +8,7 @@
  *   OCRec is the character extraction part of OCRe.
  * About this file: /segmentation/structures.h
  *   This file contains declarations of all structures
- *   about the extraction.
+ *   about the extraction..
  */
 
 #include <stdio.h>
