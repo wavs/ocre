@@ -1,0 +1,192 @@
+\chapter{Analyse et extraction}
+
+\section{Rappel des faits}
+
+La partie analyse & extraction a pour but, comme son nom l'indique, d'analyser la
+structure du document et d'extraire les caractères afin de pouvoir les communiquer à la
+partie reconnaissance des caractères. Durant les deux premières soutenances, nous vous
+avons présenté plusieurs principes de détection. Lors de la première soutenance, nous nous
+sommes attachés à détecter les lignes en utilisant la méthode des projections de pixels.
+Durant la deuxième soutenance, nous vous avons présenté la détection des
+caractères. Celle-ci faisait appel à une méthode de segmentation par croissance de régions.
+Cependant, à ce stade notre algorithme était seulement capable de récupérer les
+composantes connexes, constituant ainsi les caractères. Pour les besoins de l'OCR, il
+devenait impératif de regrouper l'ensemble de ces caractères en blocs. Ces mêmes blocs
+nous renseigneraient ainsi sur la structure du document analysé. Pour réaliser cette
+détection des blocs, nous avons donc continué sur notre voie en appliquant la fameuse
+croissance des régions.
+
+\begin{center}
+  \includegraphics[width=mm]{screenshot.jpg}
+  Extrait d'un document segment\'e
+\end{center}
+
+
+
+\section{Principe general de la segmentation}
+
+La méthode de segmentation que nous avons utilisée pour cette soutenance est la suite
+de celle là même utilisée lors de la dernière soutenance. C'est la méthode par segmentation
+de régions (region-based segmentation), plus précis\'ement par croissance de régions
+(growing-region segmentation). Elle est composée de deux étapes principales que l'on peut
+associer respectivement au travail réalisé lors des deux dernières soutenances:
+
+\begin{enumerate}
+\item Trouver les points de départ de nos régions.
+\item Faire grossir nos régions par agglomération des pixels voisins.
+\end{enumerate}
+
+La première étape, réalisée lors de la 2ème soutenance, consiste donc à trouver les
+composantes connexes qui constitueront les points de départ de nos régions. Nous ne
+détaillerons pas ici le principe de cette étape qui a déjà été abordée dans le rapport de la
+2ème soutenance.
+
+Nous nous intéressons ici à la deuxième étape de la segmentation, qui consiste à faire
+croître nos régions par agglomération des composantes connexes entre elles. Nous
+travaillons ici sur les composantes connexes qui nous sont fournies par la 1ère étape sous
+forme d'une liste triée en ordre croissant de composantes connexes. Pour la suite du
+rapport et la clarté de l'explication, les composantes connexes seront
+assimilés aux caractères.
+
+\begin{center}
+  \includegraphics[width=mm]{croissance.jpg}
+  Explication du principe de segmentation par croissance de r\'egions
+\end{center}
+
+
+
+\section{Hierarchie des informations}
+
+Pour implémenter cette deuxième étape de l'algorithme de segmentation par régions,
+nous avons fait appel à de nouvelles structures de données. Celles-ci nous permettent
+ainsi de représenter des mots, des lignes et des blocs de texte, que nous appellerons plus
+communément des paragraphes. Ces nouvelles structures de données s'ajoutent à la
+structure de composantes connexes qui est la structure atomique employée par
+l'algorithme. En effet, dans notre cas, on ne peut pas décomposer des composantes
+connexes, ce sont nos points de départs et les paragraphes seront ceux d'arrivée. Ces
+différentes structures de données sont à employer selon une hiérarchie bien précise. Les
+caractères (composantes connexes) constituent des mots, qui composent des lignes, qui
+créent des paragraphes.
+
+Afin de représenter ces données en mémoire, nous avons principalement repris la
+structure des composantes connexes en la modifiant selon nos besoins. Nos données seront
+donc stockées en mémoire grâce à des listes chaînées triées de caractères, de mots, de
+lignes et de paragraphes. Voici les quatre types principaux nous permettant de représenter
+les différents éléments cités ci-dessus:
+
+\begin{verbatim}
+struct s_cc_elt
+{
+    int id;
+    int nbpix;
+    struct s_box_coordinate coord;
+    int chr;
+    struct s_cc_elt *next;
+}
+
+struct s_word_elt
+{
+    struct s_cc_list *cclist;
+    struct s_box_coordinate coord;
+    struct s_word_elt *next;
+}
+
+struct s_line_elt
+{
+    struct s_word_list *wordlist;
+    struct s_box_coordinate coord;
+    struct s_line_elt *next;
+}
+
+struct s_paragraph_elt
+{
+    struct s_line_list *linelist;
+    struct s_box_coordinate coord;
+  struct s_paragraph_elt *next;
+}
+\end{verbatim}
+
+
+Voici la hiérarchie des types de données utilisés. Vous pouvez constater qu'ils sont
+similaires dans leurs structures. Ainsi, un paragraphe est constitué de ses propres
+coordonnées et de la liste de lignes le composant. Cette même liste de lignes est composée
+de ses coordonnées et de la liste des mots qui la composent. Et enfin cette liste de mots
+possède ses propres coordonnées et la liste des caractères qui le composent. L'algorithme 
+d'agglomération des éléments devra parcourir l'ensemble des caractères pour
+créer ainsi une liste de mots qui sera elle-même parcourues pour fournir une liste de lignes
+et ainsi de suite jusqu'à obtenir la liste des blocs de texte: les paragraphes.
+
+\begin{center}
+  \includegraphics[width=mm]{hierarchie.jpg}
+  Hi\'erarchie des informations
+\end{center}
+
+
+
+\section{Implementation}
+
+La première phase de la segmentation, à savoir la recherche des composantes connexes
+est effectuée par la fonction findCC(), comme explicitée dans le précédant rapport. Cette
+fonction nous renvoie une liste triée de composantes connexes. Cette liste constitue le
+départ de la deuxième phase de la segmentation. La phase de croissance des régions se
+réalise en trois étapes effectuées par trois fonctions principales dont voici les prototypes:
+
+\begin{verbatim}
+t_word_list *makeWords(t_cc_list *cc_list);
+
+t_line_list *makeLines(t_word_list *word_list);
+
+t_paragraph_list *makeParagraphs(t_line_list *line_list);
+\end{verbatim}
+
+Ces trois fonctions créent séquentiellement une liste de mots puis une liste de lignes et
+enfin une liste de paragraphes. Voyons plus en détails leur fonctionnement respectif.
+   
+La fonction makeWords() prend en paramètre une liste de composantes connexes et
+renvoie la liste des mots qu'elle a formés. Cette fonction parcourt la liste des composantes
+connexes. Au premier caractère trouvé, elle crée un mot auquel elle associe une liste de
+caractères. Tant que les caractères suivants respectent un seuil vertical et un seuil
+horizontal spécifique alors on ajoute ces caractères au mot précédemment créé sinon on en
+crée un autre. Le seuil vertical permet d'éviter d'ajouter des caractères provenant d'une
+autre ligne et le seuil horizontal permet d'éviter d'ajouter des caractères trop espacés qui
+feraient partis d'un autre mot.
+
+\begin{center}
+  \includegraphics[width=mm]{seuils.jpg}
+  Pr\'esentation des seuils horizomtal et vertical
+\end{center}
+
+Selon le même modèle, la fonction makeLines() prend en paramètre une liste de mots et
+renvoie une liste de lignes qu'elle a constituées. Cette fonction parcourt la liste des mots. Au
+premier mot trouvé, elle crée une ligne et lui associe une liste de mots la composant. Elle
+détecte les mots qui sont sur la même ligne grâce à un seuil vertical selon le même principe
+que le seuil vertical de la fonction makeWords(). La fonction makeParagraphs() fonctionne
+sur le même principe que les précédentes fonctions à ceci près qu'elle se situe à un niveau
+supérieur dans la hiérarchie des données.
+
+
+
+\section{Standardisation des donnees}
+
+Une fois l'image segment\'ee, on se doit de stocker les informations obtenues pour que l'on puisse
+les analyser ult\'erieurement. C'est pourquoi nous avons commenc\'e \`a d\'evelopper un module
+permettant de sauvegarder aussi bien la structure lin\'eaire du document, \`a savoir la mise en page,
+que les donn\'ees, ici les matrices de pixels correspondant aux caract\`eres. Nous avons donc \'et\'e
+amen\'e \`a concevoir une fonction permettant de r\'ecup\'erer la matrice binaire d'\`apr\`es les coordonn\'ees
+des \'el\'ements (composantes connexes, mots, lignes, paragraphes) ainsi que des fonctions nous permettant de
+cr\'eer un fichier de type xml (travail r\'ealis\'e par Alexandre) contenant la hi\'erarchie des \'el\'ements
+de la page ainsi que les coordonn\'ees des caract\`eres dans l'image du document. Cependant, un probl\`eme est
+survenu. On se devait de standardiser les informations obtenues en matrices de 10 par 10 pixels pour l'entr\'ee
+du r\'eseau de neurones, \`a savoir de redimensionner les matrices de pixels.
+Or le retard accumul\'e ne nous a pas permis de finir cette \'etape de standardisation.
+
+
+\section{Bilan}
+
+Au terme du projet, la partie Analyse & extraction permet conformément au cahier des
+charges de décomposer une image prétraitée qualifiée de "parfaite" en lettres, mots, lignes
+et paragraphes. On constate cependant des imprécisions dans les blocs détectés. Elle
+permet en outre de stocker en mémoire la structure linéaire du document ainsi que les
+données textuelles. Cependant, le retard que nous avons accumulé depuis la dernière
+soutenance ne nous a pas permis de terminer l'étape de standardisation des données pour
+le réseau de neurones.
