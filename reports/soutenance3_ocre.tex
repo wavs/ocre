@@ -103,7 +103,6 @@ plainpages = false}
 \dominitoc
 \maketitle
 \tableofcontents \pagebreak
-<<<<<<< .mine
 \thispagestyle{fancy}
 
 \chapter{Introduction} % (fold)
@@ -123,6 +122,199 @@ Notre application est une machine à tuer le papier, elle extrait l’âme du pa
 
 Plus sérieusement, nous croyons dur comme fer à la nécessité d’une telle application dans le monde d’aujourd’hui, alors qu’une application qui transforme des cartes 2D en modèles 3D, c’est certes \emph{cool}, mais ça s’arrête là. Nous croyons surtout que l’OCR peut être – et doit être – une application qui puisse être utiliser par \emph{tout le monde}. Tout le monde devrait pouvoir enregistrer facilement leurs documents papier sur leur ordinateur. Tout le monde devrait pouvoir, en un seul clic, obtenir le texte contenu dans un document scanné. C’est donc dans cette optique que nous avons choisi le projet de l’OCR, en souhaitant réaliser non pas une application compliquée, pleine d’options, mais un logiciel simplissime, qui n’ait qu’une seule fonction, mais qui la remplisse correctement.
 % section un_ocr_what_else_ (end)
+
+\chapter{Analyse et extraction}
+
+\section{Rappel des faits}
+
+La partie analyse et extraction a pour but, comme son nom l'indique, d'analyser la
+structure du document et d'extraire les caractères afin de pouvoir les communiquer à la
+partie reconnaissance des caractères. Durant les deux premières soutenances, nous vous
+avons présenté plusieurs principes de détection. Lors de la première soutenance, nous nous
+sommes attachés à détecter les lignes en utilisant la méthode des projections de pixels.
+Durant la deuxième soutenance, nous vous avons présenté la détection des
+caractères. Celle-ci faisait appel à une méthode de segmentation par croissance de régions.
+Cependant, à ce stade notre algorithme était seulement capable de récupérer les
+composantes connexes, constituant ainsi les caractères. Pour les besoins de l'OCR, il
+devenait impératif de regrouper l'ensemble de ces caractères en blocs. Ces mêmes blocs
+nous renseigneraient ainsi sur la structure du document analysé. Pour réaliser cette
+détection des blocs, nous avons donc continué sur notre voie en appliquant la fameuse
+croissance des régions.
+
+\begin{center}
+  \includegraphics[width=130mm]{screenshot.jpg}
+  \caption{\emph{Extrait d'un document segment\'e}}
+\end{center}
+
+
+
+\section{Principe de la segmentation}
+
+La méthode de segmentation que nous avons utilisée pour cette soutenance est la suite
+de celle là même utilisée lors de la dernière soutenance. C'est la méthode par segmentation
+de régions (region-based segmentation), plus précis\'ement par croissance de régions
+(growing-region segmentation). Elle est composée de deux étapes principales que l'on peut
+associer respectivement au travail réalisé lors des deux dernières soutenances:
+
+\begin{enumerate}
+\item Trouver les points de départ de nos régions.
+\item Faire grossir nos régions par agglomération des pixels voisins.
+\end{enumerate}
+
+La première étape, réalisée lors de la 2ème soutenance, consiste donc à trouver les
+composantes connexes qui constitueront les points de départ de nos régions. Nous ne
+détaillerons pas ici le principe de cette étape qui a déjà été abordée dans le rapport de la
+2ème soutenance.
+
+Nous nous intéressons ici à la deuxième étape de la segmentation, qui consiste à faire
+croître nos régions par agglomération des composantes connexes entre elles. Nous
+travaillons ici sur les composantes connexes qui nous sont fournies par la 1ère étape sous
+forme d'une liste triée en ordre croissant de composantes connexes. Pour la suite du
+rapport et la clarté de l'explication, les composantes connexes seront
+assimilés aux caractères.
+
+\begin{center}
+  \includegraphics[width=90mm]{croissance.jpg}
+  \caption{\\\emph{Explication du principe de segmentation par croissance de r\'egions}}
+\end{center}
+
+
+
+\section{Hierarchie des informations}
+
+Pour implémenter cette deuxième étape de l'algorithme de segmentation par régions,
+nous avons fait appel à de nouvelles structures de données. Celles-ci nous permettent
+ainsi de représenter des mots, des lignes et des blocs de texte, que nous appellerons plus
+communément des paragraphes. Ces nouvelles structures de données s'ajoutent à la
+structure de composantes connexes qui est la structure atomique employée par
+l'algorithme. En effet, dans notre cas, on ne peut pas décomposer des composantes
+connexes, ce sont nos points de départs et les paragraphes seront ceux d'arrivée. Ces
+différentes structures de données sont à employer selon une hiérarchie bien précise. Les
+caractères (composantes connexes) constituent des mots, qui composent des lignes, qui
+créent des paragraphes.
+
+Afin de représenter ces données en mémoire, nous avons principalement repris la
+structure des composantes connexes en la modifiant selon nos besoins. Nos données seront
+donc stockées en mémoire grâce à des listes chaînées triées de caractères, de mots, de
+lignes et de paragraphes. Voici les quatre types principaux nous permettant de représenter
+les différents éléments cités ci-dessus:
+
+\begin{lstlisting}
+struct s_cc_elt
+{
+    int id;
+    int nbpix;
+    struct s_box_coordinate coord;
+    int chr;
+    struct s_cc_elt *next;
+}
+
+struct s_word_elt
+{
+    struct s_cc_list *cclist;
+    struct s_box_coordinate coord;
+    struct s_word_elt *next;
+}
+
+struct s_line_elt
+{
+    struct s_word_list *wordlist;
+    struct s_box_coordinate coord;
+    struct s_line_elt *next;
+}
+
+struct s_paragraph_elt
+{
+    struct s_line_list *linelist;
+    struct s_box_coordinate coord;
+  struct s_paragraph_elt *next;
+}
+\end{lstlisting}
+
+
+Voici la hiérarchie des types de données utilisés. Vous pouvez constater qu'ils sont
+similaires dans leurs structures. Ainsi, un paragraphe est constitué de ses propres
+coordonnées et de la liste de lignes le composant. Cette même liste de lignes est composée
+de ses coordonnées et de la liste des mots qui la composent. Et enfin cette liste de mots
+possède ses propres coordonnées et la liste des caractères qui le composent. L'algorithme 
+d'agglomération des éléments devra parcourir l'ensemble des caractères pour
+créer ainsi une liste de mots qui sera elle-même parcourues pour fournir une liste de lignes
+et ainsi de suite jusqu'à obtenir la liste des blocs de texte: les paragraphes.
+
+\begin{center}
+  \includegraphics[width=90mm]{hierarchie.jpg}
+  \caption{\\\emph{Hi\'erarchie des informations}}
+\end{center}
+
+
+
+\section{Impl\'ementation}
+
+La première phase de la segmentation, à savoir la recherche des composantes connexes
+est effectuée par la fonction findCC(), comme explicitée dans le précédant rapport. Cette
+fonction nous renvoie une liste triée de composantes connexes. Cette liste constitue le
+départ de la deuxième phase de la segmentation. La phase de croissance des régions se
+réalise en trois étapes effectuées par trois fonctions principales dont voici les prototypes:
+
+\begin{lstlisting}
+t_word_list *makeWords(t_cc_list *cc_list);
+
+t_line_list *makeLines(t_word_list *word_list);
+
+t_paragraph_list *makeParagraphs(t_line_list *line_list);
+\end{lstlisting}
+
+Ces trois fonctions créent séquentiellement une liste de mots puis une liste de lignes et
+enfin une liste de paragraphes. Voyons plus en détails leur fonctionnement respectif.
+   
+La fonction makeWords() prend en paramètre une liste de composantes connexes et
+renvoie la liste des mots qu'elle a formés. Cette fonction parcourt la liste des composantes
+connexes. Au premier caractère trouvé, elle crée un mot auquel elle associe une liste de
+caractères. Tant que les caractères suivants respectent un seuil vertical et un seuil
+horizontal spécifique alors on ajoute ces caractères au mot précédemment créé sinon on en
+crée un autre. Le seuil vertical permet d'éviter d'ajouter des caractères provenant d'une
+autre ligne et le seuil horizontal permet d'éviter d'ajouter des caractères trop espacés qui
+feraient partis d'un autre mot.
+
+\begin{center}
+  \includegraphics[width=100mm]{seuils.jpg}
+  \caption{\\\emph{Pr\'esentation des seuils horizontal et vertical}}
+\end{center}
+
+Selon le même modèle, la fonction makeLines() prend en paramètre une liste de mots et
+renvoie une liste de lignes qu'elle a constituées. Cette fonction parcourt la liste des mots. Au
+premier mot trouvé, elle crée une ligne et lui associe une liste de mots la composant. Elle
+détecte les mots qui sont sur la même ligne grâce à un seuil vertical selon le même principe
+que le seuil vertical de la fonction makeWords(). La fonction makeParagraphs() fonctionne
+sur le même principe que les précédentes fonctions à ceci près qu'elle se situe à un niveau
+supérieur dans la hiérarchie des données.
+
+
+
+\section{Standardisation}
+
+Une fois l'image segment\'ee, on se doit de stocker les informations obtenues pour que l'on puisse
+les analyser ult\'erieurement. C'est pourquoi nous avons commenc\'e \`a d\'evelopper un module
+permettant de sauvegarder aussi bien la structure lin\'eaire du document, \`a savoir la mise en page,
+que les donn\'ees, ici les matrices de pixels correspondant aux caract\`eres. Nous avons donc \'et\'e
+amen\'e \`a concevoir une fonction permettant de r\'ecup\'erer la matrice binaire d'\`apr\`es les coordonn\'ees
+des \'el\'ements (composantes connexes, mots, lignes, paragraphes) ainsi que des fonctions nous permettant de
+cr\'eer un fichier de type xml (travail r\'ealis\'e par Alexandre) contenant la hi\'erarchie des \'el\'ements
+de la page ainsi que les coordonn\'ees des caract\`eres dans l'image du document. Cependant, un probl\`eme est
+survenu. On se devait de standardiser les informations obtenues en matrices de 10 par 10 pixels pour l'entr\'ee
+du r\'eseau de neurones, \`a savoir de redimensionner les matrices de pixels.
+Or le retard accumul\'e ne nous a pas permis de finir cette \'etape de standardisation.
+
+
+\section{Bilan}
+
+Au terme du projet, la partie Analyse et extraction permet conformément au cahier des
+charges de décomposer une image prétraitée qualifiée de ``parfaite'' en lettres, mots, lignes
+et paragraphes. On constate cependant des imprécisions dans les blocs détectés. Elle
+permet en outre de stocker en mémoire la structure linéaire du document ainsi que les
+données textuelles. Cependant, le retard que nous avons accumulé depuis la dernière
+soutenance ne nous a pas permis de terminer l'étape de standardisation des données pour
+le réseau de neurones.
 
 
 
@@ -172,6 +364,90 @@ glade_xml_signal_connect (gxml, "on_window_destroy",
 Ici, \verb!gxml! est notre fichier xml, \verb!"on_window_destroy"! est le signal auquel on rattache la fonction Gtk \verb!gtk_main_quit! qui quitte l'application en cours. Cette simple ligne de code nous permet de signifier au programme que lorsqu'on clique sur la ``croix'' en haut \`a droite de notre fen\^etre, il faut non seulement fermer la fen\^etre mais aussi l'application.
 On peut bien entendu lui sp\'ecifier d'autres fonctions que celles de Gtk.
 % subsection gtkoi_ (end)
+
+\subsection{Enregistrement d'un fichier texte} % (fold)
+\label{sec:enregistrement_d_un_fichier_texte}
+
+Pour la premi\`ere soutenance, nous nous \'etions arr\^et\'e \`a l'ouverture d'une image.\\
+Pour la deuxi\`eme soutenance, nous nous sommes attaqu\'e \`a la gestion du texte, et plus pr\'ecis\'ement \`a l'enregistrement d'un fichier texte.\\
+Les modifications apport\'ees sont relatives au texte. Nous pouvons d\'esormais \'editer du texte, ainsi que l'enregistrer. Soyons francs: la gestion du texte sous Gtk, c'est pas de la tarte. On utilise un widget de type GtkTextView qui nous sert \`a afficher le texte. Pour l'\'editer, on utilise un GtkTextBuffer, qui utilise des GtkTextIter associ\'es \`a des GtkTextMarks. Bref, c'est un merdier sans nom.
+Les GtkTextIter servent \`a se rep\'erer dans le GtkTextBuffer (qui est un buffer, thank you captain Obvious!). Un GtkTextIter est un endroit du texte. On l'utilise par exemple pour r\'ecup\'erer une cha\^ine de caract\`eres:
+\begin{lstlisting}
+ text = gtk_text_buffer_get_text( GTK_TEXT_BUFFER(txtbuffer), 
+                            &iStart, 
+                            &iEnd, 
+                            FALSE );
+\end{lstlisting}
+Ici, iStart et iEnd sont des pointeurs sur des GtkTextIter (ici le d\'ebut et la fin du buffer, encore une fois, thank you captain obvious!).
+Il faut ensuite cr\'eer une proc\'edure pour sauvegarder le texte r\'ecup\'er\'e. En C, on utilise le type \verb!FILE! de la biblioth\`eque \verb!stdio.h!. C'est assez simple pour ce qu'on fait ici. On ouvre un fichier puis on \'ecrit dedans, sans oublier une gestion d'erreur (ici pas forc\'ement tr\`es utile, mais il n'est jamais inutile de g\'erer les erreurs\ldots).
+
+\begin{lstlisting}
+void save_as (char *text, char *filename)
+{
+  FILE *fp;
+    /* opens the file in writing mode ("w")*/
+  fp = fopen(filename, "w");
+  if(!fp)
+      /* sends an error message */
+    fprintf(stderr, "Can't open file\n");
+  else
+      /* writes "text" in the file */
+    fprintf(fp, text);
+    /* closes the file */
+  fclose(fp);
+}
+\end{lstlisting}
+% section enregistrement_d_un_fichier_texte (end)
+
+\begin{center}
+
+	\includegraphics[width=120mm]{gui.png}\\
+	\caption{\emph{Notre magnifique interface graphique, telle qu'on l'avait pr\'esent\'ee lors de la deuxi\`eme soutenance}}\\
+\end{center}
+
+
+\subsection{Ortaugraffe} % (fold)
+\label{sec:ortaugraffe}
+	L'utilisateur aura besoin d'un correcteur orthographique non seulement pour corriger les erreurs de notre OCR mais aussi pour \'editer son texte avant de l'enregistrer. Avant de me lancer dans la cr\'eation d'un syst\`eme de correction orthographique, je voyais d\'ej\`a le tableau: des biblioth\`eques compliqu\'ees, des centaines de fonctions qui font tout sauf ce qu'on veut, etc\ldots J'avais en effet fini par devenir tr\`es pessimiste vis-\'a-vis de Gtk. Je dois dire que j'ai \'et\'e bluff\'e. Une ligne. UNE ligne. On utilise la biblioth\`eque \verb!GtkSpell! pr\'esente sur les machines du PIE. Cette fameuse ligne, la voici dans tout sa splendeur:
+	\begin{lstlisting}
+  gtkspell_new_attach (GtkTextView *view,
+                       const gchar *lang,
+                       GError **error);
+	\end{lstlisting}
+	\verb!view! est notre widget \verb!GtkTextView!, \verb!lang! est la langue, \verb!error! est un pointeur sur la localisation d'une erreur \'eventuelle (\verb!NULL! pour nous).
+
+	%%% SCREEN CORREC
+
+% section ortaugraffe (end)
+
+\subsection{Lions!} % (fold)
+\label{sub:lions_}
+Pour la soutenance finale, ou soutenance de projet, il fallait bien \'evidemment terminer compl\`etement l'interface. Cela signifie lier l'interface graphique aux \'executables existants. \\
+Il faut d'abord s'attaquer au probl\`eme de la taille des images. Lors de l'affichage des images dans l'interface graphique, je n'avais pas r\'eussi pour la deuxi\`eme soutenance \`a r\'eduire les images pour qu'on puisse les voir enti\`erement. Si l'on choisissait une grande image, on ne voyait que la partie sup\'erieure gauche.\\
+Nous avons r\'eussi \`a r\'esoudre ce problème en rusant, parce que nous n'avons pas trouv\'e de fonction Gtk qui puisse nous venir en aide. Pierre a cr\'e\'e pour moi une option dans son executable \verb!OCRed!, \verb!--resize-auto!, qui r\'eduit les images pour que l'utilisateur puisse voir une vignette de cette image.\\
+Pour appeler un \'executable, j'\'etais d'abord parti sur l'utilisation d'un \verb!fork()!, histoire de faire les choses proprement. J'\'etais donc parti sur quelque chose du genre:
+
+\begin{lstlisting}
+if(!fork())   
+  {
+    /* on est dans le fils */
+      system("make");  
+    execl("../bin/OCRed", "-i", "filename", "--resize-auto", NULL);
+    /* NULL est une "sentinelle" qui indique la fin des arguments */
+    exit(0); /* on quitte le fils */
+  }
+  else
+  { /* on est dans le pere */
+    wait(NULL); /* on attend la fin du fils */
+  }
+\end{lstlisting}
+
+Malheureusement, \c ca n'a pas march\'e, et on ne sait toujours pas pourquoi. Ce n'est pas faute de pers\'ev\'erance\ldots j'ai litt\'eralement pass\'e des \emph{heures} dessus! Et faites moi confiance, ce n'est pas ce qu'il y a de plus gratifiant que de passer plusieures heures sur quelques lignes de codes sans avoir le plaisir de d\'ecouvrir ce qui n'allait pas au final. Je suis donc pass\'e \`a une commande plus ``magique'', \verb!system()!. \verb!system()! prend en param\`etre une cha\^ine de caract\`ere, la commande, et l'\'ex\'ecute comme si l'on avait tap\'e cette cha\^ine nous-m\^eme en ligne de commande.
+% subsection lions_ (end)
+% chapter interface_utilisateur (end)
+
+
+
 
 % chapter interface_graphique (end)
 
