@@ -103,9 +103,76 @@ plainpages = false}
 \dominitoc
 \maketitle
 \tableofcontents \pagebreak
+<<<<<<< .mine
 \thispagestyle{fancy}
 
-%%commentaire de guilbert ! elle est ou ta partie? elle est ou ma
-%%partie? elle est ou la partie de thomas? elle ou la partie de? dim?
-%%c'est une question... sans reponse jusqu'a maintenant!! au boulot les
-%%poutreurs!!! non mais oh! .. bon je retourne glander...
+\chapter{Introduction} % (fold)
+\label{cha:introduction}
+
+Ce document que vous avez en main est le rapport du projet ``OCRe'', le fruit de plusieurs mois de travail de quatre étudiants: Thomas Aït-taleb, Pierre Guilbert, Dimitri Georgoulis, et Alexandre Testu. \\
+Vous tenez entre vos mains de nombreuses heures de stress, d’angoisse, de déceptions, mais aussi de joies, de découvertes, et surtout de camaraderie. Car OCRe est le fruit d’un travail d’équipe, d’une équipe aux membres très différents, mais qui, curieusement, tient debout. Oh, bien sûr, nous avons eu nos différends, tout le monde n’était pas toujours de bonne humeur, mais il y en avait toujours un pour redresser la situation et pousser les autres vers l’avant.
+
+% chapter introduction (end)
+
+\section{Un OCR, what else?} % (fold)
+\label{sec:un_ocr_what_else_}
+Lorsque j’ai expliqué à ma mère le but de mon projet (``on doit réaliser un logiciel qui transformera une image en texte''), elle n’a pas compris. Je lui ai ré-expliqué en lui disant que l’on entrera du texte scanné, une image donc, et que notre logiciel reconnaîtra ce texte. Elle n’a toujours pas compris, et aujourd’hui encore ne comprend pas l’intérêt de notre application – il est utile de préciser que ma mère ne sait pas se servir d’un répondeur, mais qu’elle fait le meilleur coq au vin du monde. \\
+Au fil du temps, je me suis rendu compte que ce n’était pas seulement ma mère qui ne comprenait pas, mais tout les gens qui n’utilisent pas régulièrement un ordinateur. Ils sont resté dans une logique d’\emph{impression}. L’ordinateur n’est pour eux qu’un lieu de passage pour leurs documents. Ces documents n’existent pas \emph{vraiment} s’ils ne sont pas sur du papier. \\
+Or dans le monde dans le quel nous vivons et dans lequel nous \emph{vivrons}, le papier a de moins en moins d’importance. Nous souhaitons sa mort, et ce le plus rapidement possible. C’est pour ça que nous avons choisis ce projet, c’est parce que nous souhaitons développer une application réellement utile, voire indispensable. \\
+Notre application est une machine à tuer le papier, elle extrait l’âme du papier – son contenu – pour nous permettre de le brûler avec un rictus machiavélique. \\
+
+Plus sérieusement, nous croyons dur comme fer à la nécessité d’une telle application dans le monde d’aujourd’hui, alors qu’une application qui transforme des cartes 2D en modèles 3D, c’est certes \emph{cool}, mais ça s’arrête là. Nous croyons surtout que l’OCR peut être – et doit être – une application qui puisse être utiliser par \emph{tout le monde}. Tout le monde devrait pouvoir enregistrer facilement leurs documents papier sur leur ordinateur. Tout le monde devrait pouvoir, en un seul clic, obtenir le texte contenu dans un document scanné. C’est donc dans cette optique que nous avons choisi le projet de l’OCR, en souhaitant réaliser non pas une application compliquée, pleine d’options, mais un logiciel simplissime, qui n’ait qu’une seule fonction, mais qui la remplisse correctement.
+% section un_ocr_what_else_ (end)
+
+
+
+\chapter{Interface graphique} % (fold)
+\label{cha:interface_graphique}
+
+\section{Pourquoi?} % (fold)
+\label{sec:pourquoi_}
+L’interface graphique est une partie critique d’un projet. Quoiqu’en disent beaucoup de \emph{geeks}, la ligne de commande n’est pas intuitive. Ce n’est pas le moyen le plus simple de comprendre une application. L’utilisateur lambda a besoin de boutons, parce qu’il n’a plus à s’imaginer une interface en tapant des commandes aux noms douteux, il n’a pas à \emph{apprendre} des mots magique, il n’a qu’à cliquer sur des boutons, faisant alors un parallèle avec le monde qui l’entoure. \\
+L’interface graphique rassure l’utilisateur, l’ordinateur n’est plus alors une boite magique, c’est un outil qu’il maîtrise. \\
+C’est pour cela que nous offrons à l’utilisateur une interface graphique.\\
+
+Pour le \emph{power user}, la ligne de commande est plus immédiate, elle lui procure une plus grande sensation de contrôle. Beaucoup de \emph{geeks} sont rebutés par des interface graphique trop simplistes. Ils en ont peur, tout simplement. Ils veulent savoir ``ce qu’il y a derrière''. Le fait de taper des lignes eux-mêmes leur apporte un certain pouvoir, ils voient le résultat de leur action dans les lignes qui s’affichent en réponse à leur commande. Ils peuvent tout arrêter quand ils veulent. L’ordinateur est alors un outil qu’ils maîtrisent. \\
+C’est pourquoi nous offrons aussi la possibilité à l’utilisateur d’utiliser notre application en ligne de commande.
+
+% section pourquoi_ (end)
+
+\section{Comment?} % (fold)
+\label{sec:comment_}
+La disposition que nous avons retenu pour notre interface graphique est très simple. Nous nous sommes fixer pour objectif d’avoir le moins de boutons possible, afin que l’utilisateur ait le moins de chance possible de se perdre. 
+Nous avons donc opté pour une interface en 4 parties :\\
+
+\begin{itemize}
+	\item La barre de menu, pas \emph{nécessaire} ici, mais l’utilisateur doit rester dans un environnement familier, et cela passe par le respect de certains standards,
+	\item La barre d’outil, qui contiendra les boutons principaux: open, save, convert,
+	\item Un cadre de visualisation de l’image, pour que l’utilisateur vérifie qu’il ne s’est pas tromper de fichier,
+	\item Un éditeur de texte avec correcteur orthographique intégré pour visualiser le résultat de la conversion et éventuellement corriger les erreurs de notre logiciel.
+\end{itemize}
+
+% section comment_ (end)
+
+
+\subsection{GTKoi?} % (fold)
+\label{sec:gtkoi_}
+Au début du projet, avant d’avoir touché à Gtk, nous imaginions qu’il existait un outil assez simple pour créer des interfaces graphiques. Eh oui, nous étions très naïfs à l’époque. \\
+Des camarades nous ont parlé de Glade, un outil avec des boutons et dans lequel on peut utiliser la souris pour créer des interface graphique par simple glisser-déposer. C'est plus ou moins vrai. Glade nous aide à créer une interface, mais il ne code pas pour nous! 
+
+Glade 3 fonctionne tr\`es bien sur les machines du PIE. Il a le m\'erite de nous offrir une interface assez intuitive, je l'ai donc pris en main tr\`es rapidement.\\
+Nous cr\'eons donc une interface en utilisant Glade puis nous relions chaque ``signal'' dans un \texttt{.c}. Les ``signals'' sont des sortes d'``\'ev\`enement'' auquel on peut relier une action en utilisant Gtk.\\
+Pour relier un signal \`a une action, on utilise la fonction suivante:
+
+\begin{lstlisting}
+glade_xml_signal_connect (gxml, "on_window_destroy",
+			  G_CALLBACK (gtk_main_quit));
+\end{lstlisting}
+
+Ici, \verb!gxml! est notre fichier xml, \verb!"on_window_destroy"! est le signal auquel on rattache la fonction Gtk \verb!gtk_main_quit! qui quitte l'application en cours. Cette simple ligne de code nous permet de signifier au programme que lorsqu'on clique sur la ``croix'' en haut \`a droite de notre fen\^etre, il faut non seulement fermer la fen\^etre mais aussi l'application.
+On peut bien entendu lui sp\'ecifier d'autres fonctions que celles de Gtk.
+% subsection gtkoi_ (end)
+
+% chapter interface_graphique (end)
+
+\end{document}
