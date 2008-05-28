@@ -80,7 +80,7 @@ de type jpeg,bmp,png au moins.
 \subsection{ D\'etection d'angle}
  Il existe un argument magique ``-dev'' qui a juste besoin d'avoir une
  image qui n'est pas bien droite en param\`etre. Il retourne directement
- l'image dans le bon sens, et en noir et blanc.
+ l'image dans le bon sens, et en noir et blanc, a vos risques et perils.
 \subsection{ Help me if you can! }
  L'option ``-help'' est aussi pr\'esente afin d'accompagner
  l'utilisateur dans sa d\'ecouverte du programme. Pour tout autre
@@ -94,7 +94,7 @@ de type jpeg,bmp,png au moins.
 \chapter{ La d\'etection de l'angle }
  La d\'etection de l'angle \'etait \`a faire pour la premi\`ere
  soutenance, malheureusement par un manque de temps certain elle ne f\^ut
- pas pr\^ete \`a temps. Nous arrivons \`a la deuxi\`eme soutenance avec
+ pas pr\^ete \`a temps. Nous arrivons \`a la troisi\'eme soutenance avec
  deux types de d\'etection de l'angle de rotation du texte d'une image,
  ce qui a pour but de redresser l'image, afin d'avoir une segmentation
  \`a peu pr\`es correcte.
@@ -215,8 +215,7 @@ Notre d\'etection de l'angle de rotation d'un texte dans une image est
 encore assez impr\'ecise ; cela est principalement d\^u \`a l'utilisation
 de l'arctangente qui devient tr\`es sensible aux extrema. Nous pensons
 donc r\'eutiliser la technique de la multiple rotation, qui semble en
-th\'eorie plus pr\'ecise. Les r\'esultats seront expos\'es \`a la
-prochaine soutenance.
+th\'eorie plus pr\'ecise.
 \subsubsection{ Optimisation des filtres}
 Le gros probl\`eme de la rotation est la perte d'information, en effet
 cette transformation a en sortie des nombres \`a virgule flottante,
@@ -225,11 +224,15 @@ grille d'une image dans le cas de pixels carr\'es. Une multitude de
 filtres existent, mais le plus rapide et le plus adapt\'e dans le cas de la
 rotation serait un filtre bicubique.
 %%vive le copier coller a remanier en trente secondes:D
+\Chapter{Utilisation de OCRed dans OCRe}
+\section{Pourquoi?}
+Notre programme, est cr\'ee dans l'optique d'une utilisation par un
+consomateur lambda, dans cette optique, nous avons du cr\'eer diff\'erents
+outils, qui communiquant entre eux, forment un tout unique et
+merveilleux, OCRe.
+OCRed \`a \'et\'e battit dans l'objectif de faciliter de le
+pr\'etraitement, tache tr\'es difficile r\'ealis\'e par le programme segmentation.
 
-\section{Le pretraitement}
-
-\section{Son utilisation dans OCRe}
-\subsection{}
 %% fin du chapitre sur le pretraitement
 
 %% debut du chapitre sur les reseaux de neuronnes
@@ -286,6 +289,7 @@ alors le perceptrons multicouches en 1984, dont la grande nouveaut\'e
 est la r\'etropropagation du gradient.
 
 \subsection{Ca sert a quoi?}
+
 \subsection{Diff\'erent Mod\`ele}
 \subsection{Exemple}
 
