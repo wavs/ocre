@@ -125,6 +125,457 @@ Notre application est une machine à tuer le papier, elle extrait l’âme du pa
 Plus sérieusement, nous croyons dur comme fer à la nécessité d’une telle application dans le monde d’aujourd’hui, alors qu’une application qui transforme des cartes 2D en modèles 3D, c’est certes \emph{cool}, mais ça s’arrête là. Nous croyons surtout que l’OCR peut être – et doit être – une application qui puisse être utiliser par \emph{tout le monde}. Tout le monde devrait pouvoir enregistrer facilement leurs documents papier sur leur ordinateur. Tout le monde devrait pouvoir, en un seul clic, obtenir le texte contenu dans un document scanné. C’est donc dans cette optique que nous avons choisi le projet de l’OCR, en souhaitant réaliser non pas une application compliquée, pleine d’options, mais un logiciel simplissime, qui n’ait qu’une seule fonction, mais qui la remplisse correctement.
 % section un_ocr_what_else_ (end)
 
+%%debut chapitre sur le programme ocred
+\chapter{ OCRed, k\'ezako ? }
+ OCRed est n\'e des mots Ocre et digital, qui rappellons le encore une fois
+ signifient ``Optical Character Recognition enhanced'' pour l'un et
+ num\'erique pour l'autre. La partie du projet portant sur le
+ pr\'etraitement de l'image devant \^etre faite en ocaml, OCRed est
+ totalement r\'ealis\'e dans ce langage.
+
+\section{ Visualisation de l'image grace a l'executable }
+ La cr\'eation du logiciel de traitement de l'image nous a men\'e, au
+ d\'ebut du projet \'a vouloir visualiser directement, c'est \'a dire
+ sans logiciel tiers, l'action de notre travail.
+ La visualisation des images trait\'ees permet notre ind\'ependance
+ au niveau de l'utilisation du logiciel, ce qui est un confort certain.
+ La fen\^etre est r\'ealis\'ee avec OcamlSDL, tout comme le pr\'etraitement
+ de l'image.
+%% mettre image de la fenetre sdl
+
+\begin{center}
+	
+	\includegraphics[width=70mm]{visualisationimage.jpg}\\
+\end{center}
+
+\section{ Utilisation de l'\'executable }
+ L'ex\'ecutable en ligne de commande admet un certain nombre d'arguments,
+ certains ne pouvant \'evidemment donner lieu \`a un quelconque r\'esultat
+ sans la sp\'ecification d'une image d'entr\'ee.
+\subsection{ Sp\'ecifier une image d'entr\'ee }
+ Il est plus logique, pour un logiciel de traitement d'image, d'avoir
+ une image \`a traiter. Vous devez pour cela utiliser l'argument ``-i''
+ suivi du chemin d'une image de type jpeg,bmp,png au moins.
+\subsection{ Sp\'ecifier une image de sortie }
+ Vous n'\^etes pas oblig\'e de pr\'eciser le chemin de l'image de sortie
+ mais cela permet une certaine flexibilit\'e. Dans le cas o\`u vous
+ n'indiquez pas la sortie, OCRed se debrouille pour sortir une image
+ avec un nom assez \'evident, d\'ependant du traitement. Par exemple
+ rotatation.bmp ou encore tresholded.bmp, les images se trouveront l\`a
+ o\`u vous avez ex\'ecut\'e votre programme. Pour sp\'ecifier un chemin de
+ sortie, veuillez utiliser l'argument ``-o'' suivi du chemin d'une image
+de type jpeg,bmp,png au moins.
+\subsection{ La visualisation de l'image }
+ Gr\^ace \`a OcamlSDL, nous pouvons visualiser notre image, il faut pour
+ cela sp\'ecifier une image d'entr\'ee, et passer l'argument ``-d'' en
+ param\`etre. Les d\'esavantages de l'utilisation de cette interface sont
+ assez subtils, par exemple vous ne pouvez ni zoomer ni d\'ezoomer, ni
+ vous d\'eplacer sur l'image. Toutefois il y'a (aussi) des avantages, vous pouvez
+ visualiser directement les modifications appliqu\'ees \`a votre
+ image. En appuyant sur F2 vous faites tourner l'image de l'angle que
+ vous avez pass\'e en param\`etre --voir plus loin--. En appuyant sur F3
+ vous appliquez le seuil, que vous pouvez sp\'ecifier en ligne de
+ commande. En appuyant sur F4, vous appliquez le filtre m\'edian. Nous
+ tenons \`a vous rappeler que le seuil ne marche que sur les couleurs.
+ Pour quitter il suffit d'appuyer sur F1, la petite croix en haut \`a
+ droite ne marche pas.
+\subsection{ Le seuil }
+ Permet le passage d'une image en noir et blanc, pour avoir un minimum
+ de pertes d'informations vous devez sp\'ecifier un seuil viable. Par
+ d\'efaut le seuil est \`a 200, ce qui est suffisant pour un contraste
+ normal de l'image. Vous devrez l'augmenter si il est trop faible et le
+ baisser dans le cas contraire. Passer l'argument ``-s'' en
+ param\`etre si vous voulez changer la valeur par d\'efaut. Pour
+ l'anecdote ``-s'' viendrait de seuil, mais nous n'en sommes pas vraiment
+ s\^urs.
+\subsection{ Rotation }
+ Vous pouvez passer un angle en pr\'ecision r\'eelle, ou enti\`ere. Pour
+ cela passez respectivement l'angle avec l'argument ``-af'' et ``-a''.
+ Rappelons que l'angle pass\'e en param\`etre est en degr\'es et non en
+ radian. Vous pouvez aussi tourner l'image de 90 degr\'es dans le sens
+ direct ou indirect, gr\^ace aux options ``-right'' et ``-left''.
+\subsection{ Redimensionnement }
+ Le redimensionnement peut s'effectuer en pourcentage de l'image avec
+ l'option ``--resizepercent'' qui prend en param\`etre un pourcentage
+ entier. L'on peut aussi redimensionner l'image en valeur absolue
+ --c'est \`a dire en sp\'ecifiant des valeurs de hauteur et de largeur
+ arbitraires--. Alexandre Testu avait besoin d'un petit redimensionnement
+ rien que pour lui, c'est pour cela que l'option ``--resize-auto''
+ existe.
+\subsection{ D\'etection d'angle}
+ Il existe un argument magique ``-dev'' qui a juste besoin d'avoir une
+ image qui n'est pas bien droite en param\`etre. Il retourne directement
+ l'image dans le bon sens, et en noir et blanc.
+\subsection{ Help me if you can! }
+ L'option ``-help'' est aussi pr\'esente afin d'accompagner
+ l'utilisateur dans sa d\'ecouverte du programme. Pour tout autre
+ interrogation, il se peut que vous puissiez trouver des informations
+ plus ou moins utiles dans les sources du projet, au niveau du fichier
+ README.
+%%fin chapitre sur le programme ocred
+
+
+%%debut chapitre detection de l'angle
+\chapter{ La d\'etection de l'angle }
+ La d\'etection de l'angle \'etait \`a faire pour la premi\`ere
+ soutenance, malheureusement par un manque de temps certain elle ne f\^ut
+ pas pr\^ete \`a temps. Nous arrivons \`a la deuxi\`eme soutenance avec
+ deux types de d\'etection de l'angle de rotation du texte d'une image,
+ ce qui a pour but de redresser l'image, afin d'avoir une segmentation
+ \`a peu pr\`es correcte.
+
+\section{ Diff\'erentes approches}
+ La d\'etection de l'angle de rotation d'un texte dans une image est un
+ probl\`eme assez complexe. En effet une image contenant du texte n'est
+ pas compos\'ee de composantes continues, il est donc plus difficile d'isoler
+ les caract\'eristiques des \'el\'ements. Deux principes majeurs nous
+ sont apparus. Tout d'abord l'on \'etudie les caract\'eristiques d'une
+ image pour chaque angle, on isole ensuite le bon angle ; ce
+ processus est long et d'autre part encore assez impr\'ecis.
+ L'autre principe \'etait de d\'etecter la pente d'une ligne de caract\`eres.
+\subsection{ La multiple rotation }
+ Dans cet algorithme, l'on reduit la taille de l'image pour gagner en
+ temps d'ex\'ecution, le redimensionnement est calcul\'e en fonction de la
+ taille d'origine de l'image, on suppose avoir du format A4 \`a chaque
+ fois. On proc\`ede comme suit: On tourne de fa\c con dichotomique
+ l'image, c'est \`a dire en prenant des angles plus ou moins
+ grand. Jusqu'a trouv\'e un histogramme convenable. L'histogramme est
+ produit \`a partir de la projection de tout les pixels de l'image sur
+ l'axe des horizontales.
+
+Preuve exp\'erimentale produite \`a partir d' une image multifontes,
+multicouleurs, mulicolonnes:
+
+ Comme vous pouvez le voir sur ces images, il est \'evident qu'il y'a une
+ nette diff\'erence entre des images avec un texte mal orient\'e et un
+ texte orthonormal. (mais o\`u est l'orthonormalit\'e dans ce monde ?)
+
+%% histogramme5degree.jpg
+%% commentaire de l'image
+
+\begin{center}
+	
+	\includegraphics[width=120mm]{histogramme5degre.jpg}\\
+\end{center}
+
+
+Sur cette image on peut voir un histogramme d'une image avec un
+texte ayant subi une rotation de 5 degr\'es. Il est clair que le nombre
+de zone ou l'histogramme atteint 0 en ordonn\'ee est beaucoup plus faible
+que les autres images (environ 8).
+
+
+%% rotation1deghisto.jpg
+%% commentaire de l'image
+\begin{center}
+	
+	\includegraphics[width=120mm]{rotation1deghisto.jpg}\\
+\end{center}
+
+Sur cette image on peut voir un histogramme d'une image avec un texte
+ayant subi une rotation de 1 degr\'e. Par rapport \`a l'image
+pr\'ec\'edente, on voit de fa\c con \'evidente que le nombre d'ordonn\'ees
+\`a z\'ero est bien plus grand avec un angle de un degr\'e (ici environ 18).
+
+%% histogramme_bon.jpg
+%% commentaire de l'image
+
+\begin{center}
+	
+	\includegraphics[width=120mm]{histogramme_bon.jpg}\\
+\end{center}
+
+Sur cette image on peut voir un histogramme d'une image avec un texte
+n'ayant pas subi de rotation. Il est tr\'es net que le nombre
+d'ordonn\'ees \`a z\'ero est le plus \'elev\'e.
+
+Il est facile d'implementer un algo qui compte le nombre de bandes
+proche de z\'ero ; il s'av\`ere que nous avons voulu compter le nombre de
+sommets, ce qui est beaucoup moins pr\'ecis. La m\'ethode expos\'ee
+ci-dessus semble bien marcher en th\'eorie.
+
+\subsection{ Detection de la pente }
+On d\'etecte la pente d'une ligne de texte ; pour cela on parcourt
+l'image pour chaque ligne de pixels jusqu'\`a ce que l'on tombe sur un
+pixel noir. Ceci permet d'avoir une certaine id\'ee de la pente d'une ligne
+de texte. La tangente de cette pente nous donne l'angle par rapport \`a
+la verticale. On la soustrait \`a 90 degr\'es si elle est positive, on
+l'ajoute sinon. On se retrouve avec un angle qui correspond, avec un
+taux d'erreur proche du dixi\'eme de degr\'e d'angle.
+
+% mettre l'image histo_pente.jpg
+% commentaire image histo_pente
+
+\begin{center}
+	
+	\includegraphics[width=120mm]{histo_pente.jpg}\\
+\end{center}
+
+Les extrema locaux de la courbe sont beaucoup moins \'elev\'es en
+terme de valeurs. Ce qui a pour cons\'equence, une pente peu \'elev\'ee et donc un angle tr\`es \'elev\'e.
+
+% mettre l'image histo_pent_noangle.jpg
+% commentaire image histo_pent_noangle
+
+
+\begin{center}
+	
+	\includegraphics[width=120mm]{histo_pente_noangle.jpg}\\
+\end{center}
+
+Les extrema locaux de la courbe sont beaucoup plus \'elev\'es en
+terme de valeurs que ceux de la courbe pr\'ec\'edente. Ce qui a pour
+cons\'equence, une pente tres \'elev\'ee et donc un angle tr\'es faible.
+
+Le probl\`eme avec cette technique, et le manque de pr\'ecision autour
+de l'angle nul, et des bruits trop importants produits par des lignes,
+tableaux, ou images impromptus.
+
+Nous avons pourtant retenu cette technique pour cette soutenance, car
+donnant lieu \`a des r\'esultats plus probants que la m\'ethode expos\'ee
+plus haut.
+
+\section{ Optimisations  }
+ L'optimisation est un crit\`ere de confort pour l'utilisateur, mais
+ surtout un gage de qualit\'e.
+\subsection{ R\'eduction de l'image }
+ Afin de pouvoir augmenter la rapidit\'e des algorithmes de d\'etection
+ d'angle, nous r\'eduisons l'image de sorte qu'il y ait le moins de
+ pertes d'informations n\'ecessaires \`a cette derni\`ere. A titre
+ d'exemple une image au format A4 en 75 dpi, a une taille approximative
+ de 900 par 700. Les caract\`eres pr\'esents dans cette image ont une
+ taille en pixels d'\`a peu pr\`es 8 pixels. Il ne faut donc pas trop
+ r\'eduire l'image, environ 40 pourcents de la taille originale. Au
+ contraire pour une image de plus haute d\'efinition, par exemple 600
+ dpi, il est n\'ecessaire de r\'eduire l'image \`a au moins 5 pourcents
+ de la taille originale. Et comme dirait Junior, ``l'id\'ee c'est
+ que'' la rotation d'une image r\'eduite \`a 5 pourcents prend environ
+ 0,05 secondes sur les machines du PIE, alors qu'elle prend plus de 30
+ secondes pour une image en 600 dpi.
+
+%% reduceimage20percent75dpit.jpg
+\begin{center}
+	
+	\includegraphics[width=40mm]{reduceimage20percent75dpit.jpg}\\
+	\caption{\emph{Une image r\'eduite.}}
+\end{center}
+ 
+
+\begin{description}
+	\item[Remarque:] Il est int\'eressant de noter qu'une image r\'eduite comporte
+	moins de bruit, qui fausserait l'avanc\'ee de l'algo de reconnaissance
+	des plages nulles.
+\end{description}
+
+\subsection{ Ce que nous aurions du faire}
+\subsubsection{ D\'etection d'angle}
+Notre d\'etection de l'angle de rotation d'un texte dans une image est
+encore assez impr\'ecise ; cela est principalement d\^u \`a l'utilisation
+de l'arctangente qui devient tr\`es sensible aux extrema. Nous pensons
+donc r\'eutiliser la technique de la multiple rotation, qui semble en
+th\'eorie plus pr\'ecise.
+\subsubsection{ Optimisation des filtres}
+Le gros probl\`eme de la rotation est la perte d'information, en effet
+cette transformation a en sortie des nombres \`a virgule flottante,
+ce qui ne correspond pas vraiment aux nombres entiers d\'efinissant la
+grille d'une image dans le cas de pixels carr\'es. Une multitude de
+filtres existent, mais le plus rapide et le plus adapt\'e dans le cas de la
+rotation serait un filtre bicubique.
+%%vive le copier coller a remanier en trente secondes:D
+\Chapter{Utilisation de OCRed dans OCRe}
+\section{Pourquoi?}
+Notre programme, est cr\'ee dans l'optique d'une utilisation par un
+consomateur lambda, dans cette optique, nous avons du cr\'eer diff\'erents
+outils, qui communiquant entre eux, forment un tout unique et
+merveilleux, OCRe.
+OCRed \`a \'et\'e battit dans l'objectif de faciliter de le
+pr\'etraitement, tache tr\'es difficile r\'ealis\'e par le programme segmentation.
+
+
+%% merde
+%% debut du chapitre sur les reseaux de neuronnes
+\chapter{ R\'eseau de Neurones Formels?}
+%%mettre ca en jolie pour TESTU
+fait par guilbep et dimok
+%%mettre ca en jolie pour TESTU
+
+\section{ Qu'est-ce qu'un RNF?}
+Un RNF est un r\'eseau de neurones form\'els, bon jusque l\'a vous me
+suivez, quoique pas sur. On va essayer d'y remedier.
+\subsection{Historique}
+Le domaine des r\'eseaux de neurones, dont les traditions sont
+anciennes, a \'et\'e saisi par une p\'eriode d'effervescence
+the\'eorique et interdisciplianire pendant les ann\'ees quatre-vingt,
+suivie par une phase d'explorations tous azimuts au cours de la
+d\'ecennie suivant. Ca c'est pour l'introduction.
+Pendant les ann\'ees 1980, les travaux et recherches sur les neurones
+formels rassemblaient une multitude de chercheurs venant d'horizons
+tout aussi divers que la physique statistique, la biologie,
+la psychologie et l'ing\'enierie, qui esp\'erer profiter de cette
+situation.
+
+Collaborations entre biologistes et physiciens se sont prolong\'e
+surtout sur des probl\`emes th\'eoriques dans les ann\'ees 90. A cette
+m\'eme \'epoque, les ing\'enieurs ont d'ailleurs commenc\'es la
+r\'ealisation gr\^ace aux rnfs, de syst\'emes fonctionnels en
+reconnaissance de formes et en mod\'elisation non-lin\'eaire.
+Ces derni\`eres avanc\'ees sont notamment du aux r\'esultats
+math\'ematiques et statistiques importants qui on vu le jour en ce
+d\'ebut de d\'ecennie(1990 j'entends). De plus la
+recherches dans ce domaine, qui n'a pas cess\'e, a apport\'e de nombreuses solutions
+d'optimisation ces derni\'eres ann\'ees, principalement pour les
+prob\'emes d'estimations des param\'etres du reseaux, et des
+m\'ethodes d'\'evaluation de la qualit\'e d'un classifieur.
+
+Rappelons, qu'au d\'epart l'on a appell\'e cela par analogie avec les
+syst\'emes biologiques, car oui nous sommes tous dot\'ees plus ou
+moins d'un certain nombres de neurones. M\^eme moi.
+
+Aujourd'hui principalement \'a cause de la nature statistiques des
+r\'eseaux de neurones, cette analogie semble devenir d\'esu\`ete.
+On pourrait m\^eme dire que les pseudo-justifications biologiques des
+architectures et des algorithmes ne sont plus de mise, mais l\`a ce
+n'est pas de moi.
+
+Et l\`a normalement vous me dites, et avant les ann\'ees quatre-vingt
+y'avait quoi? Bonne question: \dots d'apr\`es mes sources, une certaine
+personne du nom de Marvin Minsky, connu pour ses th\'eories sur la
+hierarchisation du syst\'eme de pens\'ees humain, mais aussi pour sa
+d\'ecouverte de l'inutilit\'e du r\'eseau de neurones formels tels
+qu'il \'etait envisag\'e dans les ann\'ees 70. Rummelhart introduit
+alors le perceptrons multicouches en 1984, dont la grande nouveaut\'e
+est la r\'etropropagation du gradient.
+
+\subsection{Ca sert a quoi?}
+Bon c'est bien beau tout \c ca mais a quoi  \c ca sert? On a
+dej\'a effleur\'e le sujet dans l'historique, mais on va
+approfondir. Les r\'eseaux de neurones formels servent
+particuli\'erement \`a la mod\`elisation statique et dynamique, la
+commande de processus, et la classification. Vous allez me dire
+comment une simple structure de donn\'ees avec deux trois m\'ethodes
+peut reconnaitre un objet, mod\`eliser un syst\`eme dynamique? C'est
+ce que j'appelle une question.
+les rnfs dont il est question ici doivent etre consideres comme des familles de fonctions aprametres
+modulaoires et possedant de bonne sproprietes
+d'approxiamation. Pourquoi parceque leur application leur demande
+d'etre ainsi.
+De nombreux problemes industriesl ou de recherche demandent de
+representer a laide dun modele mathermatique le comportement de
+processus physiques chimisues economoiques etc.. a partir de
+connaissance a priori sur ce comprotement et de mesures effecturees
+sur le processus un tel modele peut etre constriot pour, :
+analyser les phenomenes regissant le comportement du processus;
+predire a court ou a long terme les grandeurs d'inteeret du processus
+concevoir un sustemen de commande du processus
+Ou on a un processus qui est une entite qui fournit un ou plusieurs
+grandeurs qui nous interessent. cette grandeur peut etre n'importe
+quoi pourvu qu'elle nous interesse, cela peut etre un debit, un
+potentiel pour un processus de production une population ou encore
+pour un processus biologique ecologique.., par exemple des poissons?
+Generalement cette grandeur d'interet et la sortie de notre reseau de
+neurones.
+
+Bon en resume, on peut dire qu'un reseau de neurones ca sert
+principalement a trois domaines, la classification ou la
+reconnaissance de motifs, la modelisation de systeme biologique,
+industrielle, mecanique, et la commande de processus ou automate pour
+les intimes. Le principale avantage des reseaux de neuronnes par
+rapport a des modeles dit de systeme statistiques, ou expert la
+rapidite. Cela est principalement du a la faible quantite de calcule
+pour l'utilisation  d'un reseau de neurones formels.
+\subsection{Diff\'erent Mod\`ele}
+
+Il existe de nombreux mod\'eles de reseaux de neurones formels, mais
+bon principalement, comme on l'a expliqu\'e plus haut, c'est un
+syt\`eme qui nous donne une sortie qui d\'epend d'entr\'ees externes
+ou pas. Le premier mod\`ele qui nous vient \`a l'esprit est le
+mod\`ele dit de ``boites noires'' , il y'a ensuite les mod\`eles dit
+lin\'eaires et non-lin\'eaires et puis finalement le mod\`eles qui
+d\'ependent du temps, de fa\c con discr\`ete ou continue. Sachant
+qu'on peut m\'elanger raisonnablement ces diff\`erentes propri\'etees.
+Un mod\`ele de type boite noire, peut-etre non-lin\'eaire par rapport
+\`a ses param\'etres ou bien le contraire, le mod\`ele de la boite
+noire s'utilise aussi bien pour \'etudier le comportement statiques
+d'un transistor MOS en saturation, que le mod\'ele d'une r\'eaction
+enzymatique par rapport \`a son substrat.
+
+Les rnfs sont des familles de fonctions non limeaire modulaires
+capables d'approxumer n'importe quelle fonction bornmee dans un
+intervalle derme de ses entrees aussi complexe soit=elel. c'est l'une
+des raison pour lesquelles le rnds sont utilises comme modeles
+oit-noir non linmeaire statiques(reseau non boucle, donc sans
+retroaction)..et modele dit dynamique(reseau boucle, avec
+retroaction). La mise au point d'un modele neuronal consiste a
+calculer ses parametres de telle sorte que la sortie du modele predise
+celle du processus en moenne . en termes statistiques on desire
+estimer les parametres de telle facon que la sortie du modele soit
+aussii proche que possible de l'espereance mathematique de la sorite
+du processsus . Cette espeance mathemqtique auqui est une fonctione
+inconnue des entrees est appelle la regression. l'estimation de
+sparametres appele apprentissage dans la communautre neuronale est
+realise  a l'aide d'un ensemble d'apprentissage constitu\'e de couples
+de valeurs d'entres et de sorties appel\'e exemples d'apprentissage.
+
+%% mettre plein d'images kikoo lol
+\subsection{Exemple}
+Par exemple un classifieur: on veut proceder a la classification de
+chiffres decimaux manuscrits: les entrees prennent les valeurs - ou 1
+selon celles de pixels de l'images binarise du chiffre presente. Les
+classe d'appartencae sont {0 1 2 3 4 5 6 7 8 9}.
+Un classifieur est ainsi ocncyu pour attribuer un objet represente ar
+un vecteur d'entree a une classe d'appartencance. Par exemple dans le
+cas d'un probleme a deux classe la sortie du classifieur est une
+variable qui prend la valeur 1 pour la premiere classe et 0 pour la
+deuxieme.
+En gros, et pour faire simple on a une espece de representation des
+entrees/sorties sur un plan en deux dimensions, on trace une
+courbe.. et d'un cote on a la valeur de sortie a un, et de l'autre
+cote on a la valeur de sortie a 0.
+
+Et maintenant des images parce nous le valons bien:
+
+%% mettre plein d'image kikkoo lol 2
+%% tu les mets toutes la dedans et puis je te sors les commentaires
+\begin{center}
+	
+	\includegraphics[width=40mm]{IMG_7234.JPG}\\
+	\caption{\emph{Neurone Formel \`a potentiel.}}
+\end{center}
+
+\begin{center}
+	
+	\includegraphics[width=40mm]{IMG_7235.JPG}\\
+	\caption{\emph{Repr\'esentation des entr\'ees sorties.}}
+\end{center}
+
+\begin{center}
+	
+	\includegraphics[width=40mm]{IMG_7236.JPG}\\
+	\caption{\emph{Mod\`ele neuronal \`a une couche de neurones cach\'e.}}
+\end{center}
+
+\begin{center}
+	
+	\includegraphics[width=40mm]{IMG_7237.JPG}\\
+	\caption{\emph{Rnfs pour sigmoides, avec un neurones de biais}}
+\end{center}
+
+\begin{center}
+	
+	\includegraphics[width=40mm]{IMG_7238.JPG}\\
+	\caption{\emph{Un exemple de ce que nous n'avons pas fait}
+\end{center}
+
+%% pour les images
+
+\section{RNF et OCRe}
+\subsection{Quel mod\`ele a-t-on choisi?}
+\subsection{Quelle structure pour notre RNF?}
+\subsection{Exp\'eriences et rat\'es}
+\subsection{Conclusion}
+
+
+
 \chapter{Analyse et extraction}
 
 \section{Rappel des faits}
@@ -238,7 +689,7 @@ Voici la hiérarchie des types de données utilisés. Vous pouvez constater qu'i
 similaires dans leurs structures. Ainsi, un paragraphe est constitué de ses propres
 coordonnées et de la liste de lignes le composant. Cette même liste de lignes est composée
 de ses coordonnées et de la liste des mots qui la composent. Et enfin cette liste de mots
-possède ses propres coordonnées et la liste des caractères qui le composent. L'algorithme 
+possède ses propres coordonnées et la liste des caractères qui le composent. L'algorithme
 d'agglomération des éléments devra parcourir l'ensemble des caractères pour
 créer ainsi une liste de mots qui sera elle-même parcourues pour fournir une liste de lignes
 et ainsi de suite jusqu'à obtenir la liste des blocs de texte: les paragraphes.
@@ -338,7 +789,7 @@ C’est pourquoi nous offrons aussi la possibilité à l’utilisateur d’utili
 
 \section{Comment?} % (fold)
 \label{sec:comment_}
-La disposition que nous avons retenu pour notre interface graphique est très simple. Nous nous sommes fixer pour objectif d’avoir le moins de boutons possible, afin que l’utilisateur ait le moins de chance possible de se perdre. 
+La disposition que nous avons retenu pour notre interface graphique est très simple. Nous nous sommes fixer pour objectif d’avoir le moins de boutons possible, afin que l’utilisateur ait le moins de chance possible de se perdre.
 Nous avons donc opté pour une interface en 4 parties :\\
 
 \begin{itemize}
@@ -354,7 +805,7 @@ Nous avons donc opté pour une interface en 4 parties :\\
 \subsection{GTKoi?} % (fold)
 \label{sec:gtkoi_}
 Au début du projet, avant d’avoir touché à Gtk, nous imaginions qu’il existait un outil assez simple pour créer des interfaces graphiques. Eh oui, nous étions très naïfs à l’époque. \\
-Des camarades nous ont parlé de Glade, un outil avec des boutons et dans lequel on peut utiliser la souris pour créer des interface graphique par simple glisser-déposer. C'est plus ou moins vrai. Glade nous aide à créer une interface, mais il ne code pas pour nous! 
+Des camarades nous ont parlé de Glade, un outil avec des boutons et dans lequel on peut utiliser la souris pour créer des interface graphique par simple glisser-déposer. C'est plus ou moins vrai. Glade nous aide à créer une interface, mais il ne code pas pour nous!
 
 Glade 3 fonctionne tr\`es bien sur les machines du PIE. Il a le m\'erite de nous offrir une interface assez intuitive, je l'ai donc pris en main tr\`es rapidement.\\
 Nous cr\'eons donc une interface en utilisant Glade puis nous relions chaque ``signal'' dans un \texttt{.c}. Les ``signals'' sont des sortes d'``\'ev\`enement'' auquel on peut relier une action en utilisant Gtk.\\
@@ -377,9 +828,9 @@ Pour la deuxi\`eme soutenance, nous nous sommes attaqu\'e \`a la gestion du text
 Les modifications apport\'ees sont relatives au texte. Nous pouvons d\'esormais \'editer du texte, ainsi que l'enregistrer. Soyons francs: la gestion du texte sous Gtk, c'est pas de la tarte. On utilise un widget de type GtkTextView qui nous sert \`a afficher le texte. Pour l'\'editer, on utilise un GtkTextBuffer, qui utilise des GtkTextIter associ\'es \`a des GtkTextMarks. Bref, c'est un merdier sans nom.
 Les GtkTextIter servent \`a se rep\'erer dans le GtkTextBuffer (qui est un buffer, thank you captain Obvious!). Un GtkTextIter est un endroit du texte. On l'utilise par exemple pour r\'ecup\'erer une cha\^ine de caract\`eres:
 \begin{lstlisting}
- text = gtk_text_buffer_get_text( GTK_TEXT_BUFFER(txtbuffer), 
-                            &iStart, 
-                            &iEnd, 
+ text = gtk_text_buffer_get_text( GTK_TEXT_BUFFER(txtbuffer),
+                            &iStart,
+                            &iEnd,
                             FALSE );
 \end{lstlisting}
 Ici, iStart et iEnd sont des pointeurs sur des GtkTextIter (ici le d\'ebut et la fin du buffer, encore une fois, thank you captain obvious!).
@@ -432,7 +883,7 @@ Nous avons r\'eussi \`a r\'esoudre ce problème en rusant, parce que nous n'avon
 Pour appeler un \'executable, j'\'etais d'abord parti sur l'utilisation d'un \verb!fork()!, histoire de faire les choses proprement. J'\'etais donc parti sur quelque chose du genre:
 
 \begin{lstlisting}
-if(!fork())   
+if(!fork())
   {
     /* on est dans le fils */
       system("make");  

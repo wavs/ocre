@@ -300,7 +300,7 @@ ce que j'appelle une question.
 les rnfs dont il est question ici doivent etre consideres comme des familles de fonctions aprametres
 modulaoires et possedant de bonne sproprietes
 d'approxiamation. Pourquoi parceque leur application leur demande
-d'etre ainsi. 
+d'etre ainsi.
 De nombreux problemes industriesl ou de recherche demandent de
 representer a laide dun modele mathermatique le comportement de
 processus physiques chimisues economoiques etc.. a partir de
@@ -327,8 +327,58 @@ rapidite. Cela est principalement du a la faible quantite de calcule
 pour l'utilisation  d'un reseau de neurones formels.
 \subsection{Diff\'erent Mod\`ele}
 
+Il existe de nombreux mod\'eles de reseaux de neurones formels, mais
+bon principalement, comme on l'a expliqu\'e plus haut, c'est un
+syt\`eme qui nous donne une sortie qui d\'epend d'entr\'ees externes
+ou pas. Le premier mod\`ele qui nous vient \`a l'esprit est le
+mod\`ele dit de ``boites noires'' , il y'a ensuite les mod\`eles dit
+lin\'eaires et non-lin\'eaires et puis finalement le mod\`eles qui
+d\'ependent du temps, de fa\c con discr\`ete ou continue. Sachant
+qu'on peut m\'elanger raisonnablement ces diff\`erentes propri\'etees.
+Un mod\`ele de type boite noire, peut-etre non-lin\'eaire par rapport
+\`a ses param\'etres ou bien le contraire, le mod\`ele de la boite
+noire s'utilise aussi bien pour \'etudier le comportement statiques
+d'un transistor MOS en saturation, que le mod\'ele d'une r\'eaction
+enzymatique par rapport \`a son substrat.
 
+Les rnfs sont des familles de fonctions non limeaire modulaires
+capables d'approxumer n'importe quelle fonction bornmee dans un
+intervalle derme de ses entrees aussi complexe soit=elel. c'est l'une
+des raison pour lesquelles le rnds sont utilises comme modeles
+oit-noir non linmeaire statiques(reseau non boucle, donc sans
+retroaction)..et modele dit dynamique(reseau boucle, avec
+retroaction). La mise au point d'un modele neuronal consiste a
+calculer ses parametres de telle sorte que la sortie du modele predise
+celle du processus en moenne . en termes statistiques on desire
+estimer les parametres de telle facon que la sortie du modele soit
+aussii proche que possible de l'espereance mathematique de la sorite
+du processsus . Cette espeance mathemqtique auqui est une fonctione
+inconnue des entrees est appelle la regression. l'estimation de
+sparametres appele apprentissage dans la communautre neuronale est
+realise  a l'aide d'un ensemble d'apprentissage constitu\'e de couples
+de valeurs d'entres et de sorties appel\'e exemples d'apprentissage.
+
+%% mettre plein d'images kikoo lol
 \subsection{Exemple}
+Par exemple un classifieur: on veut proceder a la classification de
+chiffres decimaux manuscrits: les entrees prennent les valeurs - ou 1
+selon celles de pixels de l'images binarise du chiffre presente. Les
+classe d'appartencae sont {0 1 2 3 4 5 6 7 8 9}.
+Un classifieur est ainsi ocncyu pour attribuer un objet represente ar
+un vecteur d'entree a une classe d'appartencance. Par exemple dans le
+cas d'un probleme a deux classe la sortie du classifieur est une
+variable qui prend la valeur 1 pour la premiere classe et 0 pour la
+deuxieme.
+En gros, et pour faire simple on a une espece de representation des
+entrees/sorties sur un plan en deux dimensions, on trace une
+courbe.. et d'un cote on a la valeur de sortie a un, et de l'autre
+cote on a la valeur de sortie a 0.
+
+Et maintenant des images parce nous le valons bien:
+
+%% mettre plein d'image kikkoo lol 2
+%% tu les mets toutes la dedans et puis je te sors les commentaires
+%% pour les images
 
 \section{RNF et OCRe}
 \subsection{Quel mod\`ele a-t-on choisi?}
