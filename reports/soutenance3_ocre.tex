@@ -455,30 +455,30 @@ commande de processus, et la classification. Vous allez me dire
 comment une simple structure de donn\'ees avec deux trois m\'ethodes
 peut reconnaitre un objet, mod\`eliser un syst\`eme dynamique? C'est
 ce que j'appelle une question.
-les rnfs dont il est question ici doivent etre consideres comme des familles de fonctions aprametres
-modulaoires et possedant de bonne sproprietes
-d'approxiamation. Pourquoi parceque leur application leur demande
+Les rnfs dont il est question ici doivent etre considerees comme des familles de fonctions parametres
+modulatoires et possedant de bonnes propriet\'ees
+d'approxiamation. Pourquoi parceque leurs applications leur demande
 d'etre ainsi.
-De nombreux problemes industriesl ou de recherche demandent de
-representer a laide dun modele mathermatique le comportement de
-processus physiques chimisues economoiques etc.. a partir de
-connaissance a priori sur ce comprotement et de mesures effecturees
-sur le processus un tel modele peut etre constriot pour, :
+De nombreux probl\`emes industriels o\' de recherche demandent de
+repr\'esenter a l'aide dun mod\`ele math\'ematique le comportement de
+processus physiques,chimiques,\'economoiques etc.. a partir de
+connaissances sur ce comportement et de mesures effectu\'ees
+sur le processus. Un tel mod\`ele peut etre construit pour :
 analyser les phenomenes regissant le comportement du processus;
-predire a court ou a long terme les grandeurs d'inteeret du processus
-concevoir un sustemen de commande du processus
-Ou on a un processus qui est une entite qui fournit un ou plusieurs
+predire a court ou a long termes les grandeurs d'interet du processus
+concevoir un systeme de commande du processus.
+O\'u un processus est une entit\'e qui fournit un ou plusieurs
 grandeurs qui nous interessent. cette grandeur peut etre n'importe
-quoi pourvu qu'elle nous interesse, cela peut etre un debit, un
+quoi, cela peut etre un debit, un
 potentiel pour un processus de production une population ou encore
-pour un processus biologique ecologique.., par exemple des poissons?
-Generalement cette grandeur d'interet et la sortie de notre reseau de
+pour un processus biologique ou ecologique.., par exemple des poissons?
+Generalement cette grandeur d'interet est la sortie de notre reseau de
 neurones.
 
 Bon en resume, on peut dire qu'un reseau de neurones ca sert
 principalement a trois domaines, la classification ou la
 reconnaissance de motifs, la modelisation de systeme biologique,
-industrielle, mecanique, et la commande de processus ou automate pour
+industrielle, mecanique, et la commande de processus ou automates pour
 les intimes. Le principale avantage des reseaux de neuronnes par
 rapport a des modeles dit de systeme statistiques, ou expert la
 rapidite. Cela est principalement du a la faible quantite de calcule
@@ -499,21 +499,21 @@ noire s'utilise aussi bien pour \'etudier le comportement statiques
 d'un transistor MOS en saturation, que le mod\'ele d'une r\'eaction
 enzymatique par rapport \`a son substrat.
 
-Les rnfs sont des familles de fonctions non limeaire modulaires
-capables d'approxumer n'importe quelle fonction bornmee dans un
-intervalle derme de ses entrees aussi complexe soit=elel. c'est l'une
-des raison pour lesquelles le rnds sont utilises comme modeles
-oit-noir non linmeaire statiques(reseau non boucle, donc sans
-retroaction)..et modele dit dynamique(reseau boucle, avec
+Les rnfs sont des familles de fonctions non lineaire modulaires
+capables d'approximer n'importe quelle fonction bornee dans un
+interval bornees de ses entrees aussi complexe soit-elle. C'est l'une
+des raison pour lesquelles le rnfs sont utilises comme modeles
+boite-noire non lineaire statiques(reseau non boucle, donc sans
+retroaction)..et mod\`ele dit dynamique(reseau boucle, avec
 retroaction). La mise au point d'un modele neuronal consiste a
 calculer ses parametres de telle sorte que la sortie du modele predise
-celle du processus en moenne . en termes statistiques on desire
+celle du processus en moyenne . en termes statistiques on desire
 estimer les parametres de telle facon que la sortie du modele soit
-aussii proche que possible de l'espereance mathematique de la sorite
-du processsus . Cette espeance mathemqtique auqui est une fonctione
+aussi proche que possible de l'espereance mathematique de la sorite
+du processsus . Cette esperance mathematique qui est une fonction
 inconnue des entrees est appelle la regression. l'estimation de
-sparametres appele apprentissage dans la communautre neuronale est
-realise  a l'aide d'un ensemble d'apprentissage constitu\'e de couples
+ces parametres appele apprentissage dans la communaute neuronale est
+realis\'e  a l'aide d'un ensemble d'apprentissage constitu\'e de couples
 de valeurs d'entres et de sorties appel\'e exemples d'apprentissage.
 
 %% mettre plein d'images kikoo lol
@@ -522,7 +522,7 @@ Par exemple un classifieur: on veut proceder a la classification de
 chiffres decimaux manuscrits: les entrees prennent les valeurs - ou 1
 selon celles de pixels de l'images binarise du chiffre presente. Les
 classe d'appartencae sont {0 1 2 3 4 5 6 7 8 9}.
-Un classifieur est ainsi ocncyu pour attribuer un objet represente ar
+Un classifieur est ainsi pour attribuer un objet represente par
 un vecteur d'entree a une classe d'appartencance. Par exemple dans le
 cas d'un probleme a deux classe la sortie du classifieur est une
 variable qui prend la valeur 1 pour la premiere classe et 0 pour la
