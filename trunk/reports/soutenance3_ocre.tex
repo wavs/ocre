@@ -1,6 +1,6 @@
 %---DOCUMENT-------------------------------------------------------------------
 
-\documentclass[a4paper,10pt]{report}
+\documentclass[a4paper,12pt]{report}
 \usepackage[french]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -37,7 +37,7 @@
 \ifpdf
 \usepackage[pdftex]{graphicx, color}
 \graphicspath{{images/}}
-\DeclareGraphicsExtensions{.jpg,.png,.gif}
+\DeclareGraphicsExtensions{.jpg,.png,.gif,.bmp}
 \pdfcompresslevel=9
 
 \usepackage[pdftex, 					% Paramétrage de la navigation
@@ -112,6 +112,8 @@ Ce document que vous avez en main est le rapport du projet ``OCRe'', le fruit de
 Vous tenez entre vos mains de nombreuses heures de stress, d’angoisse, de déceptions, mais aussi de joies, de découvertes, et surtout de camaraderie. Car OCRe est le fruit d’un travail d’équipe, d’une équipe aux membres très différents, mais qui, curieusement, tient debout. Oh, bien sûr, nous avons eu nos différends, tout le monde n’était pas toujours de bonne humeur, mais il y en avait toujours un pour redresser la situation et pousser les autres vers l’avant.
 
 % chapter introduction (end)
+
+\pagebreak
 
 \section{Un OCR, what else?} % (fold)
 \label{sec:un_ocr_what_else_}
@@ -332,6 +334,8 @@ C’est pourquoi nous offrons aussi la possibilité à l’utilisateur d’utili
 
 % section pourquoi_ (end)
 
+\pagebreak
+
 \section{Comment?} % (fold)
 \label{sec:comment_}
 La disposition que nous avons retenu pour notre interface graphique est très simple. Nous nous sommes fixer pour objectif d’avoir le moins de boutons possible, afin que l’utilisateur ait le moins de chance possible de se perdre. 
@@ -446,9 +450,165 @@ Malheureusement, \c ca n'a pas march\'e, et on ne sait toujours pas pourquoi. Ce
 % subsection lions_ (end)
 % chapter interface_utilisateur (end)
 
+\chapter{Site Web} % (fold)
+\label{cha:site_web}
+	\section{Ce qu'on veut} % (fold)
+	\label{sec:ce_qu_on_veut}
+	Le site web\footnote{\url{http://huge.ocre.free.fr}} est la premi\`ere chose que verra l'utilisateur potentiel. Il devra donc \^etre \`a la fois attirant et bien ordonn\'e. Le site devra comporter:
+	\begin{itemize}
+		\item Une page d'accueil qui expliquera bri\`evement ce qu'est notre projet, qui nous sommes, etc\ldots
+		\item Une page de d\'eveloppement qui informera le visiteur des avanc\'ees du projet. Il contiendra aussi un lien vers notre page Google Code.
+		\item Une page de t\'el\'echargement qui listera chronologiquement tout ce qu'on a cr\'e\'e, c'est \`a dire nos sources, les \'ex\'ecutables et les rapports de soutenances.
+		\item Une page de liens,
+		\item Une page d'``A propos'' qui expliquera plus en d\'etail qui nous sommes, ce qu'est l'Epita, etc\ldots
+	\end{itemize}
+	De plus, nous aimerions bien avoir un site enti\`erement bilingue (anglais/fran\c cais)
+	% section ce_qu_on_veut (end)
+	
+	\begin{center}
+
+		\includegraphics[width=120mm]{screen_site.png}\\
+		\caption{\emph{La page d'accueil du site}}\\
+	\end{center}
+	
+	
+	\section{Comment on s'est d\'ebrouill\'e} % (fold)
+	\label{sec:comment_on_s_est_d'ebrouill'e}
+
+		On est parti avec l'idée que le site web ne devrait pas nous éloigner de notre tâche principale: développer un logiciel de reconnaissance de caractères. Le site web est donc tr\`es basique. Nous avons 10 pages HTML, 5 en anglais et 5 en fran\c cais. Chaque page est reli\'ee \`a sa traduction dans l'autre langue.
+		Le code HTML de chaque page ne fait que quelques lignes, nous avons plus mis l'accent sur le fichier CSS. Les balises \verb!<div id="">! correspondent \`a un style du fichier CSS. Ce fichier nous autorise \`a d\'efinir la position des \'el\'ement ain si que divers effets qui se r\'ev\`elent assez utiles pour par exemple personaliser les liens.
+		La page d'accueil est visible en annexe.
+		 
+		Pour l'instant, nous avons un site assez minimaliste. Tout en \textsc{Html}, peu de pages, vides pour la plupart, bref, on s'\'etait pas foul\'e pour la premi\`ere soutenance. Beaucoup de choses ont chang\'ees lors de la deuxi\`eme soutenance. Tout d'abord, le site s'est rempli! On a une belle page ``About'' contenant un r\'esum\'e de nos vies passionantes et pleines d'aventures, un page de t\'el\'echargement contenant pour l'instant la \emph{tarball} rendue lors que la premi\`ere soutenance et son rapport.
+
+		La grosse nouveaut\'e, c'est la page ``D\'eveloppement'', qui contient\ldots un script de news en PHP! Ce script s'est r\'ev\'el\'e tr\`es simple \`a \'ecrire. Nous avons eu besoin de 3 pages en php uniquement, ainsi qu'une base de donn\'ee MySQL. Une page \verb!liste_news.php! liste les news d\'ej\`a \'ecrites et permet de les \'editer ou de les supprimer. Une autre page \verb!rediger_news.php! nous permet de r\'ediger une nouvelle news. \\
+		Voici à quoi la page ``D\'eveloppement'':
+
+
+		\begin{center}
+
+			\includegraphics[width=120mm]{screen_dev.png}\\
+			\caption{\emph{ }}\\
+		\end{center}
+
+		
+
+	% section comment_on_s_est_d'ebrouill'e (end)
+% chapter site_web (end)
+
+
+\chapter{Conclusion} % (fold)
+\label{cha:conclusion}
+
+\c Ca y est! On a fini! Wouhou. Bon, regardons un peu en arri\`ere deux minutes. On a bien Une interface graphique, mais elle n'est pas vraiment reli\'ee \`a ce qu'on esp\'erait. Nous n'avons pas tout \`a fait fini en fin de compte. On a (presque) tout pourtant. Le pr\'etraitement de l'image est fait, on d\'etecte les blocs de texte, les lettres et m\^eme les mots, on a un r\'eseau de neurones qui marche, bref, on a tout ce qu'il faut mais on a pas vraiment eu le temps de coller tout \c ca ensemble\ldots \\
+Cependant, le but d'un tel projet est avant tout \'educatif. Et sur ce plan l\`a, on n'a pas \'echou\'e du tout. OCRe nous a beaucoup apport\'e. On s'est rendu compte au fil du temps que finalement, les cours de Marwan sont r\'eellement utile, et que \c ca sert de l'\'ecouter! Ce projet nous a grandi. Oui, nous sommes plus matures (ne riez pas, c'est vrai!). Nous nous ne lan\c cons plus dans une nouvelles fonctionalit\'e avant d'\^etre certain qu'on pourra aller au bout et qu'elle sera \emph{utile}. Notre fa\c con de coder \`a chang\'e elle aussi. Nous utilisons Subversion (exit les cl\'e USB!\ldots), nous essayons de respecter certaines normes, et de fa\c con g\'en\'erale, on code en \emph{r\'efl\'echissant}! \\
+Nous profitons de cette conclusion pour remercier quelques personnes: Krisboul (parce qu'on est un peu oblig\'e de le remercier), l'acu sympa qui nous souriait pendant les soutenances (c'est une fille et elle nous sourit!), tous les acus en g\'en\'eral, Marwan (parce que m\^eme s'il avance les dates de rendu au dernier moment il reste marrant), toute la classe de SPE B1, nos parents qui ont toujours cru en nous m\^eme s'ils ne comprennent pas ce qu'on fait, Steve Jobs et Scarlett Johansson (parce que c'est Alexandre qui r\'edige cette conclusion).
+Par contre, on ne remercie pas: les bocaliens (parce que c'est rien que des m\'echants d'abord) ni Murphy, parce qu'il a toujours raison cet enfoir\'e.\\
+Nous esp\'erons que vous avez pass\'e un agr\'eable moment \`a lire ce merveilleux rapport, et on vous dit \`a l'ann\'ee prochaine (ou pas\ldots)!
+
+
+% chapter conclusion (end)
 
 
 
-% chapter interface_graphique (end)
+
+
+
+
+
+\appendix
+
+\chapter{Annexes} % (fold)
+\label{cha:annexes}
+
+% chapter annexes (end)
+
+
+\section{Pr\'etraitement} % (fold)
+\label{sec:pr'etraitement}
+
+\begin{center}
+\includegraphics[width=160mm]{texte2.jpg}\\
+\caption{\emph{Le texte que l'on va traiter}}\\
+
+\includegraphics[width=160mm]{thresholded.jpg}\\
+\caption{\emph{L'image obtenu apr\`es pr\'etraitement}}
+
+\includegraphics[width=160mm]{segmented.jpg}\\
+\caption{\emph{Le texte d\'ecoup\'e en blocs}}
+\end{center}
+
+\pagebreak
+
+\subsection{Le fichier XML que l'on sort} % (fold)
+\label{sub:le_fichier_xml_que_l_on_sort}
+\begin{lstlisting}
+<p x[57,769] y[51,135]>
+	<l x[57,726] y[51,71]>
+		<w x[57,86] y[56,69]>
+			<c x[57,65] y[51,71] />
+			<c x[68,75] y[51,71] />
+			<c x[78,86] y[51,71] />
+		</w>
+		<w x[100,205] y[56,71]>
+			<c x[100,108] y[51,71] />
+			<c x[111,119] y[51,71] />
+			<c x[123,130] y[51,71] />
+			<c x[133,140] y[51,71] />
+			<c x[145,151] y[51,71] />
+			<c x[155,162] y[51,71] />
+			<c x[165,173] y[51,71] />
+			<c x[176,184] y[51,71] />
+			<c x[187,194] y[51,71] />
+			<c x[197,205] y[51,71] />
+		</w>
+		<w x[219,238] y[55,67]>
+			<c x[219,227] y[51,71] />
+			<c x[230,238] y[51,71] />
+		</w>
+.
+.
+.
+		<w x[539,600] y[876,889]>
+			<c x[539,545] y[831,894] />
+			<c x[548,557] y[831,894] />
+			<c x[560,567] y[831,894] />
+			<c x[571,578] y[831,894] />
+			<c x[582,590] y[831,894] />
+			<c x[594,600] y[831,894] />
+		</w>
+		<w x[616,621] y[875,883]>
+			<c x[616,621] y[831,894] />
+		</w>
+	</l>
+</p>
+<p x[61,232] y[943,958]>
+	<l x[61,232] y[943,958]>
+		<w x[61,102] y[945,958]>
+			<c x[61,70] y[943,958] />
+			<c x[72,80] y[943,958] />
+			<c x[83,91] y[943,958] />
+			<c x[94,102] y[943,958] />
+		</w>
+		<w x[117,132] y[944,957]>
+			<c x[117,124] y[943,958] />
+			<c x[130,132] y[943,958] />
+		</w>
+		<w x[149,232] y[943,956]>
+			<c x[149,157] y[943,958] />
+			<c x[158,167] y[943,958] />
+			<c x[170,178] y[943,958] />
+			<c x[181,188] y[943,958] />
+			<c x[191,200] y[943,958] />
+			<c x[202,211] y[943,958] />
+			<c x[213,220] y[943,958] />
+			<c x[224,232] y[943,958] />
+			<c x[224,226] y[943,958] />
+		</w>
+	</l>
+</p>	
+\end{lstlisting}
+% subsection le_fichier_xml_que_l_on_sort (end)
+% section pr'etraitement (end)
 
 \end{document}
