@@ -1,0 +1,31 @@
+ \documentclass[11pt]{article}
+\usepackage{geometry}                % See geometry.pdf to learn the layout options. There are lots.
+\usepackage[french]{babel}
+\geometry{letterpaper}                   % ... or a4paper or a5paper or ... 
+%\geometry{landscape}                % Activate for for rotated page geometry
+%\usepackage[parfill]{parskip}    % Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{epstopdf}
+\DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
+
+\title{OCRe \\ \textsc{Huge}}
+\author{Soutenance Finale \\ Plan de soutenance}
+%\date{}                                           % Activate to display a given date or no date
+
+\pagestyle{empty}
+\begin{document}
+\maketitle
+%\section{}
+%\subsection{}
+
+\begin{itemize}
+	\item Introduction
+	\item Pr\'etraitement
+	\item Analyse et extraction
+	\item R\'eseau de neurones
+	\item Interface graphique et site web
+	\item Conclusion
+\end{itemize}
+
+\end{document}
