@@ -3,6 +3,229 @@
 %%mettre ca en jolie pour TESTU
 par guilbep et dimok
 %%mettre ca en jolie pour TESTU
+
+%%debut chapitre sur le programme ocred
+\chapter{ OCRed qu'est-ce que c'est ? }
+ OCRed est n\'e des mots Ocre et digital, qui rappellons le encore une fois
+ signifient ``Optical Character Recognition enhanced'' pour l'un et
+ num\'erique pour l'autre. La partie du projet portant sur le
+ pr\'etraitement de l'image devant \^etre faite en ocaml, OCRed est
+ totalement r\'ealis\'e dans ce langage.
+
+\section{ Visualisation de l'image grace a l'executable }
+ La cr\'eation du logiciel de traitement de l'image nous a men\'e, au
+ d\'ebut du projet \'a vouloir visualiser directement, c'est \'a dire
+ sans logiciel tiers, l'action de notre travail.
+ La visualisation des images trait\'ees permet notre ind\'ependance
+ au niveau de l'utilisation du logiciel, ce qui est un confort certain.
+ La fen\^etre est r\'ealis\'ee avec OcamlSDL, tout comme le pr\'etraitement
+ de l'image.
+%% mettre image de la fenetre sdl
+%% visualisation.jpg
+
+\section{ Utilisation de l'\'executable }
+ L'ex\'ecutable en ligne de commande admet un certain nombre d'arguments,
+ certains ne pouvant \'evidemment donner lieu \`a un quelconque r\'esultat
+ sans la sp\'ecification d'une image d'entr\'ee.
+\subsection{ Sp\'ecifier une image d'entr\'ee }
+ Il est plus logique, pour un logiciel de traitement d'image, d'avoir
+ une image \`a traiter. Vous devez pour cela utiliser l'argument ``-i''
+ suivi du chemin d'une image de type jpeg,bmp,png au moins.
+\subsection{ Sp\'ecifier une image de sortie }
+ Vous n'\^etes pas oblig\'e de pr\'eciser le chemin de l'image de sortie
+ mais cela permet une certaine flexibilit\'e. Dans le cas o\`u vous
+ n'indiquez pas la sortie, OCRed se debrouille pour sortir une image
+ avec un nom assez \'evident, d\'ependant du traitement. Par exemple
+ rotatation.bmp ou encore tresholded.bmp, les images se trouveront l\`a
+ o\`u vous avez ex\'ecut\'e votre programme. Pour sp\'ecifier un chemin de
+ sortie, veuillez utiliser l'argument ``-o'' suivi du chemin d'une image
+de type jpeg,bmp,png au moins.
+\subsection{ La visualisation de l'image }
+ Gr\^ace \`a OcamlSDL, nous pouvons visualiser notre image, il faut pour
+ cela sp\'ecifier une image d'entr\'ee, et passer l'argument ``-d'' en
+ param\`etre. Les d\'esavantages de l'utilisation de cette interface sont
+ assez subtils, par exemple vous ne pouvez ni zoomer ni d\'ezoomer, ni
+ vous d\'eplacer sur l'image. Toutefois il y'a (aussi) des avantages, vous pouvez
+ visualiser directement les modifications appliqu\'ees \`a votre
+ image. En appuyant sur F2 vous faites tourner l'image de l'angle que
+ vous avez pass\'e en param\`etre --voir plus loin--. En appuyant sur F3
+ vous appliquez le seuil, que vous pouvez sp\'ecifier en ligne de
+ commande. En appuyant sur F4, vous appliquez le filtre m\'edian. Nous
+ tenons \`a vous rappeler que le seuil ne marche que sur les couleurs.
+ Pour quitter il suffit d'appuyer sur F1, la petite croix en haut \`a
+ droite ne marche pas.
+\subsection{ Le seuil }
+ Permet le passage d'une image en noir et blanc, pour avoir un minimum
+ de pertes d'informations vous devez sp\'ecifier un seuil viable. Par
+ d\'efaut le seuil est \`a 200, ce qui est suffisant pour un contraste
+ normal de l'image. Vous devrez l'augmenter si il est trop faible et le
+ baisser dans le cas contraire. Passer l'argument ``-s'' en
+ param\`etre si vous voulez changer la valeur par d\'efaut. Pour
+ l'anecdote ``-s'' viendrait de seuil, mais nous n'en sommes pas vraiment
+ s\^urs.
+\subsection{ Rotation }
+ Vous pouvez passer un angle en pr\'ecision r\'eelle, ou enti\`ere. Pour
+ cela passez respectivement l'angle avec l'argument ``-af'' et ``-a''.
+ Rappelons que l'angle pass\'e en param\`etre est en degr\'es et non en
+ radian. Vous pouvez aussi tourner l'image de 90 degr\'es dans le sens
+ direct ou indirect, gr\^ace aux options ``-right'' et ``-left''.
+\subsection{ Redimensionnement }
+ Le redimensionnement peut s'effectuer en pourcentage de l'image avec
+ l'option ``--resizepercent'' qui prend en param\`etre un pourcentage
+ entier. L'on peut aussi redimensionner l'image en valeur absolue
+ --c'est \`a dire en sp\'ecifiant des valeurs de hauteur et de largeur
+ arbitraires--. Alexandre Testu avait besoin d'un petit redimensionnement
+ rien que pour lui, c'est pour cela que l'option ``--resize-auto''
+ existe.
+\subsection{ D\'etection d'angle}
+ Il existe un argument magique ``-dev'' qui a juste besoin d'avoir une
+ image qui n'est pas bien droite en param\`etre. Il retourne directement
+ l'image dans le bon sens, et en noir et blanc.
+\subsection{ Help me if you can! }
+ L'option ``-help'' est aussi pr\'esente afin d'accompagner
+ l'utilisateur dans sa d\'ecouverte du programme. Pour tout autre
+ interrogation, il se peut que vous puissiez trouver des informations
+ plus ou moins utiles dans les sources du projet, au niveau du fichier
+ README.
+%%fin chapitre sur le programme ocred
+
+
+%%debut chapitre detection de l'angle
+\chapter{ La d\'etection de l'angle }
+ La d\'etection de l'angle \'etait \`a faire pour la premi\`ere
+ soutenance, malheureusement par un manque de temps certain elle ne f\^ut
+ pas pr\^ete \`a temps. Nous arrivons \`a la deuxi\`eme soutenance avec
+ deux types de d\'etection de l'angle de rotation du texte d'une image,
+ ce qui a pour but de redresser l'image, afin d'avoir une segmentation
+ \`a peu pr\`es correcte.
+
+\section{ Des principes assez diff\'erents}
+ La d\'etection de l'angle de rotation d'un texte dans une image est un
+ probl\`eme assez complexe. En effet une image contenant du texte n'est
+ pas compos\'ee de composantes continues, il est donc plus difficile d'isoler
+ les caract\'eristiques des \'el\'ements. Deux principes majeurs nous
+ sont apparus. Tout d'abord l'on \'etudie les caract\'eristiques d'une
+ image pour chaque angle, on isole ensuite le bon angle ; ce
+ processus est long et d'autre part encore assez impr\'ecis.
+ L'autre principe \'etait de d\'etecter la pente d'une ligne de caract\`eres.
+\subsection{ La multiple rotation }
+ Dans cet algorithme, l'on reduit la taille de l'image pour gagner en
+ temps d'ex\'ecution, le redimensionnement est calcul\'e en fonction de la
+ taille d'origine de l'image, on suppose avoir du format A4 \`a chaque
+ fois. On proc\`ede comme suit: On tourne de fa\c con dichotomique
+ l'image, c'est \`a dire en prenant des angles plus ou moins
+ grand. Jusqu'a trouv\'e un histogramme convenable. L'histogramme est
+ produit \`a partir de la projection de tout les pixels de l'image sur
+ l'axe des horizontales.
+
+Preuve exp\'erimentale produite \`a partir d' une image multifontes,
+multicouleurs, mulicolonnes:
+
+ Comme vous pouvez le voir sur ces images, il est \'evident qu'il y'a une
+ nette diff\'erence entre des images avec un texte mal orient\'e et un
+ texte orthonormal. (mais o\`u est l'orthonormalit\'e dans ce monde ?)
+
+%% histogramme5degree.jpg
+%% commentaire de l'image
+
+Sur cette image on peut voir un histogramme d'une image avec un
+texte ayant subi une rotation de 5 degr\'es. Il est clair que le nombre
+de zone ou l'histogramme atteint 0 en ordonn\'ee est beaucoup plus faible
+que les autres images ; environ 8.
+
+
+%% rotation1deghisto.jpg
+%% commentaire de l'image
+
+Sur cette image on peut voir un histogramme d'une image avec un texte
+ayant subi une rotation de 1 degr\'e. Par rapport \`a l'image
+pr\'ec\'edente, on voit de fa\c con \'evidente que le nombre d'ordonn\'ees
+\`a z\'ero est bien plus grand avec un angle de un degr\'e ; ici environ 18.
+
+%% histogramme_bon.jpg
+%% commentaire de l'image
+
+Sur cette image on peut voir un histogramme d'une image avec un texte
+n'ayant pas subi de rotation. Il est tr\'es net que le nombre
+d'ordonn\'ees \`a z\'ero est le plus \'elev\'e.
+
+Il est facile d'implementer un algo qui compte le nombre de bandes
+proche de z\'ero ; il s'av\`ere que nous avons voulu compter le nombre de
+sommets, ce qui est beaucoup moins pr\'ecis. La m\'ethode expos\'ee
+ci-dessus semble bien marcher en th\'eorie.
+
+\subsection{ Detection de la pente }
+On d\'etecte la pente d'une ligne de texte ; pour cela on parcourt
+l'image pour chaque ligne de pixels jusqu'\`a ce que l'on tombe sur un
+pixel noir. Ceci permet d'avoir une certaine id\'ee de la pente d'une ligne
+de texte. La tangente de cette pente nous donne l'angle par rapport \`a
+la verticale. On la soustrait \`a 90 degr\'es si elle est positive, on
+l'ajoute sinon. On se retrouve avec un angle qui correspond, avec un
+taux d'erreur proche du dixi\'eme de degr\'e d'angle.
+
+% mettre l'image histo_pente.jpg
+% commentaire image histo_pente
+
+Les extrema locaux de la courbe sont beaucoup moins \'elev\'es en
+terme de valeurs. Ce qui a pour cons\'equence, une pente peu \'elev\'ee et donc un angle tr\`es \'elev\'e.
+
+% mettre l'image histo_pent_noangle.jpg
+% commentaire image histo_pent_noangle
+
+Les extrema locaux de la courbe sont beaucoup plus \'elev\'es en
+terme de valeurs que ceux de la courbe pr\'ec\'edente. Ce qui a pour
+cons\'equence, une pente tres \'elev\'ee et donc un angle tr\'es faible.
+
+Le probl\`eme avec cette technique, et le manque de pr\'ecision autour
+de l'angle nul, et des bruits trop importants produits par des lignes,
+tableaux, ou images impromptus.
+
+Nous avons pourtant retenu cette technique pour cette soutenance, car
+donnant lieu \`a des r\'esultats plus probants que la m\'ethode expos\'ee
+plus haut.
+
+\section{ Optimisations des algorithmes }
+ L'optimisation est un crit\`ere de confort pour l'utilisateur, mais
+ surtout un gage de qualit\'e.
+\subsection{ R\'eduction de l'image }
+ Afin de pouvoir augmenter la rapidit\'e des algorithmes de d\'etection
+ d'angle, nous r\'eduisons l'image de sorte qu'il y ait le moins de
+ pertes d'informations n\'ecessaires \`a cette derni\`ere. A titre
+ d'exemple une image au format A4 en 75 dpi, a une taille approximative
+ de 900 par 700. Les caract\`eres pr\'esents dans cette image ont une
+ taille en pixels d'\`a peu pr\`es 8 pixels. Il ne faut donc pas trop
+ r\'eduire l'image, environ 40 pourcents de la taille originale. Au
+ contraire pour une image de plus haute d\'efinition, par exemple 600
+ dpi, il est n\'ecessaire de r\'eduire l'image \`a au moins 5 pourcents
+ de la taille originale. Et comme dirait Junior, ``l'id\'ee c'est
+ que'' la rotation d'une image r\'eduite \`a 5 pourcents prend environ
+ 0,05 secondes sur les machines du PIE, alors qu'elle prend plus de 30
+ secondes pour une image en 600 dpi.
+
+%% reduceimage20percent75dpit.jpg
+Une image r\'eduite.
+
+Remarque, il est int\'eressant de voir qu'une image r\'eduite comporte
+moins de bruit, qui fausserait l'avanc\'ee de l'algo de reconnaissance
+des plages nulles.
+
+\subsection{ Ce qu'il nous reste \`a faire}
+\subsubsection{ D\'etection d'angle}
+Notre d\'etection de l'angle de rotation d'un texte dans une image est
+encore assez impr\'ecise ; cela est principalement d\^u \`a l'utilisation
+de l'arctangente qui devient tr\`es sensible aux extrema. Nous pensons
+donc r\'eutiliser la technique de la multiple rotation, qui semble en
+th\'eorie plus pr\'ecise. Les r\'esultats seront expos\'es \`a la
+prochaine soutenance.
+\subsubsection{ Optimisation des filtres}
+Le gros probl\`eme de la rotation est la perte d'information, en effet
+cette transformation a en sortie des nombres \`a virgule flottante,
+ce qui ne correspond pas vraiment aux nombres entiers d\'efinissant la
+grille d'une image dans le cas de pixels carr\'es. Une multitude de
+filtres existent, mais le plus rapide et le plus adapt\'e dans le cas de la
+rotation serait un filtre bicubique.
+%%vive le copier coller a remanier en trente secondes:D
+
 \section{Le pretraitement}
 
 \section{Son utilisation dans OCRe}
