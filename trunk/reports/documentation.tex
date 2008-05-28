@@ -176,5 +176,32 @@ cette ligne de commande à taper dans votre terminal au niveau du
 répertoire \verb!bin!: \\ \verb!./OCRed -i myimage.jpg -o myfile.bmp -s 150!
 
 
+\chapter{OCRed} % (fold)
+\label{cha:ocred}
+
+La programme \verb!OCRed! est assez complexe.
+
+\begin{itemize}
+	\item Vous devez passez en param\`etre \verb!-i! suivi de l'image que vous souhaitez traiter.
+	\item Vous \emph{pouvez} sp\'ecifier un fichier de sortie au format \verb!.bmp! apr\`es l'option \verb!-o!
+	\item Vous pouvez aussi sp\'ecifier un angle de rotation si vous le d\'esirer, en degr\'e, \`a l'aide de l'option \verb!-a!
+	\item vous devez sp\'ecifier de seuil de binarisation \`a l'aide de l'option \verb!-s! (``seuil'')
+	\item L'option \verb!-d! vous permet de visualiser les traitements en temps r\'eel:
+	\begin{itemize}
+		\item appuyez sur \verb!F1! pour quitter
+		\item appuyez sur \verb!F2! pour rotater l'image
+		\item appuyez sur \verb!F3! pour binariser l'image
+		\item appuyez sur \verb!F4! pour appliquer un filtre m\'edian
+	\end{itemize}
+\end{itemize}
+
+
+\chapter{Interface graphique} % (fold)
+\label{cha:interface_graphique}
+
+L'interface graphique ne pourrait \^etre plus simple. Les ic\^ones et noms des boutons sont assez explicites. 
+
+Pour ouvrir une images, cliquez sur \verb!open!, comme indiqu\'e dans la zone de texte. Une fois l'image ouverte, cliquez sur \verb!preprocess! pour pr\'etraiter l'image. Ensuite, cliquez sur \verb!Detect Blocks! pour que notre application détecte les blocs. C'est tout pour l'instant!
+% chapter interface_graphique (end)
 
 \end{document}
